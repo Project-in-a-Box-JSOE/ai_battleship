@@ -3,7 +3,7 @@
 
 // this funtion ony runs once when the arduino turns on
 void setup () {
-
+	Serial.begin(9600);
 }
 
 //this method runs continuously afterwards
