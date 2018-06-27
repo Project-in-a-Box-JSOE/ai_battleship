@@ -51,24 +51,36 @@ def jointProb(shipSize):
 	#we have maximum 5 positions, so set the porbability to 1 and so that there is no effect in the multiplying
 	#we start by placing the smallest boards because those are the pieces people win or lose by
 
-	int one = 1;
-	int two = 1;
-	int three = 1;
-	int four = 1;
-	int five = 1;
+	float one = 1;
+	float two = 1;
 
 	rows, columns = 10, 10
 
-	for i in range(rows)
-		for j in range(columns)
-			for n i range(shipSize)
-				one = aiMatrix[i][j]
-				two = aiMatrix[i][j+1]
+	minProb = 1;
+
+	#horizontal checking for ship of size 2
+	for i in range(row):
+		for x in range(10) and y in range(9)
+			one = aiMatrix[i][x]
+			two - aiMatrix[i][1+y]
+
+			#we now get the joint probability
+			prob = one*two
+			if prob < minProb:
+				minProb = prob
+
+	#vertical checking for ship of size 2
+	for i in range(column):
+		for x in range(10) and y in range(9)
+			one = aiMatrix[x][i]
+			two - aiMatrix[1+y][i]
+
+			#we now get the joint probability
+			prob = one*two
+			if prob < minProb:
+				minProb = prob
 
 	return
-
-
-
 
 
 
