@@ -33,6 +33,7 @@ def updateBoards():
 def placeShips():
 	#ship of length 2
 
+
 	#first ship of length 3
 
 	#second ship of length 3
@@ -42,45 +43,53 @@ def placeShips():
 	#ship of length 5
 
 #this function does the probability calculations for each ship placement
-#the input is the size of the ship
-def jointProb(shipSize):
+def ship2():
 	#loop through the AI boards history matrix (the human user guesses) aka aiMatrix
 
-	#need to make sure to check both horizontal and vertical positions
-
-	#we have maximum 5 positions, so set the porbability to 1 and so that there is no effect in the multiplying
-	#we start by placing the smallest boards because those are the pieces people win or lose by
-
-	float one = 1;
-	float two = 1;
-
+	float one = 1
+	float two = 1
 	rows, columns = 10, 10
+	minProb = 1
+	p1x = 0 #the row of the first position
+	p1y = 0 #the column of the fist position
+	p2x = 0 #the row of the second position
+	p2y = 0 #the column of the second position
 
-	minProb = 1;
+
+#need to add somehing to make sure position wasnt already taken
 
 	#horizontal checking for ship of size 2
 	for i in range(row):
 		for x in range(10) and y in range(9)
 			one = aiMatrix[i][x]
-			two - aiMatrix[i][1+y]
+			two = aiMatrix[i][1+y]
 
 			#we now get the joint probability
 			prob = one*two
 			if prob < minProb:
 				minProb = prob
+				p1x, p2x = i, i
+				p1y = x
+				p2y = 1+y
 
 	#vertical checking for ship of size 2
 	for i in range(column):
 		for x in range(10) and y in range(9)
 			one = aiMatrix[x][i]
-			two - aiMatrix[1+y][i]
+			two = aiMatrix[1+y][i]
 
 			#we now get the joint probability
 			prob = one*two
 			if prob < minProb:
 				minProb = prob
+				p1x = x
+				p1y, p2y = i, i
+				p2x = 1+y
 
-	return
+	#we can either all the positions or just one position 
+	return (p1x, p1y, p2x, p2y)
+
+
 
 
 
