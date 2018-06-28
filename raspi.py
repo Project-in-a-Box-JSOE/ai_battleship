@@ -360,6 +360,8 @@ aiMatrixCopy = placeShips(aiMatrix)
 # we let the human make the first move
 # TODO - get user input from buttons (their decision of where to hit)
 
+# matrices will either be global or passed into the functions
+
 # this function takes in the inputs x(the row of the target) and y(the column of the target)
 # this funciton should return whether it was a hit(true) or miss(false)
 def humanMove(x, y):
@@ -406,7 +408,7 @@ def humanMove(x, y):
 		# updates ai side probability board
 		probability = 0.0004032258
 		newProbVal = probability/99 #because there are 99 other positions
-		aiMatrix[row][col] = aiMatrix[row][col] - probability - newProbVal #decrementing newProbBal beause it will be added in the loop
+		aiMatrix[row][col] = aiMatrix[row][col] - probability - newProbVal #decrementing newProbVal beause it will be added in the loop
 		or i in range(10)
 			for j in range(10) #because 10x10 board size
 				aiMatrix[i][j] = aiMatrix[i][j] + newProbVal
@@ -415,6 +417,63 @@ def humanMove(x, y):
 		
 #in this function the ai determines where to target its next move/hit
 def aiMove():
+
+	#determine position to hit
+	#update human side probability boards
+	#update human current game board
+	#update LED board
+
+
+	# determine position to hit by finding largest probability in human side board
+	maxValue = 0
+	row, col = 0, 0 #the row and column positions
+	for i in range(10)
+		for j in range(10) #because 10x10 matrix
+			if gameHumanMatrix[i][j] > maxValue
+				maxValue = gameHumanMatrix[i][j]
+				row = i
+				col = j
+
+
+	# HIT
+	if humanMatrix[row][col] > 1 : #if there is a ship in that position
+
+		# updates current game board
+		prob = gameHumanMatrix[row][col]
+		distProb = prob/99 #need to evenly distribute that probably to the rest of the board
+		for i in range(10)
+			for j in range(10) #because 10x10 board size
+				gameHumanMatrix[i][j] = gameHumanMatrix[i][j] + distProb
+		gameHumanMatrix[row][col] = 0 #set probably of that position in current game to be zero
+		
+		# updates ai side probability board
+		hitProb = 0.0004032258/gamesPlayed
+		posProb = hitProb/99 #because there are 99 other positions
+		humanMatrix[row][col] = humanMatrix[row][col] + hitProb + posProb #adding posProb because it will be decremented in the loop
+		for i in range(10)
+			for j in range(10) #because 10x10 board size
+				humanMatrix[i][j] = humanMatrix[i][j] - posProb
+
+
+	# MISS
+	else if humanMatrix[row][col] < 1: #if there is no ship in that position
+
+		# updates current game board
+		prob = gameHumanMatrix[row][col]
+		distProb = prob/99 #need to evenly distribute that probably to the rest of the board
+		for i in range(10)
+			for j in range(10) #because 10x10 board size
+				gameHumanMatrix[i][j] = gameHumanMatrix[i][j] + distProb
+		gameHumanMatrix[row][col] = 0 #set probably of that position in current game to be zero
+
+		# updates ai side probability board
+		probability = 0.0004032258
+		newProbVal = probability/99 #because there are 99 other positions
+		humanMatrix[row][col] = humanMatrix[row][col] - probability - newProbVal #decrementing newProbVal beause it will be added in the loop
+		or i in range(10)
+			for j in range(10) #because 10x10 board size
+				humanMatrix[i][j] = humanMatrix[i][j] + newProbVal
+
 
 
 
