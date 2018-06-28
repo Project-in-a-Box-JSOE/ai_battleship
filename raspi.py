@@ -479,7 +479,41 @@ def aiMove():
 
 
 def shipHit(x,y):
+	#check all orientations around the hit position
 	
+	maxProb = 0
+	nextX = 0
+	nextY = 0
+	if x > 1: #bounds checking
+		val = gameHumanMatrix[x-1][y] #north
+		if val > maxProb:
+			maxProb = val
+			nextX = x-1
+			nextY = y
+
+	if y < 10: #bounds checking
+		val = gameHumanMatrix[x][y+1] #east
+		if val > maxProb:
+			maxProb = val
+			nextX = x
+			nextY = y+1
+	
+	if x < 10: #bounds checking
+		val = gameHumanMatrix[x+1][y] #south
+		if val > maxProb:
+			maxProb = val
+			nextX = x+1
+			nextY = y
+
+	if y > 1: #bounds checking
+		val = gameHumanMatrix[x][y-1] #west
+		if val > maxProb:
+			maxProb = val
+			nextX = x
+			nextY = y-1
+
+	#return the next position to hit
+	return (nextX, nextY)
 
 
 #after ai guess, needs to prompt user to do another move and then continuously loop until the end of the game
