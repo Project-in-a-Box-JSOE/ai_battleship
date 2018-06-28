@@ -454,6 +454,7 @@ def aiMove():
 			for j in range(10) #because 10x10 board size
 				humanMatrix[i][j] = humanMatrix[i][j] - posProb
 
+		return (True, row, col) #return hit
 
 	# MISS
 	else if humanMatrix[row][col] < 1: #if there is no ship in that position
@@ -474,9 +475,25 @@ def aiMove():
 			for j in range(10) #because 10x10 board size
 				humanMatrix[i][j] = humanMatrix[i][j] + newProbVal
 
+		return (False, row, col) #return miss
 
 
+def shipHit(x,y):
+	
 
+
+#after ai guess, needs to prompt user to do another move and then continuously loop until the end of the game
+
+hit = humanMove(x,y) #x, y need to be gotten from arduino input
+if hit == True #send user some feedback that says they got a hit and update led board
+
+hit2, x, y = aiMove()
+#if hit2 == True update led board
+
+hit = humanMove(x,y) #this could be wrong but its here for reference
+#human user should do another turn and then on the ais next turn he can check if that last move was a hit and if so run the shiphit function
+if hit2 == True: #hen ai needs to guess positions around it in order to sink the ship
+	shipHit(x,y) #input the position where there was a hit
 
 
 gamesPlayed = gamesPlayed + 1; 
