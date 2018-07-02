@@ -454,9 +454,9 @@ def updateBoard(x, y, probMatrix, gameMatrix):
 
 # Name: aiMove()
 # Description: In this function, the AI determines where to target its next hit
-# Input: Hit - if last AI move hit(true) or missed(false) a ship, X - row of last hit, Y - column of last hit
+# Input: Hit - if last AI move hit(true) or missed(false) a ship,
 # Output: Target locations (x/row, y/col)
-def aiMove(hit, prevX, prevY):
+def aiMove(hit):
 
 	#determine position to hit
 	#update human side probability boards
@@ -464,103 +464,105 @@ def aiMove(hit, prevX, prevY):
 	#update LED board
 
 
-	if hit == False: #if the prev target did not hit a ship, find next best possible option
-		# determine position to hit by finding largest probability in human side board
-		maxValue = 0
-		row, col = 0, 0 #the row and column positions
-		for i in range(10)
-			for j in range(10) #because 10x10 matrix
-				if gameHumanMatrix[i][j] > maxValue
-					maxValue = gameHumanMatrix[i][j]
-					row = i
-					col = j
+	# determine position to hit by finding largest probability in human side board
+	maxValue = 0
+	row, col = 0, 0 #the row and column positions
+	for i in range(10)
+		for j in range(10) #because 10x10 matrix
+			if gameHumanMatrix[i][j] > maxValue
+				maxValue = gameHumanMatrix[i][j]
+				row = i
+				col = j
 
-		return (row, col)
-
-	else if hit == True: #target ship orientation
-		return shipProb(prevX, prevY)
+	return (row, col)
 
 
+	# HIT
+	#if humanMatrix[row][col] > 1 : #if there is a ship in that position
 
-	# # HIT
-	# if humanMatrix[row][col] > 1 : #if there is a ship in that position
-
-	# 	# updates current game board
-	# 	prob = gameHumanMatrix[row][col]
-	# 	distProb = prob/99 #need to evenly distribute that probably to the rest of the board
-	# 	for i in range(10)
-	# 		for j in range(10) #because 10x10 board size
-	# 			gameHumanMatrix[i][j] = gameHumanMatrix[i][j] + distProb
-	# 	gameHumanMatrix[row][col] = 0 #set probably of that position in current game to be zero
+		# # updates current game board
+		# prob = gameHumanMatrix[row][col]
+		# distProb = prob/99 #need to evenly distribute that probably to the rest of the board
+		# for i in range(10)
+		# 	for j in range(10) #because 10x10 board size
+		# 		gameHumanMatrix[i][j] = gameHumanMatrix[i][j] + distProb
+		# gameHumanMatrix[row][col] = 0 #set probably of that position in current game to be zero
 		
-	# 	# updates ai side probability board
-	# 	hitProb = 0.0004032258/gamesPlayed
-	# 	posProb = hitProb/99 #because there are 99 other positions
-	# 	humanMatrix[row][col] = humanMatrix[row][col] + hitProb + posProb #adding posProb because it will be decremented in the loop
-	# 	for i in range(10)
-	# 		for j in range(10) #because 10x10 board size
-	# 			humanMatrix[i][j] = humanMatrix[i][j] - posProb
+		# # updates ai side probability board
+		# hitProb = 0.0004032258/gamesPlayed
+		# posProb = hitProb/99 #because there are 99 other positions
+		# humanMatrix[row][col] = humanMatrix[row][col] + hitProb + posProb #adding posProb because it will be decremented in the loop
+		# for i in range(10)
+		# 	for j in range(10) #because 10x10 board size
+		# 		humanMatrix[i][j] = humanMatrix[i][j] - posProb
 
-	# 	return (True, row, col) #return hit
+		# return (True, row, col) #return hit
 
-	# # MISS
-	# else if humanMatrix[row][col] < 1: #if there is no ship in that position
+	# MISS
+	#else if humanMatrix[row][col] < 1: #if there is no ship in that position
 
-	# 	# updates current game board
-	# 	prob = gameHumanMatrix[row][col]
-	# 	distProb = prob/99 #need to evenly distribute that probably to the rest of the board
-	# 	for i in range(10)
-	# 		for j in range(10) #because 10x10 board size
-	# 			gameHumanMatrix[i][j] = gameHumanMatrix[i][j] + distProb
-	# 	gameHumanMatrix[row][col] = 0 #set probably of that position in current game to be zero
+		# updates current game board
+		# prob = gameHumanMatrix[row][col]
+		# distProb = prob/99 #need to evenly distribute that probably to the rest of the board
+		# for i in range(10)
+		# 	for j in range(10) #because 10x10 board size
+		# 		gameHumanMatrix[i][j] = gameHumanMatrix[i][j] + distProb
+		# gameHumanMatrix[row][col] = 0 #set probably of that position in current game to be zero
 
-	# 	# updates ai side probability board
-	# 	probability = 0.0004032258
-	# 	newProbVal = probability/99 #because there are 99 other positions
-	# 	humanMatrix[row][col] = humanMatrix[row][col] - probability - newProbVal #decrementing newProbVal beause it will be added in the loop
-	# 	or i in range(10)
-	# 		for j in range(10) #because 10x10 board size
-	# 			humanMatrix[i][j] = humanMatrix[i][j] + newProbVal
+		# # updates ai side probability board
+		# probability = 0.0004032258
+		# newProbVal = probability/99 #because there are 99 other positions
+		# humanMatrix[row][col] = humanMatrix[row][col] - probability - newProbVal #decrementing newProbVal beause it will be added in the loop
+		# or i in range(10)
+		# 	for j in range(10) #because 10x10 board size
+		# 		humanMatrix[i][j] = humanMatrix[i][j] + newProbVal
 
-	# 	return (False, row, col) #return miss
+		# return (False, row, col) #return miss
 
 # Name: shipHit()
 # Description: In this function, the AI determines where to hit if a ship has been hit
 # Input: X - row of last hit, Y - column of last hit
+#		X - row of last hit
+#		Y - column of last hit
+#		Orientation - says if orientation of ship has been found
 # Output: Next target locations (x/row, y/col)
-def shipHit(x,y):
-	#check all orientations around the hit position
+def shipHit(x,y, orientationFound):
+	#check all orientations around the hit position to find which osurrounding position has the highest probability
 	
 	maxProb = 0
 	nextX = 0
 	nextY = 0
-	if x > 1: #bounds checking
-		val = gameHumanMatrix[x-1][y] #north
-		if val > maxProb:
-			maxProb = val
-			nextX = x-1
-			nextY = y
 
-	if y < 10: #bounds checking
-		val = gameHumanMatrix[x][y+1] #east
-		if val > maxProb:
-			maxProb = val
-			nextX = x
-			nextY = y+1
-	
-	if x < 10: #bounds checking
-		val = gameHumanMatrix[x+1][y] #south
-		if val > maxProb:
-			maxProb = val
-			nextX = x+1
-			nextY = y
+	if orientationFound == False:
+		if x > 1: #bounds checking
+			val = gameHumanMatrix[x-1][y] #north
+			if val > maxProb:
+				maxProb = val
+				nextX = x-1
+				nextY = y
 
-	if y > 1: #bounds checking
-		val = gameHumanMatrix[x][y-1] #west
-		if val > maxProb:
-			maxProb = val
-			nextX = x
-			nextY = y-1
+		if y < 10: #bounds checking
+			val = gameHumanMatrix[x][y+1] #east
+			if val > maxProb:
+				maxProb = val
+				nextX = x
+				nextY = y+1
+		
+		if x < 10: #bounds checking
+			val = gameHumanMatrix[x+1][y] #south
+			if val > maxProb:
+				maxProb = val
+				nextX = x+1
+				nextY = y
+
+		if y > 1: #bounds checking
+			val = gameHumanMatrix[x][y-1] #west
+			if val > maxProb:
+				maxProb = val
+				nextX = x
+				nextY = y-1
+
+	#need to check if ship has sunk
 
 	#return the next position to hit
 	return (nextX, nextY)
@@ -582,6 +584,10 @@ gameAiMatrix = placeShips(aiMatrix) #place ships onto the gameAI Matrix
 
 hit2 = False #need hit2 to be outside loop so that it can be saved after every loop iteration...
 x2, y2 = None, None
+shipHit = False
+directionKnown = False
+direction = False #true is vertical, false is horizontal
+shipSunk = False
 
 #probably need to loop this
 
@@ -592,12 +598,25 @@ while gameOver == False:
 	# TODO - get human input for target positions
 	#x1, y1 = ...
 	hit1 = updateBoard(x1, y1, aiMatrix, gameAiMatrix) #updates boards and returns true if hit, false if miss
-	# TODO - send hit/miss output to human player
+	# TODO - send hit/miss output to human player and let them know if ship has sunk
 	# TODO - update LED boards based off of hit/miss
 
 	# AI Turn
-	x2, y2 = aiMove(hit2, x2, y2)
-	hit2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix)
+	if shipHit == False: #if no ship has been hit, look for regular target
+		x2, y2 = aiMove(hit2, x2, y2)
+		hit2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix)
+		if hit2 == True:
+			shipHit = True
+	else if shipHit == True: #if ship has been hit
+		x2, y2 = shipHit(x2, y2)
+		hit2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix)
+	else if shipHit == True and hit2 == False:
+
+	else if shipSunk == True:
+
+
+
+
 	# TODO - send hit/miss output to human player
 	# TODO - update LED boards based off of hit/miss
 
