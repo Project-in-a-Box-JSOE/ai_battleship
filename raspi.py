@@ -53,32 +53,32 @@ def ship2(matrix):
 	p2y = 0 #the column of the second position
 
 	#horizontal checking for ship of size 2
-	for i in range(row):
-		for x in range(10) and y in range(9):
-			one = matrix[i][x]
-			two = matrix[i][1+y]
+	for i in range(rows):
+		for j in range(9):
+			one = matrix[i][j]
+			two = matrix[i][j+1]
 
 			#we now get the joint probability
 			prob = one*two
 			if prob < minProb:
 				minProb = prob
 				p1x, p2x = i, i
-				p1y = x
-				p2y = 1+y
+				p1y = j
+				p2y = j+1
 
 	#vertical checking for ship of size 2
-	for i in range(column):
-		for x in range(10) and y in range(9):
-			one = matrix[x][i]
-			two = matrix[1+y][i]
+	for i in range(columns):
+		for j in range(9):
+			one = matrix[j][i]
+			two = matrix[j+1][i]
 
 			#we now get the joint probability
 			prob = one*two
 			if prob < minProb:
 				minProb = prob
-				p1x = x
+				p1x = j
 				p1y, p2y = i, i
-				p2x = 1+y
+				p2x = j+1
 
 	#now to make sure that no positions are chosen for multiple ships, we set those probabilities to values greater than 1 so they never get chosen
 	# but also the value is 2 so we know which positions are for the ship of size 2
@@ -104,36 +104,36 @@ def ship3(matrix):
 	p3y = 0 #the column of the third position
 
 	#horizontal checking for ship of size 3
-	for i in range(row):
-		for x in range(10) and y in range(8):
-			one = matrix[i][x]
-			two = matrix[i][1+y]
-			three = matrix[i][2+y]
+	for i in range(rows):
+		for j in range(8):
+			one = matrix[i][j]
+			two = matrix[i][j+1]
+			three = matrix[i][j+2]
 
 			#we now get the joint probability
 			prob = one*two*three
 			if prob < minProb:
 				minProb = prob
 				p1x, p2x, p3x = i, i, i
-				p1y = x
-				p2y = 1+y
-				p3y = 2+y
+				p1y = j
+				p2y = j+1
+				p3y = j+2
 
 	#vertical checking for ship of size 3
-	for i in range(column):
-		for x in range(10) and y in range(8):
-			one = matrix[x][i]
-			two = matrix[1+y][i]
-			three = matrix[2+y][i]
+	for i in range(columns):
+		for j in range(8):
+			one = matrix[j][i]
+			two = matrix[j+1][i]
+			three = matrix[j+2][i]
 
 			#we now get the joint probability
 			prob = one*two*three
 			if prob < minProb:
 				minProb = prob
-				p1x = x
+				p1x = j
 				p1y, p2y, p3y = i, i, i
-				p2x = 1+y
-				p3x = 2+y
+				p2x = j+1
+				p3x = j+2
 
 	#now to make sure that no positions are chosen for multiple ships, we set those probabilities to values greater than 1 so they never get chosen
 	# but also the value is 3 so we know which positions are for the ship of size 3
@@ -163,40 +163,40 @@ def ship4(matrix):
 	p4y = 0 #the column of the fourth position
 
 	#horizontal checking for ship of size 4
-	for i in range(row):
-		for x in range(10) and y in range(7):
-			one = matrix[i][x]
-			two = matrix[i][1+y]
-			three = matrix[i][2+y]
-			four = matrix[i][3+y]
+	for i in range(rows):
+		for j in range(7):
+			one = matrix[i][j]
+			two = matrix[i][j+1]
+			three = matrix[i][j+2]
+			four = matrix[i][j+3]
 
 			#we now get the joint probability
 			prob = one*two*three*four
 			if prob < minProb:
 				minProb = prob
 				p1x, p2x, p3x, p4x = i, i, i, i
-				p1y = x
-				p2y = 1+y
-				p3y = 2+y
-				p4y = 3+y
+				p1y = j
+				p2y = j+1
+				p3y = j+2
+				p4y = j+3
 
 	#vertical checking for ship of size 4
-	for i in range(column):
-		for x in range(10) and y in range(7):
-			one = matrix[x][i]
-			two = matrix[1+y][i]
-			three = matrix[2+y][i]
-			four = matrix[3+y][i]
+	for i in range(columns):
+		for j in range(7):
+			one = matrix[j][i]
+			two = matrix[j+1][i]
+			three = matrix[j+2][i]
+			four = matrix[j+3][i]
 
 			#we now get the joint probability
 			prob = one*two*three*four
 			if prob < minProb:
 				minProb = prob
-				p1x = x
+				p1x = j
 				p1y, p2y, p3y, p4y = i, i, i, i
-				p2x = 1+y
-				p3x = 2+y
-				p4x = 3+y
+				p2x = j+1
+				p3x = j+2
+				p4x = j+3
 
 	#now to make sure that no positions are chosen for multiple ships, we set those probabilities to values greater than 1 so they never get chosen
 	# but also the value is 4 so we know which positions are for the ship of size 4
@@ -230,44 +230,44 @@ def ship5(matrix):
 	p5y = 0 #the column of the fifth position
 
 	#horizontal checking for ship of size 5
-	for i in range(row):
-		for x in range(10) and y in range(6):
-			one = matrix[i][x]
-			two = matrix[i][1+y]
-			three = matrix[i][2+y]
-			four = matrix[i][3+y]
-			five = matrix[i][4+y]
+	for i in range(rows):
+		for j in range(6):
+			one = matrix[i][j]
+			two = matrix[i][j+1]
+			three = matrix[i][j+2]
+			four = matrix[i][j+3]
+			five = matrix[i][j+4]
 
 			#we now get the joint probability
 			prob = one*two
 			if prob < minProb:
 				minProb = prob
 				p1x, p2x, p3x, p4x, p5x = i, i, i, i, i
-				p1y = x
-				p2y = 1+y
-				p3y = 2+y
-				p4y = 3+y
-				p5y = 4+y
+				p1y = j
+				p2y = j+1
+				p3y = j+2
+				p4y = j+3
+				p5y = j+4
 
 	#vertical checking for ship of size 5
-	for i in range(column):
-		for x in range(10) and y in range(6):
-			one = matrix[x][i]
-			two = matrix[1+y][i]
-			three = matrix[2+y][i]
-			four = matrix[3+y][i]
-			five = matrix[4+y][i]
+	for i in range(columns):
+		for j in range(6):
+			one = matrix[j][i]
+			two = matrix[j+1][i]
+			three = matrix[j+2][i]
+			four = matrix[j+3][i]
+			five = matrix[j+4][i]
 
 			#we now get the joint probability
 			prob = one*two
 			if prob < minProb:
 				minProb = prob
-				p1x = x
+				p1x = j
 				p1y, p2y, p3y, p4y, p5y = i, i, i, i, i
-				p2x = 1+y
-				p3x = 2+y
-				p4x = 3+y
-				p5x = 4+y
+				p2x = j+1
+				p3x = j+2
+				p4x = j+3
+				p5x = j+4
 
 
 	#now to make sure that no positions are chosen for multiple ships, we set those probabilities to values greater than 1 so they never get chosen
