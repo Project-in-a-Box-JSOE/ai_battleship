@@ -519,57 +519,97 @@ def aiMove(hit):
 
 		# return (False, row, col) #return miss
 
-# Name: shipHit()
-# Description: In this function, the AI determines where to hit if a ship has been hit
-# Input: X - row of last hit, Y - column of last hit
-#		X - row of last hit
+# Name: getShipOrientation()
+# Description: In this function, the AI determines where to hit if a ship has been hit (which orientation)
+# Input: X - row of last hit
 #		Y - column of last hit
 #		Orientation - says if orientation of ship has been found
-# Output: Next target locations (x/row, y/col)
-def shipHit(x,y, orientationFound):
+# Output: Next target locations (x/row, y/col), Orientation - of ship to hit (NESW)
+def getShipOrientation(x,y):
 	#check all orientations around the hit position to find which osurrounding position has the highest probability
 	
 	maxProb = 0
 	nextX = 0
 	nextY = 0
+	orientation = None
 
-	if orientationFound == False:
+	if x > 1: #bounds checking
+		val = gameHumanMatrix[x-1][y] #north
+		if val > maxProb:
+			maxProb = val
+			nextX = x-1
+			nextY = y
+			orientation = "north"
+
+	if y < 10: #bounds checking
+		val = gameHumanMatrix[x][y+1] #east
+		if val > maxProb:
+			maxProb = val
+			nextX = x
+			nextY = y+1
+			orientation = "east"
+	
+	if x < 10: #bounds checking
+		val = gameHumanMatrix[x+1][y] #south
+		if val > maxProb:
+			maxProb = val
+			nextX = x+1
+			nextY = y
+			orientation = "south"
+
+	if y > 1: #bounds checking
+		val = gameHumanMatrix[x][y-1] #west
+		if val > maxProb:
+			maxProb = val
+			nextX = x
+			nextY = y-1
+			orientation = "west"
+
+
+	#return the next position to hit and direction (n, e, s, w)
+	return (nextX, nextY, orientation)
+
+# Name: hitShip()
+# Description: In this function, the AI determines where to hit if a ship has been hit and we have determined the orientation
+# Input: X - row of last hit
+#		Y - column of last hit
+#		Orientation - which direction we think the ship is facing
+# Output: Next target locations (x/row, y/col), nextOrientation (switch in case we reach end of board)
+def hitShip(x,y, orientation):
+
+	nextX = 0
+	nextY = 0
+	nextOrientation = orientation
+
+	if orientation == "north":
 		if x > 1: #bounds checking
-			val = gameHumanMatrix[x-1][y] #north
-			if val > maxProb:
-				maxProb = val
-				nextX = x-1
-				nextY = y
+			nextX = x-1
+			nextY = y
+		else: #switch orientation
+			nextOrientation = "south"
 
+	else if orientation == "east":
 		if y < 10: #bounds checking
-			val = gameHumanMatrix[x][y+1] #east
-			if val > maxProb:
-				maxProb = val
-				nextX = x
-				nextY = y+1
+			nextX = x
+			nextY = y+1
+		else:
+			nextOrientation = "west"
 		
+	else if orientation == "south":
 		if x < 10: #bounds checking
-			val = gameHumanMatrix[x+1][y] #south
-			if val > maxProb:
-				maxProb = val
-				nextX = x+1
-				nextY = y
+			nextX = x+1
+			nextY = y
+		else:
+			nextOrientation = "north"
 
+	else if orientation == "west":
 		if y > 1: #bounds checking
-			val = gameHumanMatrix[x][y-1] #west
-			if val > maxProb:
-				maxProb = val
-				nextX = x
-				nextY = y-1
+			nextX = x
+			nextY = y-1
+		else:
+			nextOrientation = "east"
 
-	#need to check if ship has sunk
-
-	#return the next position to hit
-	return (nextX, nextY)
-
-
-
-
+	return (nextX, nextY, nextOrientation)
 
 
 
@@ -585,9 +625,9 @@ gameAiMatrix = placeShips(aiMatrix) #place ships onto the gameAI Matrix
 hit2 = False #need hit2 to be outside loop so that it can be saved after every loop iteration...
 x2, y2 = None, None
 shipHit = False
-directionKnown = False
-direction = False #true is vertical, false is horizontal
-shipSunk = False
+orientationKnown = False
+orientation = None
+shipSunk == False
 
 #probably need to loop this
 
@@ -602,6 +642,44 @@ while gameOver == False:
 	# TODO - update LED boards based off of hit/miss
 
 	# AI Turn
+	if shipHit == False: #if no ship has been hit, look for regular target
+		x2, y2 = aiMove(hit2, x2, y2)
+		hit2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix)
+		shipHit = hit2
+
+	else if shipHit = True:
+
+		if orientationKnown == False:
+			x2, y2, orientation = getShipOrientation(x2, y2, direction)
+			orientationKnown = True;
+			hit2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix)
+
+
+# need to save original hit in case we need to switch orientation
+
+		else if orientationKnown == True:
+			if hit2 == True and shipSunk == False:
+				x2, y2, orientation = hitShip(x2, y2, orientation)
+
+			else if hit2 == False: #if not sunk and miss, need to switch orientation by 180 degrees
+				orientation = 
+
+
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
 	if shipHit == False: #if no ship has been hit, look for regular target
 		x2, y2 = aiMove(hit2, x2, y2)
 		hit2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix)
