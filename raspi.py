@@ -290,6 +290,9 @@ def ship5(matrix):
 # Output: True if ship was hit, False if missed
 def updateBoard(x, y, probMatrix, gameMatrix):
 	
+	row = x
+	col = y
+
 	# HIT
 	if gameMatrix[row][col] > 1 : #if there is a ship in that position
 
@@ -335,9 +338,9 @@ def updateBoard(x, y, probMatrix, gameMatrix):
 
 # Name: aiMove()
 # Description: In this function, the AI determines where to target its next hit
-# Input: Hit - if last AI move hit(true) or missed(false) a ship,
+# Input: None
 # Output: Target locations (x/row, y/col)
-def aiMove(hit):
+def aiMove():
 
 	#determine position to hit
 	#update human side probability boards
@@ -562,7 +565,7 @@ x2, y2 = None, None
 shipHit = False
 orientationKnown = False
 orientation = None
-shipSunk == False
+shipSunk = False
 ogX, ogY = None, None
 
 #probably need to loop this
@@ -573,6 +576,7 @@ while gameOver == False:
 	# Human turn
 	# TODO - get human input for target positions
 	#x1, y1 = ...
+	x1, y1 = 1, 1
 	
 	#updates boards and returns true if hit, false if miss
 	hit1 = updateBoard(x1, y1, aiMatrix, gameAiMatrix) 
@@ -582,7 +586,7 @@ while gameOver == False:
 
 	# AI Turn
 	if shipHit == False: #if no ship has been hit, look for regular target
-		x2, y2 = aiMove(hit2, x2, y2)
+		x2, y2 = aiMove()
 		ogX, ogY = x2, y2
 		hit2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix)
 		shipHit = hit2
@@ -595,7 +599,7 @@ while gameOver == False:
 			hit2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix)
 
 
-# need to save original hit in case we need to switch orientation
+	# need to save original hit in case we need to switch orientation
 
 		elif orientationKnown == True:
 			if hit2 == True and shipSunk == False:
@@ -605,6 +609,7 @@ while gameOver == False:
 				x2, y2, orientation = getShipOrientation(x2, y2, direction)
 
 
+	gameOver = True
 
 	# TODO - send hit/miss output to human player
 	# TODO - update LED boards based off of hit/miss
