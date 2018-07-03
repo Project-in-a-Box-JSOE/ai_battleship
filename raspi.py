@@ -68,19 +68,27 @@ aiMatrix = [ [0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709676
 				[0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709676, 0.0088709676, 0.0084677418, 0.0076612902, 0.006048387, 0.004032258] ]
 #aiMatrix = matrix read from file
 
-#this is the human side of the board... only used during the duration of the game
+#this is the human side of the board... used during the duration of the game
 gameHumanMatrix = humanMatrix[:]
 
 #this is the ai side of the board... only used during the duration of the game
 gameAiMatrix = aiMatrix[:]
 
-gamesPlayed = 1; #this will be a global variable that gets overwritten with the start of each new game and gets incremented at the end of each game.
+#this will be a global variable that gets overwritten with the start of each new
+#game and gets incremented at the end of each game.
+gamesPlayed = 1;
 
 #------------------------------------------------------------------------------------------------------------
 
 
 #at the start of the game the AI needs to place ships at the locations with the least probability
 #do this using probability: algorithm is to look at every possible ship placement and put the ship at the place with the lowest joint probability
+
+#these functions do the probability calculations for each ship placement
+# Name: ship#()
+# Description: This function calculates the best location to place each ship
+# Input: ProbMatrix - overall prob matrix for ai side of the board
+# Output: Matrix - contains locations of the ships
 def placeShips(aiMatrix):
 
 	aiMatrixCopy = aiMatrix[:]
@@ -97,7 +105,12 @@ def placeShips(aiMatrix):
 
 	return aiMatrixCopy
 
-#these functions do the probability calculations for each ship placement
+# Name: ship#()
+# Description: This function calculates the best location to place each ship by
+# looking at every possible ship placement and using probability superposition
+# to select the orientation with the smallest probability of being guessed
+# Input: ProbMatrix - overall prob matrix for ai side of the board
+# Output: Matrix - contains locations of the ships
 
 def ship2(matrix):
 	#loop through the AI boards history matrix (the human user guesses) aka aiMatrix
@@ -341,16 +354,12 @@ def ship5(matrix):
 	return (matrix)
 
 
-#reads the board files to start the game
-def readBoards():
-
-#writes the board files at the end of the game
-def writeBoards():
-
 # Name: updateBoard()
-# Description: In this function, we update the gameMatrix with every move so that it is accurate for the next turn
-# Input: X/Row location, Y/Column location, ProbMatrix(overall prob matrix for human/ai), GameMatrix(current game matrix for human/ai)
-# Output: Target locations (x/row, y/col)
+# Description: In this function, we update the gameMatrix with every move so
+# that it is accurate for the next turn
+# Input: X/Row location, Y/Column location, ProbMatrix(overall prob matrix for
+# human/ai), GameMatrix(current game matrix for human/ai)
+# Output: True if ship was hit, False if missed
 def updateBoard(x, y, probMatrix, gameMatrix):
 	
 	# HIT
@@ -393,65 +402,8 @@ def updateBoard(x, y, probMatrix, gameMatrix):
 			for j in range(10) #because 10x10 board size
 				probMatrix[i][j] = probMatrix[i][j] + newProbVal
 
-		return False #return miss
+		return False #return miss		
 
-
-
-# matrices will either be global or passed into the functions
-
-# this function takes in the inputs x(the row of the target) and y(the column of the target)
-# this funciton should return whether it was a hit(true) or miss(false)
-# def humanMove(x, y):
-
-	#row = x;
-	#col = y;
-
-	#update ai side probability boards
-	#update ai current game board
-	#update LED board
-
-	# HIT
-	if aiMatrixCopy[row][col] > 1 : #if there is a ship in that position
-
-		# updates current game board
-		prob = gameAiMatrix[row][col]
-		distProb = prob/99 #need to evenly distribute that probably to the rest of the board
-		for i in range(10)
-			for j in range(10) #because 10x10 board size
-				gameAiMatrix[i][j] = gameAiMatrix[i][j] + distProb
-		gameAiMatrix[row][col] = 0 #set probably of that position in current game to be zero
-		
-		# updates ai side probability board
-		hitProb = 0.0004032258/gamesPlayed
-		posProb = hitProb/99 #because there are 99 other positions
-		aiMatrix[row][col] = aiMatrix[row][col] + hitProb + posProb #adding posProb because it will be decremented in the loop
-		for i in range(10)
-			for j in range(10) #because 10x10 board size
-				aiMatrix[i][j] = aiMatrix[i][j] - posProb
-
-		return True #return hit
-
-	# MISS
-	else if aiMatrixCopy[row][col] < 1: #if there is no ship in that position
-
-		# updates current game board
-		prob = gameAiMatrix[row][col]
-		distProb = prob/99 #need to evenly distribute that probably to the rest of the board
-		for i in range(10)
-			for j in range(10) #because 10x10 board size
-				gameAiMatrix[i][j] = gameAiMatrix[i][j] + distProb
-		gameAiMatrix[row][col] = 0 #set probably of that position in current game to be zero
-
-		# updates ai side probability board
-		probability = 0.0004032258
-		newProbVal = probability/99 #because there are 99 other positions
-		aiMatrix[row][col] = aiMatrix[row][col] - probability - newProbVal #decrementing newProbVal beause it will be added in the loop
-		or i in range(10)
-			for j in range(10) #because 10x10 board size
-				aiMatrix[i][j] = aiMatrix[i][j] + newProbVal
-
-		return False #return miss
-		
 
 # Name: aiMove()
 # Description: In this function, the AI determines where to target its next hit
@@ -520,12 +472,14 @@ def aiMove(hit):
 
 		# return (False, row, col) #return miss
 
+
 # Name: getShipOrientation()
-# Description: In this function, the AI determines where to hit if a ship has been hit (which orientation)
+# Description: In this function, the AI determines where to hit if a ship has 
+# been hit (which orientation)
 # Input: X - row of last hit
 #		Y - column of last hit
 #		Orientation - says if orientation of ship has been found
-# Output: Next target locations (x/row, y/col), Orientation - of ship to hit (NESW)
+# Output: Next target locations (x/row, y/col), Orientation of ship (NESW)
 def getShipOrientation(x,y):
 	#check all orientations around the hit position to find which osurrounding position has the highest probability
 	
@@ -570,14 +524,17 @@ def getShipOrientation(x,y):
 	#return the next position to hit and direction (n, e, s, w)
 	return (nextX, nextY, orientation)
 
+
 # Name: hitShip()
-# Description: In this function, the AI determines where to hit if a ship has been hit and we have determined the orientation
+# Description: In this function, the AI determines where to hit if a ship has
+# been hit and we have determined the orientation
 # Input: X - row of last hit
 #		Y - column of last hit
 #		Orientation - which direction we think the ship is facing
 #		ogX - row of original X hit
 #		ogY - column of original Y hit
-# Output: Next target locations (x/row, y/col), nextOrientation (switch in case we reach end of board)
+# Output: Next target locations (x/row, y/col), nextOrientation (switch in case 
+# we reach end of board)
 def hitShip(x,y, orientation, ogX, ogY):
 
 	nextX = 0
@@ -622,8 +579,10 @@ def hitShip(x,y, orientation, ogX, ogY):
 
 	return (nextX, nextY, nextOrientation)
 
+
 # Name: didShipSink()
-# Description: In this function, we check whether or not the ship containing this point has sunk
+# Description: In this function, we check whether or not the ship containing
+# this point has sunk
 # Input: X - row point in ship
 #		Y - column point in ship
 # Output: True if ship has sunk, False if ship has not sunk
@@ -656,7 +615,10 @@ while gameOver == False:
 	# Human turn
 	# TODO - get human input for target positions
 	#x1, y1 = ...
-	hit1 = updateBoard(x1, y1, aiMatrix, gameAiMatrix) #updates boards and returns true if hit, false if miss
+	
+	#updates boards and returns true if hit, false if miss
+	hit1 = updateBoard(x1, y1, aiMatrix, gameAiMatrix) 
+	
 	# TODO - send hit/miss output to human player and let them know if ship has sunk
 	# TODO - update LED boards based off of hit/miss
 
@@ -681,7 +643,7 @@ while gameOver == False:
 			if hit2 == True and shipSunk == False:
 				x2, y2, orientation = hitShip(x2, y2, orientation, ogX, ogY)
 
-			else if hit2 == False: #if not sunk and miss, need to switch orientation by 180 degrees
+			else if hit2 == False: #if not sunk and miss
 				x2, y2, orientation = getShipOrientation(x2, y2, direction)
 
 
