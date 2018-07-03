@@ -1,90 +1,18 @@
+#!/usr/bin/env python
+
 #python code for raspberry pi
 
-#we will have a file that we will read at the start of every game and write to at the end of every game
-#it will contain the boards that nee to be saves for every game
-#one file for human player board
-#one file for AI board
+#import serial
+#import RPi.GPIO as GPIO
+#import time
 
-import serial
-import RPi.GPIO as GPIO
-import time
+#ser=serial.Serial("/dev/ttyACM0",9600)  #change ACM number as found from ls /dev/tty/ACM*
+#ser.baudrate=9600
+#def blink(pin):
 
-ser=serial.Serial("/dev/ttyACM0",9600)  #change ACM number as found from ls /dev/tty/ACM*
-ser.baudrate=9600
-def blink(pin):
-
-
-GPIO.output(pin,GPIO.HIGH) 
-
-
+#GPIO.output(pin,GPIO.HIGH) 
 #------------------------------------------------------------------------------------------------------------
 
-# These are the board we need throughout the game
-
-#this only counts for the first game ever
-startMatrix = [ [0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709676, 0.0088709676, 0.0084677418, 0.0076612902, 0.006048387, 0.004032258],
-				[0.006048387, 0.008064516, 0.0096774192, 0.0104838708, 0.0108870966, 0.0108870966, 0.0104838708, 0.0096774192, 0.008064516, 0.006048387],
-				[0.0076612902, 0.0096774192, 0.0112903224, 0.012096774, 0.0124999998, 0.0124999998, 0.012096774, 0.0112903224, 0.0096774192, 0.0076612902],
-				[0.0084677418, 0.0104838708, 0.012096774, 0.0129032256, 0.0133064514, 0.0133064514, 0.0129032256, 0.012096774, 0.0104838708, 0.0084677418],
-				[0.0088709676, 0.0108870966, 0.0124999998, 0.0133064514, 0.0137096772, 0.0137096772, 0.0133064514, 0.0124999998, 0.0108870966, 0.0088709676],
-				[0.0088709676, 0.0108870966, 0.0124999998, 0.0133064514, 0.0137096772, 0.0137096772, 0.0133064514, 0.0124999998, 0.0108870966, 0.0088709676],
-				[0.0084677418, 0.0104838708, 0.012096774, 0.0129032256, 0.0133064514, 0.0133064514, 0.0129032256, 0.012096774, 0.0104838708, 0.0084677418],
-				[0.0076612902, 0.0096774192, 0.0112903224, 0.012096774, 0.0124999998, 0.0124999998, 0.012096774, 0.0112903224, 0.0096774192, 0.0076612902],
-				[0.006048387, 0.008064516, 0.0096774192, 0.0104838708, 0.0108870966, 0.0108870966, 0.0104838708, 0.0096774192, 0.008064516, 0.006048387],
-				[0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709676, 0.0088709676, 0.0084677418, 0.0076612902, 0.006048387, 0.004032258] ]
-
-#this is the matrix of the human side that will get saved at the end of the game to be used at the start of the next game
-endHumanMatrix = []
-
-#this is the matrix of the ai side that will get saved at the end of the game to be used at the start of the next game
-endAiMatrix = []
-
-#TODO - the values in these matrices need to be changes for every game... read from file
-
-#this is the board probability of the current game... starts the same as the startMatrix
-#this is the humans side of the board... this gets saved at the end of the game to be used at the start of the next game
-humanMatrix = [ [0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709676, 0.0088709676, 0.0084677418, 0.0076612902, 0.006048387, 0.004032258],
-				[0.006048387, 0.008064516, 0.0096774192, 0.0104838708, 0.0108870966, 0.0108870966, 0.0104838708, 0.0096774192, 0.008064516, 0.006048387],
-				[0.0076612902, 0.0096774192, 0.0112903224, 0.012096774, 0.0124999998, 0.0124999998, 0.012096774, 0.0112903224, 0.0096774192, 0.0076612902],
-				[0.0084677418, 0.0104838708, 0.012096774, 0.0129032256, 0.0133064514, 0.0133064514, 0.0129032256, 0.012096774, 0.0104838708, 0.0084677418],
-				[0.0088709676, 0.0108870966, 0.0124999998, 0.0133064514, 0.0137096772, 0.0137096772, 0.0133064514, 0.0124999998, 0.0108870966, 0.0088709676],
-				[0.0088709676, 0.0108870966, 0.0124999998, 0.0133064514, 0.0137096772, 0.0137096772, 0.0133064514, 0.0124999998, 0.0108870966, 0.0088709676],
-				[0.0084677418, 0.0104838708, 0.012096774, 0.0129032256, 0.0133064514, 0.0133064514, 0.0129032256, 0.012096774, 0.0104838708, 0.0084677418],
-				[0.0076612902, 0.0096774192, 0.0112903224, 0.012096774, 0.0124999998, 0.0124999998, 0.012096774, 0.0112903224, 0.0096774192, 0.0076612902],
-				[0.006048387, 0.008064516, 0.0096774192, 0.0104838708, 0.0108870966, 0.0108870966, 0.0104838708, 0.0096774192, 0.008064516, 0.006048387],
-				[0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709676, 0.0088709676, 0.0084677418, 0.0076612902, 0.006048387, 0.004032258] ]
-#humanMatrix = matrix read from file
-
-#this is the ai side of the board... this gets saved at the end of the game to be used at the start of the next game
-aiMatrix = [ [0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709676, 0.0088709676, 0.0084677418, 0.0076612902, 0.006048387, 0.004032258],
-				[0.006048387, 0.008064516, 0.0096774192, 0.0104838708, 0.0108870966, 0.0108870966, 0.0104838708, 0.0096774192, 0.008064516, 0.006048387],
-				[0.0076612902, 0.0096774192, 0.0112903224, 0.012096774, 0.0124999998, 0.0124999998, 0.012096774, 0.0112903224, 0.0096774192, 0.0076612902],
-				[0.0084677418, 0.0104838708, 0.012096774, 0.0129032256, 0.0133064514, 0.0133064514, 0.0129032256, 0.012096774, 0.0104838708, 0.0084677418],
-				[0.0088709676, 0.0108870966, 0.0124999998, 0.0133064514, 0.0137096772, 0.0137096772, 0.0133064514, 0.0124999998, 0.0108870966, 0.0088709676],
-				[0.0088709676, 0.0108870966, 0.0124999998, 0.0133064514, 0.0137096772, 0.0137096772, 0.0133064514, 0.0124999998, 0.0108870966, 0.0088709676],
-				[0.0084677418, 0.0104838708, 0.012096774, 0.0129032256, 0.0133064514, 0.0133064514, 0.0129032256, 0.012096774, 0.0104838708, 0.0084677418],
-				[0.0076612902, 0.0096774192, 0.0112903224, 0.012096774, 0.0124999998, 0.0124999998, 0.012096774, 0.0112903224, 0.0096774192, 0.0076612902],
-				[0.006048387, 0.008064516, 0.0096774192, 0.0104838708, 0.0108870966, 0.0108870966, 0.0104838708, 0.0096774192, 0.008064516, 0.006048387],
-				[0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709676, 0.0088709676, 0.0084677418, 0.0076612902, 0.006048387, 0.004032258] ]
-#aiMatrix = matrix read from file
-
-#this is the human side of the board... used during the duration of the game
-gameHumanMatrix = humanMatrix[:]
-
-#this is the ai side of the board... only used during the duration of the game
-gameAiMatrix = aiMatrix[:]
-
-#this will be a global variable that gets overwritten with the start of each new
-#game and gets incremented at the end of each game.
-gamesPlayed = 1;
-
-#------------------------------------------------------------------------------------------------------------
-
-
-#at the start of the game the AI needs to place ships at the locations with the least probability
-#do this using probability: algorithm is to look at every possible ship placement and put the ship at the place with the lowest joint probability
-
-#these functions do the probability calculations for each ship placement
 # Name: ship#()
 # Description: This function calculates the best location to place each ship
 # Input: ProbMatrix - overall prob matrix for ai side of the board
@@ -115,8 +43,8 @@ def placeShips(aiMatrix):
 def ship2(matrix):
 	#loop through the AI boards history matrix (the human user guesses) aka aiMatrix
 
-	float one = 1
-	float two = 1
+	one = 1.0
+	two = 1.0
 	rows, columns = 10, 10
 	minProb = 1
 	p1x = 0 #the row of the first position
@@ -126,7 +54,7 @@ def ship2(matrix):
 
 	#horizontal checking for ship of size 2
 	for i in range(row):
-		for x in range(10) and y in range(9)
+		for x in range(10) and y in range(9):
 			one = matrix[i][x]
 			two = matrix[i][1+y]
 
@@ -140,7 +68,7 @@ def ship2(matrix):
 
 	#vertical checking for ship of size 2
 	for i in range(column):
-		for x in range(10) and y in range(9)
+		for x in range(10) and y in range(9):
 			one = matrix[x][i]
 			two = matrix[1+y][i]
 
@@ -163,9 +91,9 @@ def ship2(matrix):
 def ship3(matrix):
 	#loop through the AI boards history matrix (the human user guesses) aka aiMatrix
 
-	float one = 1
-	float two = 1
-	float three = 1
+	fone = 1.0
+	two = 1.0
+	three = 1.0
 	rows, columns = 10, 10
 	minProb = 1
 	p1x = 0 #the row of the first position
@@ -177,7 +105,7 @@ def ship3(matrix):
 
 	#horizontal checking for ship of size 3
 	for i in range(row):
-		for x in range(10) and y in range(8)
+		for x in range(10) and y in range(8):
 			one = matrix[i][x]
 			two = matrix[i][1+y]
 			three = matrix[i][2+y]
@@ -193,7 +121,7 @@ def ship3(matrix):
 
 	#vertical checking for ship of size 3
 	for i in range(column):
-		for x in range(10) and y in range(8)
+		for x in range(10) and y in range(8):
 			one = matrix[x][i]
 			two = matrix[1+y][i]
 			three = matrix[2+y][i]
@@ -219,10 +147,10 @@ def ship3(matrix):
 def ship4(matrix):
 	#loop through the AI boards history matrix (the human user guesses) aka aiMatrix
 
-	float one = 1
-	float two = 1
-	float three = 1
-	float four = 1
+	one = 1.0
+	two = 1.0
+	three = 1.0
+	four = 1.0
 	rows, columns = 10, 10
 	minProb = 1
 	p1x = 0 #the row of the first position
@@ -236,7 +164,7 @@ def ship4(matrix):
 
 	#horizontal checking for ship of size 4
 	for i in range(row):
-		for x in range(10) and y in range(7)
+		for x in range(10) and y in range(7):
 			one = matrix[i][x]
 			two = matrix[i][1+y]
 			three = matrix[i][2+y]
@@ -254,7 +182,7 @@ def ship4(matrix):
 
 	#vertical checking for ship of size 4
 	for i in range(column):
-		for x in range(10) and y in range(7)
+		for x in range(10) and y in range(7):
 			one = matrix[x][i]
 			two = matrix[1+y][i]
 			three = matrix[2+y][i]
@@ -283,11 +211,11 @@ def ship4(matrix):
 def ship5(matrix):
 	#loop through the AI boards history matrix (the human user guesses) aka aiMatrix
 
-	float one = 1
-	float two = 1
-	float three = 1
-	float four = 1
-	float five = 1
+	one = 1.0
+	two = 1.0
+	three = 1.0
+	four = 1.0
+	five = 1.0
 	rows, columns = 10, 10
 	minProb = 1
 	p1x = 0 #the row of the first position
@@ -303,7 +231,7 @@ def ship5(matrix):
 
 	#horizontal checking for ship of size 5
 	for i in range(row):
-		for x in range(10) and y in range(6)
+		for x in range(10) and y in range(6):
 			one = matrix[i][x]
 			two = matrix[i][1+y]
 			three = matrix[i][2+y]
@@ -323,7 +251,7 @@ def ship5(matrix):
 
 	#vertical checking for ship of size 5
 	for i in range(column):
-		for x in range(10) and y in range(6)
+		for x in range(10) and y in range(6):
 			one = matrix[x][i]
 			two = matrix[1+y][i]
 			three = matrix[2+y][i]
@@ -368,8 +296,8 @@ def updateBoard(x, y, probMatrix, gameMatrix):
 		# updates current game board
 		prob = gameMatrix[row][col]
 		distProb = prob/99 #need to evenly distribute that probably to the rest of the board
-		for i in range(10)
-			for j in range(10) #because 10x10 board size
+		for i in range(10):
+			for j in range(10): #because 10x10 board size
 				gameMatrix[i][j] = gameMatrix[i][j] + distProb
 		gameMatrix[row][col] = 0 #set probably of that position in current game to be zero
 		
@@ -377,20 +305,20 @@ def updateBoard(x, y, probMatrix, gameMatrix):
 		hitProb = 0.0004032258/gamesPlayed
 		posProb = hitProb/99 #because there are 99 other positions
 		probMatrix[row][col] = probMatrix[row][col] + hitProb + posProb #adding posProb because it will be decremented in the loop
-		for i in range(10)
-			for j in range(10) #because 10x10 board size
+		for i in range(10):
+			for j in range(10): #because 10x10 board size
 				probMatrix[i][j] = probMatrix[i][j] - posProb
 
 		return True #return hit
 
 	# MISS
-	else if gameMatrix[row][col] < 1: #if there is no ship in that position
+	elif gameMatrix[row][col] < 1: #if there is no ship in that position
 
 		# updates current game board
 		prob = gameMatrix[row][col]
 		distProb = prob/99 #need to evenly distribute that probably to the rest of the board
-		for i in range(10)
-			for j in range(10) #because 10x10 board size
+		for i in range(10):
+			for j in range(10): #because 10x10 board size
 				gameMatrix[i][j] = gameMatrix[i][j] + distProb
 		gameMatrix[row][col] = 0 #set probably of that position in current game to be zero
 
@@ -398,8 +326,8 @@ def updateBoard(x, y, probMatrix, gameMatrix):
 		probability = 0.0004032258
 		newProbVal = probability/99 #because there are 99 other positions
 		probMatrix[row][col] = probMatrix[row][col] - probability - newProbVal #decrementing newProbVal beause it will be added in the loop
-		or i in range(10)
-			for j in range(10) #because 10x10 board size
+		for i in range(10):
+			for j in range(10): #because 10x10 board size
 				probMatrix[i][j] = probMatrix[i][j] + newProbVal
 
 		return False #return miss		
@@ -420,57 +348,14 @@ def aiMove(hit):
 	# determine position to hit by finding largest probability in human side board
 	maxValue = 0
 	row, col = 0, 0 #the row and column positions
-	for i in range(10)
-		for j in range(10) #because 10x10 matrix
-			if gameHumanMatrix[i][j] > maxValue
+	for i in range(10):
+		for j in range(10): #because 10x10 matrix
+			if gameHumanMatrix[i][j] > maxValue:
 				maxValue = gameHumanMatrix[i][j]
 				row = i
 				col = j
 
 	return (row, col)
-
-
-	# HIT
-	#if humanMatrix[row][col] > 1 : #if there is a ship in that position
-
-		# # updates current game board
-		# prob = gameHumanMatrix[row][col]
-		# distProb = prob/99 #need to evenly distribute that probably to the rest of the board
-		# for i in range(10)
-		# 	for j in range(10) #because 10x10 board size
-		# 		gameHumanMatrix[i][j] = gameHumanMatrix[i][j] + distProb
-		# gameHumanMatrix[row][col] = 0 #set probably of that position in current game to be zero
-		
-		# # updates ai side probability board
-		# hitProb = 0.0004032258/gamesPlayed
-		# posProb = hitProb/99 #because there are 99 other positions
-		# humanMatrix[row][col] = humanMatrix[row][col] + hitProb + posProb #adding posProb because it will be decremented in the loop
-		# for i in range(10)
-		# 	for j in range(10) #because 10x10 board size
-		# 		humanMatrix[i][j] = humanMatrix[i][j] - posProb
-
-		# return (True, row, col) #return hit
-
-	# MISS
-	#else if humanMatrix[row][col] < 1: #if there is no ship in that position
-
-		# updates current game board
-		# prob = gameHumanMatrix[row][col]
-		# distProb = prob/99 #need to evenly distribute that probably to the rest of the board
-		# for i in range(10)
-		# 	for j in range(10) #because 10x10 board size
-		# 		gameHumanMatrix[i][j] = gameHumanMatrix[i][j] + distProb
-		# gameHumanMatrix[row][col] = 0 #set probably of that position in current game to be zero
-
-		# # updates ai side probability board
-		# probability = 0.0004032258
-		# newProbVal = probability/99 #because there are 99 other positions
-		# humanMatrix[row][col] = humanMatrix[row][col] - probability - newProbVal #decrementing newProbVal beause it will be added in the loop
-		# or i in range(10)
-		# 	for j in range(10) #because 10x10 board size
-		# 		humanMatrix[i][j] = humanMatrix[i][j] + newProbVal
-
-		# return (False, row, col) #return miss
 
 
 # Name: getShipOrientation()
@@ -550,7 +435,7 @@ def hitShip(x,y, orientation, ogX, ogY):
 			nextX = ogX+1
 			nextY = ogY
 
-	else if orientation == "east":
+	elif orientation == "east":
 		if y < 10: #bounds checking
 			nextX = x
 			nextY = y+1
@@ -559,7 +444,7 @@ def hitShip(x,y, orientation, ogX, ogY):
 			nextX = ogX
 			nextY = ogY-1
 		
-	else if orientation == "south":
+	elif orientation == "south":
 		if x < 10: #bounds checking
 			nextX = x+1
 			nextY = y
@@ -568,7 +453,7 @@ def hitShip(x,y, orientation, ogX, ogY):
 			nextX = ogX-1
 			nextY = ogY
 
-	else if orientation == "west":
+	elif orientation == "west":
 		if y > 1: #bounds checking
 			nextX = x
 			nextY = y-1
@@ -586,8 +471,81 @@ def hitShip(x,y, orientation, ogX, ogY):
 # Input: X - row point in ship
 #		Y - column point in ship
 # Output: True if ship has sunk, False if ship has not sunk
-def didShipSink(x, y):
+#def didShipSink(x, y):
 
+
+
+
+#------------------------------------------------------------------------------------------------------------
+
+#at the start of the game the AI needs to place ships at the locations with the least probability
+#do this using probability: algorithm is to look at every possible ship placement and put the ship at the place with the lowest joint probability
+
+
+# These are the board we need throughout the game
+# we will have a file that we will read at the start of every game and write to at the end of every game
+# it will contain the boards that nee to be saves for every game
+# one file for human player board
+# one file for AI board
+
+#this only counts for the first game ever
+startMatrix = [ [0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709676, 0.0088709676, 0.0084677418, 0.0076612902, 0.006048387, 0.004032258],
+				[0.006048387, 0.008064516, 0.0096774192, 0.0104838708, 0.0108870966, 0.0108870966, 0.0104838708, 0.0096774192, 0.008064516, 0.006048387],
+				[0.0076612902, 0.0096774192, 0.0112903224, 0.012096774, 0.0124999998, 0.0124999998, 0.012096774, 0.0112903224, 0.0096774192, 0.0076612902],
+				[0.0084677418, 0.0104838708, 0.012096774, 0.0129032256, 0.0133064514, 0.0133064514, 0.0129032256, 0.012096774, 0.0104838708, 0.0084677418],
+				[0.0088709676, 0.0108870966, 0.0124999998, 0.0133064514, 0.0137096772, 0.0137096772, 0.0133064514, 0.0124999998, 0.0108870966, 0.0088709676],
+				[0.0088709676, 0.0108870966, 0.0124999998, 0.0133064514, 0.0137096772, 0.0137096772, 0.0133064514, 0.0124999998, 0.0108870966, 0.0088709676],
+				[0.0084677418, 0.0104838708, 0.012096774, 0.0129032256, 0.0133064514, 0.0133064514, 0.0129032256, 0.012096774, 0.0104838708, 0.0084677418],
+				[0.0076612902, 0.0096774192, 0.0112903224, 0.012096774, 0.0124999998, 0.0124999998, 0.012096774, 0.0112903224, 0.0096774192, 0.0076612902],
+				[0.006048387, 0.008064516, 0.0096774192, 0.0104838708, 0.0108870966, 0.0108870966, 0.0104838708, 0.0096774192, 0.008064516, 0.006048387],
+				[0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709676, 0.0088709676, 0.0084677418, 0.0076612902, 0.006048387, 0.004032258] ]
+
+#this is the matrix of the human side that will get saved at the end of the game to be used at the start of the next game
+endHumanMatrix = []
+
+#this is the matrix of the ai side that will get saved at the end of the game to be used at the start of the next game
+endAiMatrix = []
+
+#TODO - the values in these matrices need to be changes for every game... read from file
+
+#this is the board probability of the current game... starts the same as the startMatrix
+#this is the humans side of the board... this gets saved at the end of the game to be used at the start of the next game
+humanMatrix = [ [0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709676, 0.0088709676, 0.0084677418, 0.0076612902, 0.006048387, 0.004032258],
+				[0.006048387, 0.008064516, 0.0096774192, 0.0104838708, 0.0108870966, 0.0108870966, 0.0104838708, 0.0096774192, 0.008064516, 0.006048387],
+				[0.0076612902, 0.0096774192, 0.0112903224, 0.012096774, 0.0124999998, 0.0124999998, 0.012096774, 0.0112903224, 0.0096774192, 0.0076612902],
+				[0.0084677418, 0.0104838708, 0.012096774, 0.0129032256, 0.0133064514, 0.0133064514, 0.0129032256, 0.012096774, 0.0104838708, 0.0084677418],
+				[0.0088709676, 0.0108870966, 0.0124999998, 0.0133064514, 0.0137096772, 0.0137096772, 0.0133064514, 0.0124999998, 0.0108870966, 0.0088709676],
+				[0.0088709676, 0.0108870966, 0.0124999998, 0.0133064514, 0.0137096772, 0.0137096772, 0.0133064514, 0.0124999998, 0.0108870966, 0.0088709676],
+				[0.0084677418, 0.0104838708, 0.012096774, 0.0129032256, 0.0133064514, 0.0133064514, 0.0129032256, 0.012096774, 0.0104838708, 0.0084677418],
+				[0.0076612902, 0.0096774192, 0.0112903224, 0.012096774, 0.0124999998, 0.0124999998, 0.012096774, 0.0112903224, 0.0096774192, 0.0076612902],
+				[0.006048387, 0.008064516, 0.0096774192, 0.0104838708, 0.0108870966, 0.0108870966, 0.0104838708, 0.0096774192, 0.008064516, 0.006048387],
+				[0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709676, 0.0088709676, 0.0084677418, 0.0076612902, 0.006048387, 0.004032258] ]
+#humanMatrix = matrix read from file
+
+#this is the ai side of the board... this gets saved at the end of the game to be used at the start of the next game
+aiMatrix = [ [0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709676, 0.0088709676, 0.0084677418, 0.0076612902, 0.006048387, 0.004032258],
+				[0.006048387, 0.008064516, 0.0096774192, 0.0104838708, 0.0108870966, 0.0108870966, 0.0104838708, 0.0096774192, 0.008064516, 0.006048387],
+				[0.0076612902, 0.0096774192, 0.0112903224, 0.012096774, 0.0124999998, 0.0124999998, 0.012096774, 0.0112903224, 0.0096774192, 0.0076612902],
+				[0.0084677418, 0.0104838708, 0.012096774, 0.0129032256, 0.0133064514, 0.0133064514, 0.0129032256, 0.012096774, 0.0104838708, 0.0084677418],
+				[0.0088709676, 0.0108870966, 0.0124999998, 0.0133064514, 0.0137096772, 0.0137096772, 0.0133064514, 0.0124999998, 0.0108870966, 0.0088709676],
+				[0.0088709676, 0.0108870966, 0.0124999998, 0.0133064514, 0.0137096772, 0.0137096772, 0.0133064514, 0.0124999998, 0.0108870966, 0.0088709676],
+				[0.0084677418, 0.0104838708, 0.012096774, 0.0129032256, 0.0133064514, 0.0133064514, 0.0129032256, 0.012096774, 0.0104838708, 0.0084677418],
+				[0.0076612902, 0.0096774192, 0.0112903224, 0.012096774, 0.0124999998, 0.0124999998, 0.012096774, 0.0112903224, 0.0096774192, 0.0076612902],
+				[0.006048387, 0.008064516, 0.0096774192, 0.0104838708, 0.0108870966, 0.0108870966, 0.0104838708, 0.0096774192, 0.008064516, 0.006048387],
+				[0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709676, 0.0088709676, 0.0084677418, 0.0076612902, 0.006048387, 0.004032258] ]
+#aiMatrix = matrix read from file
+
+#this is the human side of the board... used during the duration of the game
+gameHumanMatrix = humanMatrix[:]
+
+#this is the ai side of the board... only used during the duration of the game
+gameAiMatrix = aiMatrix[:]
+
+#this will be a global variable that gets overwritten with the start of each new
+#game and gets incremented at the end of each game.
+gamesPlayed = 1;
+
+#------------------------------------------------------------------------------------------------------------
 
 
 # START OF THE MAIN CODE
@@ -629,7 +587,7 @@ while gameOver == False:
 		hit2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix)
 		shipHit = hit2
 
-	else if shipHit = True:
+	elif shipHit == True:
 
 		if orientationKnown == False:
 			x2, y2, orientation = getShipOrientation(x2, y2, direction)
@@ -639,41 +597,12 @@ while gameOver == False:
 
 # need to save original hit in case we need to switch orientation
 
-		else if orientationKnown == True:
+		elif orientationKnown == True:
 			if hit2 == True and shipSunk == False:
 				x2, y2, orientation = hitShip(x2, y2, orientation, ogX, ogY)
 
-			else if hit2 == False: #if not sunk and miss
+			elif hit2 == False: #if not sunk and miss
 				x2, y2, orientation = getShipOrientation(x2, y2, direction)
-
-
-
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-	if shipHit == False: #if no ship has been hit, look for regular target
-		x2, y2 = aiMove(hit2, x2, y2)
-		hit2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix)
-		if hit2 == True:
-			shipHit = True
-	else if shipHit == True: #if ship has been hit
-		x2, y2 = shipHit(x2, y2)
-		hit2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix)
-	else if shipHit == True and hit2 == False:
-
-	else if shipSunk == True:
-
 
 
 
@@ -689,38 +618,3 @@ gamesPlayed = gamesPlayed + 1;
 
 # TODO - code to setup matrices for next game... update aiMatrix and humanMatrix for the start of the next game
 
-
-
-
-
-
-
-
-hit = humanMove(x,y) #x, y need to be gotten from arduino input
-if hit == True #send user some feedback that says they got a hit and update led board to set x/y led light on board to light up
-
-hit2, x1, y1 = aiMove()
-#if hit2 == True update led board
-
-hit = humanMove(x2,y2) #this could be wrong but its here for reference
-#human user should do another turn and then on the ais next turn he can check if that last move was a hit and if so run the shiphit function
-
-if hit2 == True: #hen ai needs to guess positions around it in order to sink the ship
-	shipHit(x1,y1) #input the position where there was a hit
-
-#we can redo this to have functions that detemine where to hit (for the ai) or take human input for where to hit
-#and then another function to update the board no matter whos turn, we just input the board names
-
-
-gamesPlayed = gamesPlayed + 1; 
-
-
-
-# import sys
-
-# def main(argv):
-#     n = int(argv[1])
-#     print(n + 1)
-
-# if __name__ == '__main__':
-#     sys.exit(main(sys.argv))
