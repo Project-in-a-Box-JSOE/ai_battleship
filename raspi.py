@@ -287,7 +287,7 @@ def ship5(matrix):
 # that it is accurate for the next turn
 # Input: X/Row location, Y/Column location, ProbMatrix(overall prob matrix for
 # human/ai), GameMatrix(current game matrix for human/ai)
-# Output: True if ship was hit, False if missed
+# Output: True if ship was hit, False if missed, Ship Size if hit
 def updateBoard(x, y, probMatrix, gameMatrix):
 	
 	row = x
@@ -296,8 +296,8 @@ def updateBoard(x, y, probMatrix, gameMatrix):
 	# HIT
 	if gameMatrix[row][col] > 1 : #if there is a ship in that position
 
-		# updates current game board
-		prob = gameMatrix[row][col]
+		shipSize = gameMatrix[row][col]
+		prob = probMatrix[row][col]
 		distProb = prob/99 #need to evenly distribute that probably to the rest of the board
 		for i in range(10):
 			for j in range(10): #because 10x10 board size
@@ -312,7 +312,7 @@ def updateBoard(x, y, probMatrix, gameMatrix):
 			for j in range(10): #because 10x10 board size
 				probMatrix[i][j] = probMatrix[i][j] - posProb
 
-		return True #return hit
+		return (True, shipSize) #return hit and size of ship if hit
 
 	# MISS
 	elif gameMatrix[row][col] < 1: #if there is no ship in that position
@@ -473,8 +473,26 @@ def hitShip(x,y, orientation, ogX, ogY):
 # this point has sunk
 # Input: X - row point in ship
 #		Y - column point in ship
+#		Orientation - the direction of the ship
+#		GameMatrix - the matrix containing current board data
+#		ShipSize = ship size so we know which values to look for in matrix
 # Output: True if ship has sunk, False if ship has not sunk
-#def didShipSink(x, y):
+def didShipSink(x, y, orientation, gameMatrix, shipSize):
+
+	shipLength = shipSize
+
+	if orientation == "north" or orientation == "south":
+		for row in range(10):
+			if gameMatrix[row][y] == shipLength:
+				return False
+
+	elif orientation == "west" or orientation == "east":
+		for col in range(10):
+			if gameMatrix[x][col] == shipLength:
+				return False
+
+	return True
+
 
 
 
@@ -588,7 +606,7 @@ while gameOver == False:
 	if shipHit == False: #if no ship has been hit, look for regular target
 		x2, y2 = aiMove()
 		ogX, ogY = x2, y2
-		hit2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix)
+		hit2, length1 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix)
 		shipHit = hit2
 
 	elif shipHit == True:
@@ -596,7 +614,7 @@ while gameOver == False:
 		if orientationKnown == False:
 			x2, y2, orientation = getShipOrientation(x2, y2, direction)
 			orientationKnown = True;
-			hit2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix)
+			hit2, length2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix)
 
 
 	# need to save original hit in case we need to switch orientation
