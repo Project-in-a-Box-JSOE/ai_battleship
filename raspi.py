@@ -491,6 +491,10 @@ def didShipSink(x, y, orientation, gameMatrix, shipSize):
 			if gameMatrix[x][col] == shipLength:
 				return False
 
+	# maybe do this by checking ship size and checking how many hits there have been and seeing if they have all been on the same size shio
+	# edge case is two of the 3 length boats adjacent, sooo we have to make sure that the other end of the orientation doesnt have a boat there too
+	# possible fix - give one of the 3size boats a ship size of 3.5 or some other value
+
 	return True
 
 
