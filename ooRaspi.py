@@ -370,7 +370,35 @@ def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix):
          for j in range(10): #because 10x10 board size
             probMatrix[i][j] = probMatrix[i][j] + newProbVal
 
+      #if there was a miss, we do not need to update any ship objects
+
       return False #return miss     
+
+
+# Name: aiMove()
+# Description: In this function, the AI determines where to target its next hit
+# by finding position with highest probability
+# Input: None
+# Output: Target locations (x/row, y/col)
+def aiMove():
+
+   #determine position to hit
+   #update human side probability boards
+   #update human current game board
+   #update LED board
+
+
+   # determine position to hit by finding largest probability in human side board
+   maxValue = 0
+   row, col = 0, 0 #the row and column positions
+   for i in range(10):
+      for j in range(10): #because 10x10 matrix
+         if gameHumanMatrix[i][j] > maxValue:
+            maxValue = gameHumanMatrix[i][j]
+            row = i
+            col = j
+
+   return (row, col)
 
 # -----------------------------------------------------------------------------
 
@@ -475,6 +503,25 @@ while gameOver == False:
    
    # TODO - send hit/miss output to human player and let them know if ship has sunk
    # TODO - update LED boards based off of hit/miss
+
+
+   #TODO - AI Turn
+      # get most likely location to hit
+      # if there was no hit, find the most likely location again
+      # if there was a hit, find most likely orientation
+      # if guess all in one direction and still not sunk, change direction
+
+   hit2 = False #saving outside loop so that it can be used in next iteration
+   ogX, ogY = None, None #keeping track of original targets in case it hits
+   x2, y2 = None, None #saving outside so that it can be used in all ifs/elifs
+
+
+   shipHit = False
+   orientationKnown = False
+   orientation = None
+   shipSunk = False
+   ogX, ogY = None, None #keeping track of original targets in case it hits
+
 
    # AI Turn
    if shipHit == False: #if no ship has been hit, look for regular target
