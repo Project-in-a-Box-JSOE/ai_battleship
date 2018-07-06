@@ -9,7 +9,10 @@ class Ship:
       self.sunk = sunk
       self.orientation = orientation
       self.locations = locations #positions on board, list of pairs
+      ship.hits = 0
       Ship.shipCount += 1
+      if ship.length == ship.hits:
+         sunk = True
    
    def didShipSink(self):
      print ("Did ship of length ", self.length, "sink? ", self.sunk)
@@ -309,7 +312,69 @@ def ship5(matrix):
    ship = Ship(len(location), False, orientation, location)
 
 
+# Name: updateBoard()
+# Description: In this function, we update the gameMatrix with every move so
+# that it is accurate for the next turn, we update the probablily matrix so it
+# is valid for the next game, we update ship objects in shipMatrix to detect
+# sinks in the future
+# Input: X/Row location, Y/Column location, ProbMatrix(overall prob matrix for
+# human/ai), GameMatrix(current game matrix for human/ai), ShipMatrix(contains
+# human/ai ships)
+# Output: True if ship was hit, False if missed, Ship Size if hit
+def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix):
+   
+   row = x
+   col = y
+
+   # HIT
+   if gameMatrix[row][col] > 1 : #if there is a ship in that position
+
+      shipSize = gameMatrix[row][col]
+      prob = probMatrix[row][col]
+      distProb = prob/99 #need to evenly distribute that probably to the rest of the board
+      for i in range(10):
+         for j in range(10): #because 10x10 board size
+            gameMatrix[i][j] = gameMatrix[i][j] + distProb
+      gameMatrix[row][col] = 0 #set probably of that position in current game to be zero
+      
+      # updates ai side probability board
+      hitProb = 0.0004032258/gamesPlayed
+      posProb = hitProb/99 #because there are 99 other positions
+      probMatrix[row][col] = probMatrix[row][col] + hitProb + posProb #adding posProb because it will be decremented in the loop
+      for i in range(10):
+         for j in range(10): #because 10x10 board size
+            probMatrix[i][j] = probMatrix[i][j] - posProb
+
+      #update ship object
+      ship = shipMatrix[row][col]
+      ship.hits += 1
+
+      return (True, shipSize) #return hit and size of ship if hit
+
+   # MISS
+   elif gameMatrix[row][col] < 1: #if there is no ship in that position
+
+      # updates current game board
+      prob = gameMatrix[row][col]
+      distProb = prob/99 #need to evenly distribute that probably to the rest of the board
+      for i in range(10):
+         for j in range(10): #because 10x10 board size
+            gameMatrix[i][j] = gameMatrix[i][j] + distProb
+      gameMatrix[row][col] = 0 #set probably of that position in current game to be zero
+
+      # updates ai side probability board
+      probability = 0.0004032258
+      newProbVal = probability/99 #because there are 99 other positions
+      probMatrix[row][col] = probMatrix[row][col] - probability - newProbVal #decrementing newProbVal beause it will be added in the loop
+      for i in range(10):
+         for j in range(10): #because 10x10 board size
+            probMatrix[i][j] = probMatrix[i][j] + newProbVal
+
+      return False #return miss     
+
 # -----------------------------------------------------------------------------
+
+# TODO - get matrix values from files at the start of the game (read from file)
 
 #Matrix Initilizations
    #this only counts for the first game ever
@@ -361,6 +426,11 @@ def ship5(matrix):
    #ai side of the board that shows where its ships are
    aiShipMatrix = [[0 for x in range(10)] for y in range(10)] 
 
+# TODO - get number of games played (read from file)
+#gets saved at the end of the game and overwritten with the start of a game
+# gets incremented and saved at the end of each game
+gamesPlayed = 1;
+
 # -----------------------------------------------------------------------------
 
 # START OF THE MAIN CODE
@@ -391,6 +461,61 @@ ship1 = Ship(len(locations1), False, orientation1, locations1)
       #user puts locations that are not adjacent to each other
     #user puts locations not in a straight line
 
+
+#Human gets to go first
+
+while gameOver == False:
+   # Human turn
+   # TODO - get human input for target positions
+   #x1, y1 = ... 
+   x1, y1 = 1, 1 #SAMPLE FOR NOW
+   
+   #updates boards and returns true if hit, false if miss
+   hit1 = updateBoards(x1, y1, aiMatrix, gameAiMatrix, aiShipMatrix) 
+   
+   # TODO - send hit/miss output to human player and let them know if ship has sunk
+   # TODO - update LED boards based off of hit/miss
+
+   # AI Turn
+   if shipHit == False: #if no ship has been hit, look for regular target
+      x2, y2 = aiMove()
+      ogX, ogY = x2, y2
+      hit2, length1 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix)
+      shipHit = hit2
+
+   elif shipHit == True:
+
+      if orientationKnown == False:
+         x2, y2, orientation = getShipOrientation(x2, y2, direction)
+         orientationKnown = True;
+         hit2, length2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix)
+
+
+   # need to save original hit in case we need to switch orientation
+
+      elif orientationKnown == True:
+         if hit2 == True and shipSunk == False:
+            x2, y2, orientation = hitShip(x2, y2, orientation, ogX, ogY)
+
+         elif hit2 == False: #if not sunk and miss
+            x2, y2, orientation = getShipOrientation(x2, y2, direction)
+
+   
+   # just for now until we have this fully functional
+   gameOver = True
+
+   # TODO - send hit/miss output to human player
+   # TODO - update LED boards based off of hit/miss
+
+
+
+
+
+
+gamesPlayed = gamesPlayed + 1; 
+
+# TODO - code to setup matrices for next game... update aiMatrix and humanMatrix for the start of the next game
+   #save current probably matrices to file that will be read at the start of the next game
 
 
 
