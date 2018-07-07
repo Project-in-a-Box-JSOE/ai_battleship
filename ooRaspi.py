@@ -400,6 +400,58 @@ def aiMove():
 
    return (row, col)
 
+
+# Name: getShipOrientation()
+# Description: In this function, the AI determines where to hit if a ship has 
+# been hit (which orientation)
+# Input: X - row of last hit
+#     Y - column of last hit
+#     Orientation - says if orientation of ship has been found
+# Output: Next target locations (x/row, y/col), Orientation of ship (NESW)
+def getShipOrientation(x,y):
+   #check all orientations around the hit position to find which osurrounding position has the highest probability
+   
+   maxProb = 0
+   nextX = 0
+   nextY = 0
+   orientation = None
+
+   if x > 1: #bounds checking
+      val = gameHumanMatrix[x-1][y] #north
+      if val > maxProb:
+         maxProb = val
+         nextX = x-1
+         nextY = y
+         orientation = "north"
+
+   if y < 10: #bounds checking
+      val = gameHumanMatrix[x][y+1] #east
+      if val > maxProb:
+         maxProb = val
+         nextX = x
+         nextY = y+1
+         orientation = "east"
+   
+   if x < 10: #bounds checking
+      val = gameHumanMatrix[x+1][y] #south
+      if val > maxProb:
+         maxProb = val
+         nextX = x+1
+         nextY = y
+         orientation = "south"
+
+   if y > 1: #bounds checking
+      val = gameHumanMatrix[x][y-1] #west
+      if val > maxProb:
+         maxProb = val
+         nextX = x
+         nextY = y-1
+         orientation = "west"
+
+
+   #return the next position to hit and direction (n, e, s, w)
+   return (nextX, nextY, orientation)
+
 # -----------------------------------------------------------------------------
 
 # TODO - get matrix values from files at the start of the game (read from file)
@@ -490,6 +542,14 @@ ship1 = Ship(len(locations1), False, orientation1, locations1)
     #user puts locations not in a straight line
 
 
+#saving variables so they can be used in the next iteration
+hit2 = False
+ogX, ogY = None, None #keeping track of original targets in case it hits
+x2, y2 = None, None 
+shipHit = False
+orientationKnown = False
+orientation = None
+
 #Human gets to go first
 
 while gameOver == False:
@@ -511,23 +571,12 @@ while gameOver == False:
       # if there was a hit, find most likely orientation
       # if guess all in one direction and still not sunk, change direction
 
-   hit2 = False #saving outside loop so that it can be used in next iteration
-   ogX, ogY = None, None #keeping track of original targets in case it hits
-   x2, y2 = None, None #saving outside so that it can be used in all ifs/elifs
-
-
-   shipHit = False
-   orientationKnown = False
-   orientation = None
-   shipSunk = False
-   ogX, ogY = None, None #keeping track of original targets in case it hits
-
 
    # AI Turn
    if shipHit == False: #if no ship has been hit, look for regular target
       x2, y2 = aiMove()
       ogX, ogY = x2, y2
-      hit2, length1 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix)
+      hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix)
       shipHit = hit2
 
    elif shipHit == True:
