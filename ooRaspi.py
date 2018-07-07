@@ -593,10 +593,14 @@ while gameOver == False:
          hit2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix)
 
          #need to check that we hit the same ship
-         if humanShipMatrix[x][y] == humanShipMatrix[x2][y2] #then same ship
+         if humanShipMatrix[x][y] == humanShipMatrix[x2][y2]: #then same ship
             directionKnown = hit2 #we only know direction if hit same ship
 
-   # need to save original hit in case we need to switch direction
+         #else: #hit different ship
+
+
+
+      # need to save original hit in case we need to switch direction
 
       elif directionKnown == True:
          if hit2 == True and shipSunk == False:
