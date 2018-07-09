@@ -767,6 +767,9 @@ while gameOver == False:
       if humanShip.sunk == True:
          humanShips.remove(ship)
          x2, y2 = ogX, ogY
+         hit2 = False
+         
+
 
    
    # just for now until we have this fully functional
