@@ -458,6 +458,107 @@ def getShipDirection(x,y):
    #return the next position to hit and direction (n, e, s, w)
    return (nextX, nextY, direction)
 
+
+# Name: switchOrientation()
+# Description: In this function, we slip the direction if we reach the end of
+# the board or if there is a hit followed by a miss
+# Input: X - row of last hit
+#     Y - column of last hit
+#     Orientation - which direction we think the ship is facing
+#     ogX - row of original X hit
+#     ogY - column of original Y hit
+# Output: Next target locations (x/row, y/col), nextOrientation (switch in case 
+# we reach end of board)
+def switchOrientation(ogX, ogY, orientation):
+
+   nextX = 0
+   nextY = 0
+   nextOrientation = orientation
+
+   if orientation == "north":
+      nextOrientation = "south"
+      nextX = ogX+1
+      nextY = ogY
+
+   elif orientation == "east":
+      nextOrientation = "west"
+      nextX = ogX
+      nextY = ogY-1
+
+   elif orientation == "south":
+         nextOrientation = "north"
+         nextX = ogX-1
+         nextY = ogY
+
+   elif orientation == "west":
+         nextOrientation = "east"
+         nextX = ogX
+         nextY = ogY+1
+
+   return (nextX, nextY, nextOrientation)
+
+
+
+# Name: hitShip()
+# Description: In this function, the AI determines where to hit if a ship has
+# been hit and we have determined the orientation
+# Input: X - row of last hit
+#     Y - column of last hit
+#     Orientation - which direction we think the ship is facing
+#     ogX - row of original X hit
+#     ogY - column of original Y hit
+# Output: Next target locations (x/row, y/col), nextOrientation (switch in case 
+# we reach end of board)
+def hitShip(x,y, orientation, ogX, ogY):
+
+   nextX = 0
+   nextY = 0
+   nextOrientation = orientation
+
+   if orientation == "north":
+      if x > 1: #bounds checking
+         nextX = x-1
+         nextY = y
+      else: #switch orientation
+         nextX, nextY, nextOrientation = switchOrientation(ogX, ogY, orientation)
+         #nextOrientation = "south"
+         #nextX = ogX+1
+         #nextY = ogY
+
+   elif orientation == "east":
+      if y < 10: #bounds checking
+         nextX = x
+         nextY = y+1
+      else:
+         nextX, nextY, nextOrientation = switchOrientation(ogX, ogY, orientation)
+         # nextOrientation = "west"
+         # nextX = ogX
+         # nextY = ogY-1
+      
+   elif orientation == "south":
+      if x < 10: #bounds checking
+         nextX = x+1
+         nextY = y
+      else:
+         nextX, nextY, nextOrientation = switchOrientation(ogX, ogY, orientation)
+         # nextOrientation = "north"
+         # nextX = ogX-1
+         # nextY = ogY
+
+   elif orientation == "west":
+      if y > 1: #bounds checking
+         nextX = x
+         nextY = y-1
+      else:
+         nextX, nextY, nextOrientation = switchOrientation(ogX, ogY, orientation)
+         # nextOrientation = "east"
+         # nextX = ogX
+         # nextY = ogY+1
+
+   return (nextX, nextY, nextOrientation)
+
+
+
 # -----------------------------------------------------------------------------
 
 # TODO - get matrix values from files at the start of the game (read from file)
@@ -579,6 +680,10 @@ while gameOver == False:
 
 
    # AI Turn
+
+   # TODO - always need to check if there is a ship that was hit that was not sunk
+      # set shipHit to true r false depending on if there is a ship that is already hit
+
    if shipHit == False: #if no ship has been hit, look for regular target
       x2, y2 = aiMove()
       ogX, ogY = x2, y2
@@ -588,15 +693,17 @@ while gameOver == False:
    elif shipHit == True:
 
       if directionKnown == False:
-         x, y = x2, y2
+         #xStart, yStart = x2, y2
          x2, y2, direction = getShipDirection(x2, y2)
          hit2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix)
+         directionKnown = hit2 #direction only known if there is a hit nearby
 
          #need to check that we hit the same ship
-         if humanShipMatrix[x][y] == humanShipMatrix[x2][y2]: #then same ship
-            directionKnown = hit2 #we only know direction if hit same ship
+         #if humanShipMatrix[x][y] == humanShipMatrix[x2][y2]: #then same ship
+         #   directionKnown = hit2 #we only know direction if hit same ship
 
          #else: #hit different ship
+
 
 
 
@@ -605,10 +712,20 @@ while gameOver == False:
       elif directionKnown == True:
          if hit2 == True and shipSunk == False:
             x2, y2, direction = hitShip(x2, y2, direction, ogX, ogY)
+            hit2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix)
 
-         elif hit2 == False: #if not sunk and miss
-            x2, y2, direction = getShipDirection(x2, y2, direction)
 
+         elif hit2 == False and shipSunk == False: #if not sunk and miss
+
+            # if more than 2 hits then we know orientation so we just need to flip
+            x2, y2, direction = switchOrientation()
+
+            #humanShipMatrix[x][y]
+
+            #x2, y2, direction = getShipDirection(x2, y2, direction)
+
+
+   #for checking sink
    
    # just for now until we have this fully functional
    gameOver = True
