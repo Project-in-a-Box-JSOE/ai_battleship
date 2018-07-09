@@ -692,8 +692,14 @@ while gameOver == False:
 
    # AI Turn
 
-   # TODO - always need to check if there is a ship that was hit that was not sunk
-      # set shipHit to true or false depending on if there is a ship that is already hit
+   #if a ship is hit in the process of sinking another ship than it is only possible
+   #for it to have been hit once unless it is in the same direction in which case
+   #it would been sunk
+   for humanShip in humanShips:
+      if humanShip.hits > 0: #then ship was hit
+         shipHit = True
+         ogX, ogY = 
+         x2, y2 = ogX, ogY
 
    if shipHit == False: #if no ship has been hit, look for regular target
       x2, y2 = aiMove()
