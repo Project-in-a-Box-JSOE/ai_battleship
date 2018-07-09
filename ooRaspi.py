@@ -8,7 +8,7 @@ class Ship:
       self.length = length
       self.sunk = sunk
       self.orientation = orientation
-      self.locations = locations #positions on board, list of pairs
+      self.locations = locations #positions on board, list of list (X, y, hit)
       self.hits = 0
       Ship.shipCount += 1
       if self.length == self.hits:
@@ -98,7 +98,7 @@ def ship2(matrix, shipMatrix):
    matrix[p2x][p2y] = 2
 
    #create ship and place it in the shipMatrix
-   location = [(p1x, p1y), (p2x, p2y)]
+   location = [(p1x, p1y, False), (p2x, p2y, False)]
    ship = Ship(len(location), False, orientation, location)
 
 def ship3(matrix, shipMatrix):
@@ -161,7 +161,7 @@ def ship3(matrix, shipMatrix):
    matrix[p3x][p3y] = 3
 
    #create ship and place it in the shipMatrix
-   location = [(p1x, p1y), (p2x, p2y), (p3x, p3y)]
+   location = [(p1x, p1y, False), (p2x, p2y, False), (p3x, p3y, False)]
    ship = Ship(len(location), False, orientation, location)
 
 def ship4(matrix, shipMatrix):
@@ -229,7 +229,7 @@ def ship4(matrix, shipMatrix):
    matrix[p4x][p4y] = 4
 
    #create ship and place it in the shipMatrix
-   location = [(p1x, p1y), (p2x, p2y), (p3x, p3y), (p4x, p4y)]
+   location = [(p1x, p1y, False), (p2x, p2y, False), (p3x, p3y, False), (p4x, p4y, False)]
    ship = Ship(len(location), False, orientation, location)
 
 def ship5(matrix, shipMatrix):
@@ -306,7 +306,7 @@ def ship5(matrix, shipMatrix):
    matrix[p4x][p5y] = 5
 
    #create ship and place it in the shipMatrix
-   location = [(p1x, p1y), (p2x, p2y), (p3x, p3y), (p4x, p4y), (p5x, p5y)]
+   location = [(p1x, p1y, False), (p2x, p2y, False), (p3x, p3y, False), (p4x, p4y, False), (p5x, p5y, False)]
    ship = Ship(len(location), False, orientation, location)
 
 
@@ -698,7 +698,7 @@ while gameOver == False:
    for humanShip in humanShips:
       if humanShip.hits > 0: #then ship was hit
          shipHit = True
-         ogX, ogY = 
+         #ogX, ogY = 
          x2, y2 = ogX, ogY
 
    if shipHit == False: #if no ship has been hit, look for regular target
@@ -753,18 +753,19 @@ while gameOver == False:
 
 
    #check if original target ship has sunk
-   ship = humanShipMatrix[ogX][ogY]
-   shipSunk = ship.sunk
-   if shipSunk == True: #reset variables
-      hit2 = False
-      ogX, ogY = None, None #keeping track of original targets in case it hits
-      x2, y2 = None, None 
-      shipHit = False
-      directionKnown = False
-      direction = None
-      orientationSwitched = False
-      shipSunk = False
-      humanShips.remove(ship)
+   if humanShipMatrix[ogX][ogY] != 0:
+      ship = humanShipMatrix[ogX][ogY]
+      shipSunk = ship.sunk
+      if shipSunk == True: #reset variables
+         hit2 = False
+         ogX, ogY = None, None #keeping track of original targets in case it hits
+         x2, y2 = None, None 
+         shipHit = False
+         directionKnown = False
+         direction = None
+         orientationSwitched = False
+         shipSunk = False
+         humanShips.remove(ship)
 
 
    #check all ships to see if any of them have sunk in case it was not OG ship
