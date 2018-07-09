@@ -14,17 +14,9 @@ class Ship:
       if self.length == self.hits:
          sunk = True
    
-   def didShipSink(self):
-     print ("Did ship of length ", self.length, "sink? ", self.sunk)
-     return self.sunk
-
-   # def incrementHits(self):
-   #    self.hits +=1
-
-   # def shipLength(self):
-   #    return self.length
-
-   #def hitShip(self):
+   # def didShipSink(self):
+   #   print ("Did ship of length ", self.length, "sink? ", self.sunk)
+   #   return self.sunk
 
 
 # Name: ship#()
@@ -462,11 +454,9 @@ def getShipDirection(x,y):
 # Name: switchOrientation()
 # Description: In this function, we slip the direction if we reach the end of
 # the board or if there is a hit followed by a miss
-# Input: X - row of last hit
-#     Y - column of last hit
-#     Orientation - which direction we think the ship is facing
-#     ogX - row of original X hit
+# Input: ogX - row of original X hit
 #     ogY - column of original Y hit
+#     Orientation - which direction we think the ship is facing
 # Output: Next target locations (x/row, y/col), nextOrientation (switch in case 
 # we reach end of board)
 def switchOrientation(ogX, ogY, orientation):
@@ -638,7 +628,26 @@ elif locations1[0][1] == locations1[1][1]: #if they have the same column
    orientation1 = "vertical"
 ship1 = Ship(len(locations1), False, orientation1, locations1)
 
-# TODO - get user input from buttons FORr user to place ships
+locations2 = [(3, 0), (4, 0), (5,0)] #sample for first ship
+orientation2 = None
+if locations2[0][0] == locations2[1][0]: #if they have the same row
+   orientation2 = "horizontal"
+elif locations2[0][1] == locations1[1][1]: #if they have the same column
+   orientation2 = "vertical"
+ship2 = Ship(len(locations2), False, orientation2, locations2)
+
+locations3 = [(2, 6), (2, 7)] #sample for first ship
+orientation3 = None
+if locations3[0][0] == locations3[1][0]: #if they have the same row
+   orientation3 = "horizontal"
+elif locations3[0][1] == locations3[1][1]: #if they have the same column
+   orientation3 = "vertical"
+ship3 = Ship(len(locations3), False, orientation3, locations3)
+
+#list that contains all the ships
+humanShips = [ship1, ship2, ship3]
+
+# TODO - get user input from buttons for user to place ships
    #get locations from user input
    #create ships
    #place ships on board
@@ -656,6 +665,8 @@ x2, y2 = None, None
 shipHit = False
 directionKnown = False
 direction = None
+orientationSwitched = False
+shipSunk = False
 
 #Human gets to go first
 
@@ -682,7 +693,7 @@ while gameOver == False:
    # AI Turn
 
    # TODO - always need to check if there is a ship that was hit that was not sunk
-      # set shipHit to true r false depending on if there is a ship that is already hit
+      # set shipHit to true or false depending on if there is a ship that is already hit
 
    if shipHit == False: #if no ship has been hit, look for regular target
       x2, y2 = aiMove()
@@ -710,22 +721,53 @@ while gameOver == False:
       # need to save original hit in case we need to switch direction
 
       elif directionKnown == True:
-         if hit2 == True and shipSunk == False:
+         if hit2 == True:
             x2, y2, direction = hitShip(x2, y2, direction, ogX, ogY)
             hit2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix)
 
 
-         elif hit2 == False and shipSunk == False: #if not sunk and miss
+         elif hit2 == False: #if not sunk and miss
 
-            # if more than 2 hits then we know orientation so we just need to flip
-            x2, y2, direction = switchOrientation()
+            if orientationSwitched == False:
+               x2, y2, direction = switchOrientation(ogX, ogY, direction)
+               hit2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix)
+               orientationSwitched == True
+
+            else:
+               x2, y2, direction = getShipDirection(x2, y2)
+               hit2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix)
+
+
+            #if switch orientation has been called and still no hit, we need to try another direction
+
 
             #humanShipMatrix[x][y]
 
             #x2, y2, direction = getShipDirection(x2, y2, direction)
 
 
-   #for checking sink
+   #check if original target ship has sunk
+   ship = humanShipMatrix[ogX][ogY]
+   shipSunk = ship.sunk
+   if shipSunk == True: #reset variables
+      hit2 = False
+      ogX, ogY = None, None #keeping track of original targets in case it hits
+      x2, y2 = None, None 
+      shipHit = False
+      directionKnown = False
+      direction = None
+      orientationSwitched = False
+      shipSunk = False
+      humanShips.remove(ship)
+
+
+   #check all ships to see if any of them have sunk in case it was not OG ship
+   #but we only want to see if it was newly sunk so if a ship is sunk we take it out of the list
+   for humanShip in humanShips:
+      if humanShip.sunk == True:
+         humanShips.remove(ship)
+         x2, y2 = ogX, ogY
+
    
    # just for now until we have this fully functional
    gameOver = True
