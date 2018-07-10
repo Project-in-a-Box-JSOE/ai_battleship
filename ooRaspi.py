@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import sys
+
 class Ship:
    'Common base class for all ships'
    shipCount = 0
@@ -550,6 +552,43 @@ def hitShip(x,y, orientation, ogX, ogY):
 
    return (nextX, nextY, nextOrientation)
 
+# Name: highestProbDirection()
+# Description: In this function, the AI determines direction to hit if a ship has
+# been hit more than twice while trying to sink another ship
+# Input: X - row of last hit
+#     Y - column of last hit
+#     Orientation - which direction we think the ship is facing
+#     ogX - row of original X hit
+#     ogY - column of original Y hit
+# Output: Next target locations (x/row, y/col), nextOrientation (switch in case 
+# we reach end of board)
+#def highestProbDirection(ogX, ogY, x, y, probMatrix):
+
+   # if ogX == x: #same row so horizontal
+
+   #    #have to do bounds checking
+
+   #    if ogY == 0: #then we just go off of y
+   #       direction = 
+
+
+   #    if ogY > y:
+   #       smallerY = y
+   #       biggerY = ogY
+   #    else:
+   #       smallerY = ogY
+   #       biggerY = y
+      
+   #    prob1 = probMatrix[ogX][ogY]
+   #    prob2 = probMatrix[ogX][y]
+
+
+   # elif ogY == y: #same column so vertical
+
+
+
+   # return direction
+
 
 
 # -----------------------------------------------------------------------------
@@ -650,6 +689,26 @@ ship3 = Ship(len(locations3), False, orientation3, locations3)
 #list that contains all the ships
 humanShips = [ship1, ship2, ship3]
 
+
+# FOR TESTING
+#get input from user in terminal
+print("For each ship, type the row followed by a space follow by column.")
+print("Place a comma between each point of the ship.")
+print("Example: 2 3, 2 4, 2 5, 2 6")
+
+var1 = input("Please enter the start and end locations for ship of size 2\n")
+
+#in between, ned to check that user does not put same location multiple times
+
+var2 = input("Please enter the start and end locations for ship of size 3\n")
+var3 = input("Please enter the start and end locations for second ship of size 3\n")
+var4 = input("Please enter the start and end locations for ship of size 4\n")
+var5 = input("Please enter the start and end locations for ship of size 5\n")
+
+
+
+
+
 # TODO - get user input from buttons for user to place ships
    #get locations from user input
    #create ships
@@ -695,16 +754,44 @@ while gameOver == False:
 
    # AI Turn
 
-   #if a ship is hit in the process of sinking another ship than it is only possible
-   #for it to have been hit once unless it is in the same direction in which case
-   #it would been sunk
-   for humanShip in humanShips:
-      if humanShip.hits > 0: #then ship was hit
-         shipHit = True
-         #ogX, ogY = 
-         x2, y2 = ogX, ogY
-
    if shipHit == False: #if no ship has been hit, look for regular target
+      
+      #do it in the if statement because we dont want to target another ship if we are already targeting a ship
+      #if a ship is hit in the process of sinking another ship than it is only possible
+      #for it to have been hit once unless it is in the same direction in which case
+      #it would been sunk
+      for humanShip in humanShips:
+         if humanShip.hits > 0 and humanShip.sunk == False: #ship was hit and not sunk
+            shipHit = True
+            hitLocations = []
+            for location in humanShip.locations:
+               if location[2] == True:
+                  hitLocations.append((location[0], location[1]))
+                  ogX, ogY = location[0], location[1]
+                  x2, y2 = ogX, ogY
+            # numHits = len(hitLocations)
+            # if numHits > 1: #then shit hit at least twice
+            #    x2, y2 = humanShip.locations[numHits-1][0], humanShip.locations[numHits-1][1]
+
+            #    direction = highestProbDirection(ogX, ogY, x2, y2, gameHumanMatrix)
+            #    directionKnown = True
+
+
+               #get direction of the ship
+               # if x2 == ogX: #if same row
+               #    #we check which direction (east/west) will have the higher probability
+               #    direction = highestProbDirection()
+                  
+               # elif y2 == ogX: #if same column
+               #    #we check which direction (north/south) will have the higher probability
+               #    direction = highestProbDirection()
+
+               # directionKnown = True
+
+            break; #break once we do this for the first ship we find
+
+
+
       x2, y2 = aiMove()
       ogX, ogY = x2, y2
       hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix)
@@ -770,20 +857,23 @@ while gameOver == False:
          shipSunk = False
          humanShips.remove(ship)
 
+         #TODO - lights of ship blink 10-15 times to show that is has sunk
+
 
    #check all ships to see if any of them have sunk in case it was not OG ship
    #but we only want to see if it was newly sunk so if a ship is sunk we take it out of the list
-   for humanShip in humanShips:
-      if humanShip.sunk == True:
-         humanShips.remove(ship)
-         x2, y2 = ogX, ogY
-         hit2 = False
+   # for humanShip in humanShips:
+   #    if humanShip.sunk == True:
+   #       humanShips.remove(ship)
+   #       x2, y2 = ogX, ogY
+   #       hit2 = False
          
 
 
    
    # just for now until we have this fully functional
    gameOver = True
+   # TODO - when game is over, have all lights on the board blinking
 
    # TODO - send hit/miss output to human player
    # TODO - update LED boards based off of hit/miss
