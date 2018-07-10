@@ -346,6 +346,9 @@ def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix):
       #update ship object
       ship = shipMatrix[row][col]
       ship.hits += 1
+      for location in ship.location: #setting that location as hit
+         if location[0] == x and location[1] == y:
+            location[2] = True
 
       return (True, shipSize) #return hit and size of ship if hit
 
