@@ -606,19 +606,10 @@ def getHumanInput(humanShipMatrix):
    print("Place a comma between each point of the ship.")
    print("Example: 2 3, 2 6")
 
-   ship3 = False #using this as a flag so we do this twice for ship of size 3
-
    humanShips = []
-   for i in range(2,5): #loop 5 times to do this for 5 ships
-
-      string = "Please enter the start and end locations for ship of size " + str(i) + ".\n"
-
-      if i == 4 and ship3 == False:
-         i -= 1
-         ship3 = True
-         string = "Please enter the start and end locations for the second ship of size " + str(i) + ".\n"
+   for i in range(2,6): #loop 5 times to do this for 5 ships
       
-
+      string = "Please enter the start and end locations for ship of size " + str(i) + ".\n"
       #print(string)
       var = input(string)
       var = var.replace(" ", "").replace(",", "")
@@ -652,6 +643,42 @@ def getHumanInput(humanShipMatrix):
       humanShips.append(ship)
       placeHumanShip(ship, humanShipMatrix)
       print(humanShipMatrix)
+
+      if i == 3:
+         string = "Please enter the start and end locations for the second ship of size " + str(i) + ".\n"
+         var = input(string)
+         var = var.replace(" ", "").replace(",", "")
+         
+         locations = [(int(var[0]), int(var[1]), False), (int(var[2]), int(var[3]), False)]
+         orientation = getOrientation(locations) #check valid orientation
+         size = checkShipSize(orientation, locations) #check valid ship size
+         overlap, locations = checkOverlap(orientation, size, locations, humanShipMatrix) #check is ship overlaps another
+         #print (overlap)
+
+         #if orientation or size not valid, reprompt user for locations
+         while orientation == "none" or size != i or overlap == True:
+            
+            if orientation == "none":
+               print("Sorry, you entered a ship that is not horizontal or vertical.")
+            elif size != i:
+               print("Sorry, you entered a ship that is not of size ", i, ".")
+            elif overlap == True:
+               print("Sorry, you entered a ship overlaps with another ship.")
+            
+            var = input(string)
+            var = var.replace(" ", "").replace(",", "")
+            locations = [(int(var[0]), int(var[1]), False), (int(var[2]), int(var[3]), False)]
+            orientation = getOrientation(locations)
+            size = checkShipSize(orientation, locations)
+            overlap, locations = checkOverlap(orientation, size, locations, humanShipMatrix)
+            #print(overlap)
+
+
+         ship = Ship(len(locations), False, orientation, locations)
+         humanShips.append(ship)
+         placeHumanShip(ship, humanShipMatrix)
+         print(humanShipMatrix)
+
 
    return humanShips
 
