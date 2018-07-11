@@ -610,20 +610,22 @@ def getHumanInput(humanShipMatrix):
    humanShips = []
    for i in range(2,5): #loop 5 times to do this for 5 ships
 
+      string = "Please enter the start and end locations for ship of size " + str(i) + ".\n"
+
       if i == 4 and ship3 == False:
          i -= 1
          ship3 = True
+         string = "Please enter the start and end locations for the second ship of size " + str(i) + ".\n"
+      
 
-      string = "Please enter the start and end locations for ship of size " + str(i) + "\n"
       #print(string)
       var = input(string)
       var = var.replace(" ", "").replace(",", "")
       
       locations = [(int(var[0]), int(var[1]), False), (int(var[2]), int(var[3]), False)]
-      
       orientation = getOrientation(locations) #check valid orientation
-      size = checkShipSize(locations) #check valid ship size
-      overlap = checkOverlap(locations) #check is ship overlaps another
+      size = checkShipSize(orientation, locations) #check valid ship size
+      overlap = checkOverlap(orientation, size, locations, humanShipMatrix) #check is ship overlaps another
 
       #if orientation or size not valid, reprompt user for locations
       while orientation == "none" or size != i or overlap == True:
@@ -645,7 +647,7 @@ def getHumanInput(humanShipMatrix):
 
       ship = Ship(len(locations), False, orientation, locations)
       humanShips.append(ship)
-      placeHumanShip(ship, humanShipMatrix)
+      placeHumanShips(ship, humanShipMatrix)
 
    return humanShips
 
@@ -674,19 +676,20 @@ def checkShipSize(orientation, locations):
    #if orientation == "none" then length remains 0
 
    if orientation == "horizontal": #same row
-      val1 = locations[0][0]
-      val2 = locations[1][0]
+      #we want to get the column calues
+      val1 = locations[0][1]
+      val2 = locations[1][1]
       length = abs(val1-val2) + 1
 
    elif orientation == "vertical": #same column
-      val1 = locations[0][1]
-      val2 = locations[1][1]
+      #we want to get the row values
+      val1 = locations[0][0]
+      val2 = locations[1][0]
       length = abs(val1-val2) + 1
 
    return length
 
 
-#TODO
 # Name: checkOverlap()
 # Description: This function check if ship is overlapping another ship by finding
 # all the points in between the start/end points and checking if there is a ship
@@ -717,8 +720,8 @@ def checkOverlap(orientation, shipSize, locations, humanShipMatrix):
          startCol = locations[1][1]
          endCol = locations[0][1]
 
-      for col in range(startCol, endCol)
-         newLocations.append((row, column, False)) #append points to new list
+      for col in range(startCol, endCol):
+         newLocations.append((row, col, False)) #append points to new list
          if humanShipMatrix[row][col] != 0: #if there is a ship there
             return (True, locations)
 
@@ -734,7 +737,7 @@ def checkOverlap(orientation, shipSize, locations, humanShipMatrix):
          startRow = locations[1][0]
          endRow = locations[0][0]
 
-      for row in range(startRow, endRow)
+      for row in range(startRow, endRow):
          newLocations.append((row, column, False)) #append points to new list
          if humanShipMatrix[row][col] != 0: #if there is a ship there
             return (True, locations)
@@ -742,17 +745,20 @@ def checkOverlap(orientation, shipSize, locations, humanShipMatrix):
    return (False, newLocations)
 
 
-#TODO
 # Name: placeHumanShips()
 # Description: This function takes in the ship and places it on the human matrix
 # Input: Ship to place on Matrix
 # Output: None
-def placeHumanShips(ship):
-   return False
+def placeHumanShips(ship, humanShipMatrix):
 
-   # loop through locations of ship
-   # place ship in those locations on the human matrix
+   for location in ship.locations:
+      row = location[0]
+      column = location[1]
+      humanShipMatrix[row][column] = ship #placing ship in matrix
 
+
+# TODO - function that prints the game boards after each turn... need this to test game logic
+# def printBoards()
 
 # -----------------------------------------------------------------------------
 
