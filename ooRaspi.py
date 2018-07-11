@@ -610,6 +610,8 @@ def getHumanInput(humanShipMatrix):
    for i in range(2,6): #loop 5 times to do this for 5 ships
       
       string = "Please enter the start and end locations for ship of size " + str(i) + ".\n"
+      # TODO - figure out how to prompt this with LEDS (maybe blinking ship of size ___ or just write number in LEDS)
+
       #print(string)
       var = input(string)
       var = var.replace(" ", "").replace(",", "")
@@ -642,7 +644,8 @@ def getHumanInput(humanShipMatrix):
       ship = Ship(len(locations), False, orientation, locations)
       humanShips.append(ship)
       placeHumanShip(ship, humanShipMatrix)
-      print(humanShipMatrix)
+      printBoard(humanShipMatrix)
+      #print(humanShipMatrix)
 
       if i == 3:
          string = "Please enter the start and end locations for the second ship of size " + str(i) + ".\n"
@@ -677,7 +680,8 @@ def getHumanInput(humanShipMatrix):
          ship = Ship(len(locations), False, orientation, locations)
          humanShips.append(ship)
          placeHumanShip(ship, humanShipMatrix)
-         print(humanShipMatrix)
+         printBoard(humanShipMatrix)
+         #print(humanShipMatrix)
 
 
    return humanShips
@@ -783,14 +787,26 @@ def checkOverlap(orientation, shipSize, locations, humanShipMatrix):
 def placeHumanShip(ship, humanShipMatrix):
 
    for location in ship.locations:
-      print (location)
       row = location[0]
       column = location[1]
       humanShipMatrix[row][column] = ship #placing ship in matrix
+      #printBoards(humanShipMatrix, aiShipMatrix)
 
 
 # TODO - function that prints the game boards after each turn... need this to test game logic
-# def printBoards()
+def printBoard(shipMatrix):
+
+   tempShipMatrix = [[0 for x in range(10)] for y in range(10)] 
+
+   for row in range(10):
+      for column in range(10):
+         if shipMatrix[row][column] != 0: #if there is a ship
+            ship = shipMatrix[row][column]
+            tempShipMatrix[row][column] = ship.length
+            #if ship.
+      print(tempShipMatrix[row])
+
+   #print(tempShipMatrix)
 
 # -----------------------------------------------------------------------------
 
