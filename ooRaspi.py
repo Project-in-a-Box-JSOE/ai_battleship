@@ -595,7 +595,10 @@ def hitShip(x,y, orientation, ogX, ogY):
 # places the ships in the human side matrix
 # Input: Human Ship Matrix - contains locations of the ships
 # Output: humanShips - the list of ships
-def getHumanInput(shipMatrix):
+def getHumanInput(humanShipMatrix):
+
+
+   # TODO - figure out lighting up LEDs based on the user input
 
    print("For each ship, type the start location followed by ending location.")
    print("Type the row followed by a space followed by column.")
@@ -616,11 +619,11 @@ def getHumanInput(shipMatrix):
       var = input(string)
       var = var.replace(" ", "").replace(",", "")
       
-      locations = [(int(var[0]), int(var[1])), (int(var[2]), int(var[3]))]
+      locations = [(int(var[0]), int(var[1]), False), (int(var[2]), int(var[3]), False)]
       
       orientation = getOrientation(locations) #check valid orientation
       size = checkShipSize(locations) #check valid ship size
-      overlap = checkOverlap() #check is ship overlaps another
+      overlap = checkOverlap(locations) #check is ship overlaps another
 
       #if orientation or size not valid, reprompt user for locations
       while orientation == "none" or size != i or overlap == True:
@@ -629,28 +632,21 @@ def getHumanInput(shipMatrix):
             print("Sorry, you entered a ship that is not horizontal or vertical.")
          elif size != i:
             print("Sorry, you entered a ship that is not of size ", i, ".")
+         elif overlap == True:
+            print("Sorry, you entered a ship overlaps with another ship.")
          
          var = input(string)
          var = var.replace(" ", "").replace(",", "")
-         locations = [(int(var[0]), int(var[1])), (int(var[2]), int(var[3]))]
+         locations = [(int(var[0]), int(var[1]), False), (int(var[2]), int(var[3]), False)]
          orientation = getOrientation(locations)
-         size = checkShipSize(locations)
+         size = checkShipSize(orientation, locations)
+         overlap, locations = checkOverlap(orientation, size, locations, humanShipMatrix)
 
 
       ship = Ship(len(locations), False, orientation, locations)
-      getAllShipPoints(ship)
+      humanShips.append(ship)
+      placeHumanShip(ship, humanShipMatrix)
 
-      #need to make sure that ship isnt place in place where there is another ship already
-      place = checkShipLocation(ship)
-
-      #ship = Ship(len(locations), False, orientation, locations)
-      if place == True:
-         humanShips.append(ship)
-         placeHumanShip(ship)
-
-      #else: #reprompt user to enter new location
-
-   #placeHumanShips(humanShips)
    return humanShips
 
 
@@ -667,61 +663,83 @@ def getOrientation(locations):
       return ("none")
 
 
-#TODO
 # Name: checkShipSize()
 # Description: This function checks to see if the user inputted points that
 # match the ships size
 # Input: Ship
-# Output: None
-def checkShipSize(ship):
-   if ship.orientation == "horizontal":
-      ship.locations[0][0] == ship.locations[1][0]
+# Output: length of ship, locations of ship
+def checkShipSize(orientation, locations):
 
-   elif ship.orientation == "vertical":
-      ship.locations[0][0] == ship.locations[1][0]
+   length = 0
+   #if orientation == "none" then length remains 0
 
-   return ship.length
+   if orientation == "horizontal": #same row
+      val1 = locations[0][0]
+      val2 = locations[1][0]
+      length = abs(val1-val2) + 1
+
+   elif orientation == "vertical": #same column
+      val1 = locations[0][1]
+      val2 = locations[1][1]
+      length = abs(val1-val2) + 1
+
+   return length
 
 
 #TODO
 # Name: checkOverlap()
-# Description: This function check if ship is overlapping another ship
-# Input: Ship
+# Description: This function check if ship is overlapping another ship by finding
+# all the points in between the start/end points and checking if there is a ship
+# already at any of those points. This function also updates the locations list
+# to include all of these points.
+# Input: Orientation of ship, Length of ship, start/end locations of ship
+# HumanShipMatrix - matrix that contains all of the humans ship in location
 # Output: True if overlap, False otherwise
-def checkOverlap(ship):
-   return False
+def checkOverlap(orientation, shipSize, locations, humanShipMatrix):
 
+   newLocations = [] #list that will contain all the points of this ship
 
+   if orientation == "none":
+      return (False, locations)
 
+   elif shipSize == 0:
+      return (False, locations)
 
-#TODO
-# Name: getAllShipPoints()
-# Description: This function takes in the start/end locations of a ship and
-# updates to get all the points in between
-# Input: Ship
-# Output: None
-def getAllShipPoints(ship):
-   locations = ship.locations
-   #if ship.orientation == "horizontal":
+   elif orientation == "horizontal": #same row
+      row = locations[0][0]
+      startCol, endCol = 0, 0
 
-   #elif ship.orientation == "Vertical":
+      #finding smaller column to make looping easier
+      if locations[0][1] < locations[1][1]:
+         startCol = locations[0][1]
+         endCol = locations[1][1]
+      else:
+         startCol = locations[1][1]
+         endCol = locations[0][1]
 
-   ship.locations = newLocations
-   ship.length = len(ship.locations)
+      for col in range(startCol, endCol)
+         newLocations.append((row, column, False)) #append points to new list
+         if humanShipMatrix[row][col] != 0: #if there is a ship there
+            return (True, locations)
 
-   #light up all the points on the LED Board
+   elif orientation == "vertical": #same column
+      column = locations[0][1]
+      startRow, endRow = 0, 0
 
+      #finding smaller row to make looping easier
+      if locations[0][1] < locations[1][1]:
+         startRow = locations[0][0]
+         endRow = locations[1][0]
+      else:
+         startRow = locations[1][0]
+         endRow = locations[0][0]
 
-#TODO
-# Name: checkShipLocation()
-# Description: This function checks to see if the placement of the ship is valid
-# aka that there are no other ships already in those positions
-# Input: Ship
-# Output: True = no other ships, good to be places there
-#         False - other ship already there, need to choose a different location
-def checkShipLocation(ship):
-   return False
+      for row in range(startRow, endRow)
+         newLocations.append((row, column, False)) #append points to new list
+         if humanShipMatrix[row][col] != 0: #if there is a ship there
+            return (True, locations)
 
+   return (False, newLocations)
 
 
 #TODO
