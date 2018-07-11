@@ -595,9 +595,9 @@ def hitShip(x,y, orientation, ogX, ogY):
 # places the ships in the human side matrix
 # Input: Human Ship Matrix - contains locations of the ships
 # Output: humanShips - the list of ships
-def getHumanInput(shipMatrix):
+def getHumanInput(humanShipMatrix):
 
-   humanShipMatrix = shipMatrix
+   #humanShipMatrix = shipMatrix
 
    # TODO - figure out lighting up LEDs based on the user input
 
@@ -627,7 +627,7 @@ def getHumanInput(shipMatrix):
       orientation = getOrientation(locations) #check valid orientation
       size = checkShipSize(orientation, locations) #check valid ship size
       overlap, locations = checkOverlap(orientation, size, locations, humanShipMatrix) #check is ship overlaps another
-      print (overlap)
+      #print (overlap)
 
       #if orientation or size not valid, reprompt user for locations
       while orientation == "none" or size != i or overlap == True:
@@ -645,7 +645,7 @@ def getHumanInput(shipMatrix):
          orientation = getOrientation(locations)
          size = checkShipSize(orientation, locations)
          overlap, locations = checkOverlap(orientation, size, locations, humanShipMatrix)
-         print(overlap)
+         #print(overlap)
 
 
       ship = Ship(len(locations), False, orientation, locations)
@@ -724,7 +724,7 @@ def checkOverlap(orientation, shipSize, locations, humanShipMatrix):
          startCol = locations[1][1]
          endCol = locations[0][1]
 
-      for col in range(startCol, endCol):
+      for col in range(startCol, endCol+1):
          newLocations.append((row, col, False)) #append points to new list
          if humanShipMatrix[row][col] != 0: #if there is a ship there
             return (True, locations)
@@ -741,7 +741,7 @@ def checkOverlap(orientation, shipSize, locations, humanShipMatrix):
          startRow = locations[1][0]
          endRow = locations[0][0]
 
-      for row in range(startRow, endRow):
+      for row in range(startRow, endRow+1):
          newLocations.append((row, column, False)) #append points to new list
          if humanShipMatrix[row][col] != 0: #if there is a ship there
             return (True, locations)
@@ -756,6 +756,7 @@ def checkOverlap(orientation, shipSize, locations, humanShipMatrix):
 def placeHumanShip(ship, humanShipMatrix):
 
    for location in ship.locations:
+      print (location)
       row = location[0]
       column = location[1]
       humanShipMatrix[row][column] = ship #placing ship in matrix
