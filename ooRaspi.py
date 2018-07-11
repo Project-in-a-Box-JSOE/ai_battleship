@@ -595,8 +595,9 @@ def hitShip(x,y, orientation, ogX, ogY):
 # places the ships in the human side matrix
 # Input: Human Ship Matrix - contains locations of the ships
 # Output: humanShips - the list of ships
-def getHumanInput(humanShipMatrix):
+def getHumanInput(shipMatrix):
 
+   humanShipMatrix = shipMatrix
 
    # TODO - figure out lighting up LEDs based on the user input
 
@@ -625,7 +626,8 @@ def getHumanInput(humanShipMatrix):
       locations = [(int(var[0]), int(var[1]), False), (int(var[2]), int(var[3]), False)]
       orientation = getOrientation(locations) #check valid orientation
       size = checkShipSize(orientation, locations) #check valid ship size
-      overlap = checkOverlap(orientation, size, locations, humanShipMatrix) #check is ship overlaps another
+      overlap, locations = checkOverlap(orientation, size, locations, humanShipMatrix) #check is ship overlaps another
+      print (overlap)
 
       #if orientation or size not valid, reprompt user for locations
       while orientation == "none" or size != i or overlap == True:
@@ -643,11 +645,13 @@ def getHumanInput(humanShipMatrix):
          orientation = getOrientation(locations)
          size = checkShipSize(orientation, locations)
          overlap, locations = checkOverlap(orientation, size, locations, humanShipMatrix)
+         print(overlap)
 
 
       ship = Ship(len(locations), False, orientation, locations)
       humanShips.append(ship)
-      placeHumanShips(ship, humanShipMatrix)
+      placeHumanShip(ship, humanShipMatrix)
+      print(humanShipMatrix)
 
    return humanShips
 
@@ -745,11 +749,11 @@ def checkOverlap(orientation, shipSize, locations, humanShipMatrix):
    return (False, newLocations)
 
 
-# Name: placeHumanShips()
+# Name: placeHumanShip()
 # Description: This function takes in the ship and places it on the human matrix
 # Input: Ship to place on Matrix
 # Output: None
-def placeHumanShips(ship, humanShipMatrix):
+def placeHumanShip(ship, humanShipMatrix):
 
    for location in ship.locations:
       row = location[0]
