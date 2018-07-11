@@ -609,7 +609,7 @@ def getHumanInput(shipMatrix):
 
       if i == 4 and ship3 == False:
          i -= 1
-         ship3 - True
+         ship3 = True
 
       string = "Please enter the start and end locations for ship of size " + str(i) + "\n"
       #print(string)
@@ -618,11 +618,23 @@ def getHumanInput(shipMatrix):
       
       locations = [(int(var[0]), int(var[1])), (int(var[2]), int(var[3]))]
       
-      #TODO - also need to make sure that there is a valid orientation
-      orientation = getOrientation(locations)
+      orientation = getOrientation(locations) #check valid orientation
+      size = checkShipSize(locations) #check valid ship size
+      overlap = checkOverlap() #check is ship overlaps another
 
-      #also ned to check that they entered correct size, if not, need to repromt
-      size = checkShipSize(locations)
+      #if orientation or size not valid, reprompt user for locations
+      while orientation == "none" or size != i or overlap == True:
+         
+         if orientation == "none":
+            print("Sorry, you entered a ship that is not horizontal or vertical.")
+         elif size != i:
+            print("Sorry, you entered a ship that is not of size ", i, ".")
+         
+         var = input(string)
+         var = var.replace(" ", "").replace(",", "")
+         locations = [(int(var[0]), int(var[1])), (int(var[2]), int(var[3]))]
+         orientation = getOrientation(locations)
+         size = checkShipSize(locations)
 
 
       ship = Ship(len(locations), False, orientation, locations)
@@ -636,7 +648,7 @@ def getHumanInput(shipMatrix):
          humanShips.append(ship)
          placeHumanShip(ship)
 
-      else: #reprompt user to enter new location
+      #else: #reprompt user to enter new location
 
    #placeHumanShips(humanShips)
    return humanShips
@@ -645,12 +657,14 @@ def getHumanInput(shipMatrix):
 # Name: getOrientation()
 # Description: This function takes in the locations and gets orientation of ship
 # Input: Locations list
-# Output: Orientation (vertical/horizontal)
+# Output: Orientation (vertical/horizontal) or None (if user put invalid input)
 def getOrientation(locations):
    if locations[0][0] == locations[1][0]: #if they have the same row
       return ("horizontal")
    elif locations[0][1] == locations[1][1]: #if they have the same column
       return ("vertical")
+   else: #if the ship points are not in the same row or column
+      return ("none")
 
 
 #TODO
@@ -660,6 +674,25 @@ def getOrientation(locations):
 # Input: Ship
 # Output: None
 def checkShipSize(ship):
+   if ship.orientation == "horizontal":
+      ship.locations[0][0] == ship.locations[1][0]
+
+   elif ship.orientation == "vertical":
+      ship.locations[0][0] == ship.locations[1][0]
+
+   return ship.length
+
+
+#TODO
+# Name: checkOverlap()
+# Description: This function check if ship is overlapping another ship
+# Input: Ship
+# Output: True if overlap, False otherwise
+def checkOverlap(ship):
+   return False
+
+
+
 
 #TODO
 # Name: getAllShipPoints()
@@ -669,12 +702,14 @@ def checkShipSize(ship):
 # Output: None
 def getAllShipPoints(ship):
    locations = ship.locations
-   if ship.orientation == "horizontal":
+   #if ship.orientation == "horizontal":
 
-   elif ship.orientation == "Vertical":
+   #elif ship.orientation == "Vertical":
 
    ship.locations = newLocations
    ship.length = len(ship.locations)
+
+   #light up all the points on the LED Board
 
 
 #TODO
@@ -685,6 +720,7 @@ def getAllShipPoints(ship):
 # Output: True = no other ships, good to be places there
 #         False - other ship already there, need to choose a different location
 def checkShipLocation(ship):
+   return False
 
 
 
@@ -694,6 +730,7 @@ def checkShipLocation(ship):
 # Input: Ship to place on Matrix
 # Output: None
 def placeHumanShips(ship):
+   return False
 
    # loop through locations of ship
    # place ship in those locations on the human matrix
