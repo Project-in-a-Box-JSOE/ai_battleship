@@ -9,7 +9,7 @@ class Ship:
    def __init__(self, length, sunk, orientation, locations):
       self.length = length
       self.sunk = sunk
-      self.orientation = orientation
+      self.orientation = orientation #might not even be necessary
       self.locations = locations #positions on board, list of list (X, y, hit)
       self.hits = 0
       Ship.shipCount += 1
@@ -590,6 +590,114 @@ def hitShip(x,y, orientation, ogX, ogY):
    # return direction
 
 
+# Name: getHumanInput()
+# Description: This function prompts the user to enter ship placements and
+# places the ships in the human side matrix
+# Input: Human Ship Matrix - contains locations of the ships
+# Output: humanShips - the list of ships
+def getHumanInput(shipMatrix):
+
+   print("For each ship, type the start location followed by ending location.")
+   print("Type the row followed by a space followed by column.")
+   print("Place a comma between each point of the ship.")
+   print("Example: 2 3, 2 6")
+
+   ship3 = False #using this as a flag so we do this twice for ship of size 3
+
+   humanShips = []
+   for i in range(2,5): #loop 5 times to do this for 5 ships
+
+      if i == 4 and ship3 == False:
+         i -= 1
+         ship3 - True
+
+      string = "Please enter the start and end locations for ship of size " + str(i) + "\n"
+      #print(string)
+      var = input(string)
+      var = var.replace(" ", "").replace(",", "")
+      
+      locations = [(int(var[0]), int(var[1])), (int(var[2]), int(var[3]))]
+      
+      #TODO - also need to make sure that there is a valid orientation
+      orientation = getOrientation(locations)
+
+      #also ned to check that they entered correct size, if not, need to repromt
+      size = checkShipSize(locations)
+
+
+      ship = Ship(len(locations), False, orientation, locations)
+      getAllShipPoints(ship)
+
+      #need to make sure that ship isnt place in place where there is another ship already
+      place = checkShipLocation(ship)
+
+      #ship = Ship(len(locations), False, orientation, locations)
+      if place == True:
+         humanShips.append(ship)
+         placeHumanShip(ship)
+
+      else: #reprompt user to enter new location
+
+   #placeHumanShips(humanShips)
+   return humanShips
+
+
+# Name: getOrientation()
+# Description: This function takes in the locations and gets orientation of ship
+# Input: Locations list
+# Output: Orientation (vertical/horizontal)
+def getOrientation(locations):
+   if locations[0][0] == locations[1][0]: #if they have the same row
+      return ("horizontal")
+   elif locations[0][1] == locations[1][1]: #if they have the same column
+      return ("vertical")
+
+
+#TODO
+# Name: checkShipSize()
+# Description: This function checks to see if the user inputted points that
+# match the ships size
+# Input: Ship
+# Output: None
+def checkShipSize(ship):
+
+#TODO
+# Name: getAllShipPoints()
+# Description: This function takes in the start/end locations of a ship and
+# updates to get all the points in between
+# Input: Ship
+# Output: None
+def getAllShipPoints(ship):
+   locations = ship.locations
+   if ship.orientation == "horizontal":
+
+   elif ship.orientation == "Vertical":
+
+   ship.locations = newLocations
+   ship.length = len(ship.locations)
+
+
+#TODO
+# Name: checkShipLocation()
+# Description: This function checks to see if the placement of the ship is valid
+# aka that there are no other ships already in those positions
+# Input: Ship
+# Output: True = no other ships, good to be places there
+#         False - other ship already there, need to choose a different location
+def checkShipLocation(ship):
+
+
+
+#TODO
+# Name: placeHumanShips()
+# Description: This function takes in the ship and places it on the human matrix
+# Input: Ship to place on Matrix
+# Output: None
+def placeHumanShips(ship):
+
+   # loop through locations of ship
+   # place ship in those locations on the human matrix
+
 
 # -----------------------------------------------------------------------------
 
@@ -662,53 +770,37 @@ placeShips(gameAiMatrix, aiShipMatrix) #place ships onto the gameAI Matrix
 #get locations from human player and turn them into a list of pairs
 
 #SAMPLE FOR NOW
-locations1 = [(2, 6), (2, 7)] #sample for first ship
-orientation1 = None
-if locations1[0][0] == locations1[1][0]: #if they have the same row
-   orientation1 = "horizontal"
-elif locations1[0][1] == locations1[1][1]: #if they have the same column
-   orientation1 = "vertical"
-ship1 = Ship(len(locations1), False, orientation1, locations1)
+# locations1 = [(2, 6), (2, 7)] #sample for first ship
+# orientation1 = None
+# if locations1[0][0] == locations1[1][0]: #if they have the same row
+#    orientation1 = "horizontal"
+# elif locations1[0][1] == locations1[1][1]: #if they have the same column
+#    orientation1 = "vertical"
+# ship1 = Ship(len(locations1), False, orientation1, locations1)
 
-locations2 = [(3, 0), (4, 0), (5,0)] #sample for first ship
-orientation2 = None
-if locations2[0][0] == locations2[1][0]: #if they have the same row
-   orientation2 = "horizontal"
-elif locations2[0][1] == locations1[1][1]: #if they have the same column
-   orientation2 = "vertical"
-ship2 = Ship(len(locations2), False, orientation2, locations2)
+# locations2 = [(3, 0), (4, 0), (5,0)] #sample for first ship
+# orientation2 = None
+# if locations2[0][0] == locations2[1][0]: #if they have the same row
+#    orientation2 = "horizontal"
+# elif locations2[0][1] == locations1[1][1]: #if they have the same column
+#    orientation2 = "vertical"
+# ship2 = Ship(len(locations2), False, orientation2, locations2)
 
-locations3 = [(2, 6), (2, 7)] #sample for first ship
-orientation3 = None
-if locations3[0][0] == locations3[1][0]: #if they have the same row
-   orientation3 = "horizontal"
-elif locations3[0][1] == locations3[1][1]: #if they have the same column
-   orientation3 = "vertical"
-ship3 = Ship(len(locations3), False, orientation3, locations3)
+# locations3 = [(2, 6), (2, 7)] #sample for first ship
+# orientation3 = None
+# if locations3[0][0] == locations3[1][0]: #if they have the same row
+#    orientation3 = "horizontal"
+# elif locations3[0][1] == locations3[1][1]: #if they have the same column
+#    orientation3 = "vertical"
+# ship3 = Ship(len(locations3), False, orientation3, locations3)
 
-#list that contains all the ships
-humanShips = [ship1, ship2, ship3]
+# #list that contains all the ships
+# humanShips = [ship1, ship2, ship3]
 
 
 # FOR TESTING
 #get input from user in terminal
-print("For each ship, type the row followed by a space follow by column.")
-print("Place a comma between each point of the ship.")
-print("Example: 2 3, 2 4, 2 5, 2 6")
-
-var1 = input("Please enter the start and end locations for ship of size 2\n")
-
-#in between, ned to check that user does not put same location multiple times
-
-var2 = input("Please enter the start and end locations for ship of size 3\n")
-var3 = input("Please enter the start and end locations for second ship of size 3\n")
-var4 = input("Please enter the start and end locations for ship of size 4\n")
-var5 = input("Please enter the start and end locations for ship of size 5\n")
-
-
-
-
-
+humanShips = getHumanInput(humanShipMatrix)
 # TODO - get user input from buttons for user to place ships
    #get locations from user input
    #create ships
@@ -874,6 +966,7 @@ while gameOver == False:
    # just for now until we have this fully functional
    gameOver = True
    # TODO - when game is over, have all lights on the board blinking
+   # When game is over, make lights blink in cool shape (start going in and out? bordere going in and out?)
 
    # TODO - send hit/miss output to human player
    # TODO - update LED boards based off of hit/miss
