@@ -347,6 +347,7 @@ def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix):
 
       #update ship object
       ship = shipMatrix[row][col]
+      shipMatrix[row][col] = "X"
       ship.hits += 1
       for location in ship.location: #setting that location as hit
          if location[0] == x and location[1] == y:
@@ -800,10 +801,12 @@ def printBoard(shipMatrix):
 
    for row in range(10):
       for column in range(10):
-         if shipMatrix[row][column] != 0: #if there is a ship
+         if shipMatrix[row][column] == "X":
+            tempShipMatrix[row][column] = "X"
+         elif shipMatrix[row][column] != 0: #if there is a ship
             ship = shipMatrix[row][column]
             tempShipMatrix[row][column] = ship.length
-            #if ship.
+            
       print(tempShipMatrix[row])
 
    #print(tempShipMatrix)
