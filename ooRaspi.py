@@ -106,8 +106,10 @@ def ship2(matrix, shipMatrix, aiShips):
    matrix[p2x][p2y] = 2
 
    #create ship and place it in the shipMatrix
-   location = [(p1x, p1y, False), (p2x, p2y, False)]
-   ship = Ship(len(location), False, orientation, location)
+   locations = [[p1x, p1y, False], [p2x, p2y, False]]
+   ship = Ship(len(locations), False, orientation, locations)
+   for location in locations: #put ships in AI Ship Matrix
+      shipMatrix[location[0]][location[1]] = ship
    aiShips.append(ship)
 
 def ship3(matrix, shipMatrix, aiShips):
@@ -170,8 +172,10 @@ def ship3(matrix, shipMatrix, aiShips):
    matrix[p3x][p3y] = 3
 
    #create ship and place it in the shipMatrix
-   location = [(p1x, p1y, False), (p2x, p2y, False), (p3x, p3y, False)]
-   ship = Ship(len(location), False, orientation, location)
+   locations = [[p1x, p1y, False], [p2x, p2y, False], [p3x, p3y, False]]
+   ship = Ship(len(locations), False, orientation, locations)
+   for location in locations: #put ships in AI Ship Matrix
+      shipMatrix[location[0]][location[1]] = ship
    aiShips.append(ship)
 
 def ship4(matrix, shipMatrix, aiShips):
@@ -239,8 +243,10 @@ def ship4(matrix, shipMatrix, aiShips):
    matrix[p4x][p4y] = 4
 
    #create ship and place it in the shipMatrix
-   location = [(p1x, p1y, False), (p2x, p2y, False), (p3x, p3y, False), (p4x, p4y, False)]
-   ship = Ship(len(location), False, orientation, location)
+   locations = [[p1x, p1y, False], [p2x, p2y, False], [p3x, p3y, False], [p4x, p4y, False]]
+   ship = Ship(len(locations), False, orientation, locations)
+   for location in locations: #put ships in AI Ship Matrix
+      shipMatrix[location[0]][location[1]] = ship
    aiShips.append(ship)
 
 def ship5(matrix, shipMatrix, aiShips):
@@ -317,8 +323,10 @@ def ship5(matrix, shipMatrix, aiShips):
    matrix[p4x][p5y] = 5
 
    #create ship and place it in the shipMatrix
-   location = [(p1x, p1y, False), (p2x, p2y, False), (p3x, p3y, False), (p4x, p4y, False), (p5x, p5y, False)]
-   ship = Ship(len(location), False, orientation, location)
+   locations = [[p1x, p1y, False], [p2x, p2y, False], [p3x, p3y, False], [p4x, p4y, False], [p5x, p5y, False]]
+   ship = Ship(len(locations), False, orientation, locations)
+   for location in locations: #put ships in AI Ship Matrix
+      shipMatrix[location[0]][location[1]] = ship
    aiShips.append(ship)
 
 
@@ -362,7 +370,7 @@ def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix):
       shipMatrix[row][col] = "X"
       print(ship)
       ship.hits += 1
-      for location in ship.location: #setting that location as hit
+      for location in ship.locations: #setting that location as hit
          if location[0] == x and location[1] == y:
             location[2] = True
 
@@ -657,7 +665,7 @@ def getHumanInput(humanShipMatrix):
 
          var = input(string)
          var = var.replace(" ", "").replace(",", "")
-         locations = [(int(var[0]), int(var[1]), False), (int(var[2]), int(var[3]), False)]
+         locations = [[int(var[0]), int(var[1]), False], [int(var[2]), int(var[3]), False]]
          orientation = getOrientation(locations)
          size = checkShipSize(orientation, locations)
          overlap, locations = checkOverlap(orientation, size, locations, humanShipMatrix)
@@ -676,7 +684,7 @@ def getHumanInput(humanShipMatrix):
          var = input(string)
          var = var.replace(" ", "").replace(",", "")
          
-         locations = [(int(var[0]), int(var[1]), False), (int(var[2]), int(var[3]), False)]
+         locations = [[int(var[0]), int(var[1]), False], [int(var[2]), int(var[3]), False]]
          orientation = getOrientation(locations) #check valid orientation
          size = checkShipSize(orientation, locations) #check valid ship size
          overlap, locations = checkOverlap(orientation, size, locations, humanShipMatrix) #check is ship overlaps another
@@ -694,7 +702,7 @@ def getHumanInput(humanShipMatrix):
             
             var = input(string)
             var = var.replace(" ", "").replace(",", "")
-            locations = [(int(var[0]), int(var[1]), False), (int(var[2]), int(var[3]), False)]
+            locations = [[int(var[0]), int(var[1]), False], [int(var[2]), int(var[3]), False]]
             orientation = getOrientation(locations)
             size = checkShipSize(orientation, locations)
             overlap, locations = checkOverlap(orientation, size, locations, humanShipMatrix)
@@ -782,7 +790,7 @@ def checkOverlap(orientation, shipSize, locations, humanShipMatrix):
          endCol = locations[0][1]
 
       for col in range(startCol, endCol+1):
-         newLocations.append((row, col, False)) #append points to new list
+         newLocations.append([row, col, False]) #append points to new list
          #print("HERE1")
          if humanShipMatrix[row][col] != 0: #if there is a ship there
             return (True, locations)
@@ -802,7 +810,7 @@ def checkOverlap(orientation, shipSize, locations, humanShipMatrix):
 
       #print(startRow, endRow)
       for row in range(startRow, endRow+1):
-         newLocations.append((row, column, False)) #append points to new list
+         newLocations.append([row, column, False]) #append points to new list
          #print("appended")
          if humanShipMatrix[row][column] != 0: #if there is a ship there
             #print("HERE2")
