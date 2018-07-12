@@ -16,9 +16,10 @@ class Ship:
       if self.length == self.hits:
          sunk = True
    
-   # def didShipSink(self):
-   #   print ("Did ship of length ", self.length, "sink? ", self.sunk)
-   #   return self.sunk
+   def didShipSink(self):
+      if self.length == self.hits:
+         return True
+      return False
 
 
 # Name: ship#()
@@ -322,6 +323,8 @@ def ship5(matrix, shipMatrix, aiShips):
    matrix[p4x][p4y] = 5
    matrix[p4x][p5y] = 5
 
+   print(matrix)
+
    #create ship and place it in the shipMatrix
    locations = [[p1x, p1y, False], [p2x, p2y, False], [p3x, p3y, False], [p4x, p4y, False], [p5x, p5y, False]]
    ship = Ship(len(locations), False, orientation, locations)
@@ -344,6 +347,7 @@ def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix):
    row = x
    col = y
 
+   print(gameMatrix[row][col])
    # HIT
    if gameMatrix[row][col] > 1 : #if there is a ship in that position
 
@@ -364,11 +368,11 @@ def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix):
             probMatrix[i][j] = probMatrix[i][j] - posProb
 
       #update ship object
-      print(shipMatrix)
+      #print(shipMatrix)
       ship = shipMatrix[row][col][0]
-      print(ship)
+      #print(ship)
       shipMatrix[row][col][1] = "X"
-      print(ship)
+      #print(ship)
       ship.hits += 1
       for location in ship.locations: #setting that location as hit
          if location[0] == x and location[1] == y:
@@ -892,13 +896,14 @@ def printAiBoard(shipMatrix):
 
    for row in range(10):
       for column in range(10):
-         if shipMatrix[row][column] != 0: #if there is a ship there
+         
+         if shipMatrix[row][column] == "O":
+            tempShipMatrix[row][column] = "O"
+
+         elif shipMatrix[row][column] != 0: #if there is a ship there
 
             if shipMatrix[row][column][1] == "X": #if ship was hit
                tempShipMatrix[row][column] = "X"
-
-         elif shipMatrix[row][column] == "O":
-            tempShipMatrix[row][column] = "O"
 
          else:
             tempShipMatrix[row][column] = 0
@@ -1079,6 +1084,11 @@ while gameOver == False:
    hit1 = updateBoards(x1, y1, aiMatrix, gameAiMatrix, aiShipMatrix) 
    if hit1 == True:
       print("HIT!")
+      #check if ship has sunk
+      ship = aiShipMatrix[x1][y1][0]
+      #print(ship)
+      if ship.didShipSink() == True:
+         print("You have sunk one of my battleships!")
    else:
       print("MISS!")
    printAiBoard(aiShipMatrix)
