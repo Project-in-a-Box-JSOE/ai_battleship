@@ -805,6 +805,7 @@ def checkOverlap(orientation, shipSize, locations, humanShipMatrix):
 def placeHumanShip(ship, humanShipMatrix):
 
    for location in ship.locations:
+      print(location)
       row = location[0]
       column = location[1]
       humanShipMatrix[row][column] = ship #placing ship in matrix
