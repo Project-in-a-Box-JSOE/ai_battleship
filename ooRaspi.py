@@ -630,7 +630,7 @@ def getHumanInput(humanShipMatrix):
       locations = [(int(var[0]), int(var[1]), False), (int(var[2]), int(var[3]), False)]
       print("here1\n")
       orientation = getOrientation(locations) #check valid orientation
-      print("here2\n")
+      print(orientation)
       size = checkShipSize(orientation, locations) #check valid ship size
       print("here3\n")
       overlap, locations = checkOverlap(orientation, size, locations, humanShipMatrix) #check is ship overlaps another
@@ -642,11 +642,14 @@ def getHumanInput(humanShipMatrix):
          
          if orientation == "none":
             print("Sorry, you entered a ship that is not horizontal or vertical.")
+            printBoard(humanShipMatrix)
          elif size != i:
             print("Sorry, you entered a ship that is not of size ", i, ".")
+            printBoard(humanShipMatrix)
          elif overlap == True:
             print("Sorry, you entered a ship overlaps with another ship.")
-         
+            printBoard(humanShipMatrix)
+
          var = input(string)
          var = var.replace(" ", "").replace(",", "")
          locations = [(int(var[0]), int(var[1]), False), (int(var[2]), int(var[3]), False)]
@@ -751,6 +754,7 @@ def checkShipSize(orientation, locations):
 # Output: True if overlap, False otherwise
 def checkOverlap(orientation, shipSize, locations, humanShipMatrix):
 
+   print(locations)
    newLocations = [] #list that will contain all the points of this ship
 
    if orientation == "none":
@@ -762,6 +766,7 @@ def checkOverlap(orientation, shipSize, locations, humanShipMatrix):
    elif orientation == "horizontal": #same row
       row = locations[0][0]
       startCol, endCol = 0, 0
+      print("in horizontal")
 
       #finding smaller column to make looping easier
       if locations[0][1] < locations[1][1]:
@@ -773,25 +778,29 @@ def checkOverlap(orientation, shipSize, locations, humanShipMatrix):
 
       for col in range(startCol, endCol+1):
          newLocations.append((row, col, False)) #append points to new list
+         print("HERE1")
          if humanShipMatrix[row][col] != 0: #if there is a ship there
             return (True, locations)
 
    elif orientation == "vertical": #same column
       column = locations[0][1]
       startRow, endRow = 0, 0
+      print("in vertical")
 
       #finding smaller row to make looping easier
-      if locations[0][1] < locations[1][1]:
+      if locations[0][0] < locations[1][0]:
          startRow = locations[0][0]
          endRow = locations[1][0]
       else:
          startRow = locations[1][0]
          endRow = locations[0][0]
 
+      print(startRow, endRow)
       for row in range(startRow, endRow+1):
          newLocations.append((row, column, False)) #append points to new list
+         print("appended")
          if humanShipMatrix[row][column] != 0: #if there is a ship there
-            print("HERE")
+            print("HERE2")
             return (True, locations)
 
 
@@ -805,7 +814,7 @@ def checkOverlap(orientation, shipSize, locations, humanShipMatrix):
 def placeHumanShip(ship, humanShipMatrix):
 
    for location in ship.locations:
-      print(location)
+      #print(location)
       row = location[0]
       column = location[1]
       humanShipMatrix[row][column] = ship #placing ship in matrix
@@ -842,6 +851,7 @@ def printBoard(shipMatrix):
 def humanTurn():
 
    #print("Where would you like your next target to be?")
+   print("YOUR TURN!")
    print("Type the row followed by a space followed by column. For example: 2 3")
    var = input("Where would you like your next target to be?\n")
    var = var.replace(" ", "")
