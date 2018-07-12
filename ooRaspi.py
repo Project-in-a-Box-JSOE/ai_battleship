@@ -356,8 +356,11 @@ def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix):
             probMatrix[i][j] = probMatrix[i][j] - posProb
 
       #update ship object
+      print(shipMatrix)
       ship = shipMatrix[row][col]
+      print(ship)
       shipMatrix[row][col] = "X"
+      print(ship)
       ship.hits += 1
       for location in ship.location: #setting that location as hit
          if location[0] == x and location[1] == y:
@@ -384,7 +387,9 @@ def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix):
          for j in range(10): #because 10x10 board size
             probMatrix[i][j] = probMatrix[i][j] + newProbVal
 
-      #if there was a miss, we do not need to update any ship objects
+      #if there was a miss, we do not need to update any ship objects, just the Matrix
+      shipMatrix[row][col] = "O"
+
 
       return False #return miss     
 
@@ -628,13 +633,13 @@ def getHumanInput(humanShipMatrix):
       var = var.replace(" ", "").replace(",", "")
       
       locations = [(int(var[0]), int(var[1]), False), (int(var[2]), int(var[3]), False)]
-      print("here1\n")
+      #print("here1\n")
       orientation = getOrientation(locations) #check valid orientation
-      print(orientation)
+      #print(orientation)
       size = checkShipSize(orientation, locations) #check valid ship size
-      print("here3\n")
+      #print("here3\n")
       overlap, locations = checkOverlap(orientation, size, locations, humanShipMatrix) #check is ship overlaps another
-      print("here4\n")
+      #print("here4\n")
       #print (overlap)
 
       #if orientation or size not valid, reprompt user for locations
@@ -642,13 +647,13 @@ def getHumanInput(humanShipMatrix):
          
          if orientation == "none":
             print("Sorry, you entered a ship that is not horizontal or vertical.")
-            printBoard(humanShipMatrix)
+            printHumanBoard(humanShipMatrix)
          elif size != i:
             print("Sorry, you entered a ship that is not of size ", i, ".")
-            printBoard(humanShipMatrix)
+            printHumanBoard(humanShipMatrix)
          elif overlap == True:
             print("Sorry, you entered a ship overlaps with another ship.")
-            printBoard(humanShipMatrix)
+            printHumanBoard(humanShipMatrix)
 
          var = input(string)
          var = var.replace(" ", "").replace(",", "")
@@ -663,7 +668,7 @@ def getHumanInput(humanShipMatrix):
       humanShips.append(ship)
       placeHumanShip(ship, humanShipMatrix)
       #print(humanShipMatrix)
-      printBoard(humanShipMatrix)
+      printHumanBoard(humanShipMatrix)
       #print(humanShipMatrix)
 
       if i == 3:
@@ -699,7 +704,7 @@ def getHumanInput(humanShipMatrix):
          ship = Ship(len(locations), False, orientation, locations)
          humanShips.append(ship)
          placeHumanShip(ship, humanShipMatrix)
-         printBoard(humanShipMatrix)
+         printHumanBoard(humanShipMatrix)
          #print(humanShipMatrix)
 
 
@@ -754,7 +759,7 @@ def checkShipSize(orientation, locations):
 # Output: True if overlap, False otherwise
 def checkOverlap(orientation, shipSize, locations, humanShipMatrix):
 
-   print(locations)
+   #print(locations)
    newLocations = [] #list that will contain all the points of this ship
 
    if orientation == "none":
@@ -766,7 +771,7 @@ def checkOverlap(orientation, shipSize, locations, humanShipMatrix):
    elif orientation == "horizontal": #same row
       row = locations[0][0]
       startCol, endCol = 0, 0
-      print("in horizontal")
+      #print("in horizontal")
 
       #finding smaller column to make looping easier
       if locations[0][1] < locations[1][1]:
@@ -778,14 +783,14 @@ def checkOverlap(orientation, shipSize, locations, humanShipMatrix):
 
       for col in range(startCol, endCol+1):
          newLocations.append((row, col, False)) #append points to new list
-         print("HERE1")
+         #print("HERE1")
          if humanShipMatrix[row][col] != 0: #if there is a ship there
             return (True, locations)
 
    elif orientation == "vertical": #same column
       column = locations[0][1]
       startRow, endRow = 0, 0
-      print("in vertical")
+      #print("in vertical")
 
       #finding smaller row to make looping easier
       if locations[0][0] < locations[1][0]:
@@ -795,12 +800,12 @@ def checkOverlap(orientation, shipSize, locations, humanShipMatrix):
          startRow = locations[1][0]
          endRow = locations[0][0]
 
-      print(startRow, endRow)
+      #print(startRow, endRow)
       for row in range(startRow, endRow+1):
          newLocations.append((row, column, False)) #append points to new list
-         print("appended")
+         #print("appended")
          if humanShipMatrix[row][column] != 0: #if there is a ship there
-            print("HERE2")
+            #print("HERE2")
             return (True, locations)
 
 
@@ -822,11 +827,11 @@ def placeHumanShip(ship, humanShipMatrix):
 
 
 # TODO - replace this with update LED board?????
-# Name: printBoard()
+# Name: printHumanBoard()
 # Description: This function takes in the shipMatrix and prints it out
-# Input: Ship Matrix
+# Input: Human Ship Matrix
 # Output: None
-def printBoard(shipMatrix):
+def printHumanBoard(shipMatrix):
 
    tempShipMatrix = [[0 for x in range(10)] for y in range(10)] 
 
@@ -834,9 +839,33 @@ def printBoard(shipMatrix):
       for column in range(10):
          if shipMatrix[row][column] == "X":
             tempShipMatrix[row][column] = "X"
+         elif shipMatrix[row][column] == "O":
+            tempShipMatrix[row][column] = "O"
          elif shipMatrix[row][column] != 0: #if there is a ship
             ship = shipMatrix[row][column]
             tempShipMatrix[row][column] = ship.length
+
+      print(tempShipMatrix[row])
+
+   #print(tempShipMatrix)
+
+# TODO - replace this with update LED board?????
+# Name: printAiBoard()
+# Description: This function takes in the shipMatrix and prints it out
+# Input: Ai Ship Matrix
+# Output: None
+def printAiBoard(shipMatrix):
+
+   tempShipMatrix = [[0 for x in range(10)] for y in range(10)] 
+
+   for row in range(10):
+      for column in range(10):
+         if shipMatrix[row][column] == "X":
+            tempShipMatrix[row][column] = "X"
+         elif shipMatrix[row][column] == "O":
+            tempShipMatrix[row][column] = "O"
+         else:
+            tempShipMatrix[row][column] = 0
 
       print(tempShipMatrix[row])
 
@@ -1007,7 +1036,7 @@ while gameOver == False:
    
    #updates boards and returns true if hit, false if miss
    hit1 = updateBoards(x1, y1, aiMatrix, gameAiMatrix, aiShipMatrix) 
-   printBoard(aiShipMatrix)
+   printAiBoard(aiShipMatrix)
    
    # TODO - send hit/miss output to human player and let them know if ship has sunk
    # TODO - update LED boards based off of hit/miss
@@ -1112,7 +1141,7 @@ while gameOver == False:
 
             #x2, y2, direction = getShipDirection(x2, y2, direction)
 
-   printBoard(humanShipMatrix)
+   printHumanBoard(humanShipMatrix)
 
    #check if original target ship has sunk
    if humanShipMatrix[ogX][ogY] != 0:
