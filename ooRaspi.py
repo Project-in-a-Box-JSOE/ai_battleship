@@ -109,7 +109,7 @@ def ship2(matrix, shipMatrix, aiShips):
    locations = [[p1x, p1y, False], [p2x, p2y, False]]
    ship = Ship(len(locations), False, orientation, locations)
    for location in locations: #put ships in AI Ship Matrix
-      shipMatrix[location[0]][location[1]] = ship
+      shipMatrix[location[0]][location[1]] = [ship, 0]
    aiShips.append(ship)
 
 def ship3(matrix, shipMatrix, aiShips):
@@ -175,7 +175,7 @@ def ship3(matrix, shipMatrix, aiShips):
    locations = [[p1x, p1y, False], [p2x, p2y, False], [p3x, p3y, False]]
    ship = Ship(len(locations), False, orientation, locations)
    for location in locations: #put ships in AI Ship Matrix
-      shipMatrix[location[0]][location[1]] = ship
+      shipMatrix[location[0]][location[1]] = [ship, 0]
    aiShips.append(ship)
 
 def ship4(matrix, shipMatrix, aiShips):
@@ -246,7 +246,7 @@ def ship4(matrix, shipMatrix, aiShips):
    locations = [[p1x, p1y, False], [p2x, p2y, False], [p3x, p3y, False], [p4x, p4y, False]]
    ship = Ship(len(locations), False, orientation, locations)
    for location in locations: #put ships in AI Ship Matrix
-      shipMatrix[location[0]][location[1]] = ship
+      shipMatrix[location[0]][location[1]] = [ship, 0]
    aiShips.append(ship)
 
 def ship5(matrix, shipMatrix, aiShips):
@@ -326,7 +326,7 @@ def ship5(matrix, shipMatrix, aiShips):
    locations = [[p1x, p1y, False], [p2x, p2y, False], [p3x, p3y, False], [p4x, p4y, False], [p5x, p5y, False]]
    ship = Ship(len(locations), False, orientation, locations)
    for location in locations: #put ships in AI Ship Matrix
-      shipMatrix[location[0]][location[1]] = ship
+      shipMatrix[location[0]][location[1]] = [ship, 0]
    aiShips.append(ship)
 
 
@@ -338,7 +338,7 @@ def ship5(matrix, shipMatrix, aiShips):
 # Input: X/Row location, Y/Column location, ProbMatrix(overall prob matrix for
 # human/ai), GameMatrix(current game matrix for human/ai), ShipMatrix(contains
 # human/ai ships)
-# Output: True if ship was hit, False if missed, Ship Size if hit
+# Output: True if ship was hit, False if missed
 def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix):
    
    row = x
@@ -365,16 +365,16 @@ def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix):
 
       #update ship object
       print(shipMatrix)
-      ship = shipMatrix[row][col]
+      ship = shipMatrix[row][col][0]
       print(ship)
-      shipMatrix[row][col] = "X"
+      shipMatrix[row][col][1] = "X"
       print(ship)
       ship.hits += 1
       for location in ship.locations: #setting that location as hit
          if location[0] == x and location[1] == y:
             location[2] = True
 
-      return (True, shipSize) #return hit and size of ship if hit
+      return True #return hit
 
    # MISS
    elif gameMatrix[row][col] < 1: #if there is no ship in that position
@@ -830,7 +830,7 @@ def placeHumanShip(ship, humanShipMatrix):
       #print(location)
       row = location[0]
       column = location[1]
-      humanShipMatrix[row][column] = ship #placing ship in matrix
+      humanShipMatrix[row][column] = [ship, 0] #placing ship in matrix
       #printBoards(humanShipMatrix, aiShipMatrix)
 
 
@@ -846,13 +846,17 @@ def printHumanBoard(shipMatrix):
 
    for row in range(10):
       for column in range(10):
-         if shipMatrix[row][column] == "X":
-            tempShipMatrix[row][column] = "X"
-         elif shipMatrix[row][column] == "O":
+
+         if shipMatrix[row][column] == "O":
             tempShipMatrix[row][column] = "O"
          elif shipMatrix[row][column] != 0: #if there is a ship
-            ship = shipMatrix[row][column]
-            tempShipMatrix[row][column] = ship.length
+            #print(shipMatrix[row][column])
+            if shipMatrix[row][column][1] == "X": #if ship was hit
+               tempShipMatrix[row][column] = "X"
+            else:
+               ship = shipMatrix[row][column][0]
+               tempShipMatrix[row][column] = ship.length
+
 
       print(tempShipMatrix[row])
    print("\n")
@@ -866,15 +870,36 @@ def printHumanBoard(shipMatrix):
 # Output: None
 def printAiBoard(shipMatrix):
    
+   print("Real AI Board:")
+   tempShipMatrix = [[0 for x in range(10)] for y in range(10)] 
+
+   for row in range(10):
+      for column in range(10):
+
+         if shipMatrix[row][column] == "O":
+            tempShipMatrix[row][column] = "O"
+         elif shipMatrix[row][column] != 0: #if there is a ship
+               ship = shipMatrix[row][column][0]
+               tempShipMatrix[row][column] = ship.length
+
+      print(tempShipMatrix[row])
+   print("\n")
+
+
+
    print("AI Board:")
    tempShipMatrix = [[0 for x in range(10)] for y in range(10)] 
 
    for row in range(10):
       for column in range(10):
-         if shipMatrix[row][column] == "X":
-            tempShipMatrix[row][column] = "X"
+         if shipMatrix[row][column] != 0: #if there is a ship there
+
+            if shipMatrix[row][column][1] == "X": #if ship was hit
+               tempShipMatrix[row][column] = "X"
+
          elif shipMatrix[row][column] == "O":
             tempShipMatrix[row][column] = "O"
+
          else:
             tempShipMatrix[row][column] = 0
 
@@ -961,13 +986,17 @@ aiMatrix = [ [0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709676
 
 #this is the human side of the board... used during the duration of the game
 gameHumanMatrix = humanMatrix[:]
-#human side of the board that shows where its ships are
+#human side of the board that shows where its ships are and keeps track of hits/misses
 humanShipMatrix = [[0 for x in range(10)] for y in range(10)] 
 
 #this is the ai side of the board... only used during the duration of the game
 gameAiMatrix = aiMatrix[:]
-#ai side of the board that shows where its ships are
-aiShipMatrix = [[0 for x in range(10)] for y in range(10)] 
+#ai side of the board that shows where its ships are and keeps track of hits/misses
+aiShipMatrix = [[0 for x in range(10)] for y in range(10)]
+
+
+
+
 
 # TODO - get number of games played (read from file)
 #gets saved at the end of the game and overwritten with the start of a game
@@ -1048,7 +1077,12 @@ while gameOver == False:
    
    #updates boards and returns true if hit, false if miss
    hit1 = updateBoards(x1, y1, aiMatrix, gameAiMatrix, aiShipMatrix) 
+   if hit1 == True:
+      print("HIT!")
+   else:
+      print("MISS!")
    printAiBoard(aiShipMatrix)
+
    
    # TODO - send hit/miss output to human player and let them know if ship has sunk
    # TODO - update LED boards based off of hit/miss
@@ -1153,13 +1187,18 @@ while gameOver == False:
 
             #x2, y2, direction = getShipDirection(x2, y2, direction)
 
+   if hit2 == True:
+      print("The AI HIT one of your ships!")
+   else:
+      print("The AI MISSED!")
    printHumanBoard(humanShipMatrix)
 
    #check if original target ship has sunk
-   if humanShipMatrix[ogX][ogY] != 0 and humanShipMatrix[ogX][ogY] != "X" and humanShipMatrix[ogX][ogY] != "O":
-      ship = humanShipMatrix[ogX][ogY]
+   if humanShipMatrix[ogX][ogY] != 0 and humanShipMatrix[ogX][ogY] != "O":
+      ship = humanShipMatrix[ogX][ogY][0]
       shipSunk = ship.sunk
       if shipSunk == True: #reset variables
+         print("Sunk ship of size ", ship.length)
          hit2 = False
          ogX, ogY = None, None #keeping track of original targets in case it hits
          x2, y2 = None, None 
