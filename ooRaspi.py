@@ -841,6 +841,7 @@ def placeHumanShip(ship, humanShipMatrix):
 # Output: None
 def printHumanBoard(shipMatrix):
 
+   print("Your Board:")
    tempShipMatrix = [[0 for x in range(10)] for y in range(10)] 
 
    for row in range(10):
@@ -854,6 +855,7 @@ def printHumanBoard(shipMatrix):
             tempShipMatrix[row][column] = ship.length
 
       print(tempShipMatrix[row])
+   print("\n")
 
    #print(tempShipMatrix)
 
@@ -863,7 +865,8 @@ def printHumanBoard(shipMatrix):
 # Input: Ai Ship Matrix
 # Output: None
 def printAiBoard(shipMatrix):
-
+   
+   print("AI Board:")
    tempShipMatrix = [[0 for x in range(10)] for y in range(10)] 
 
    for row in range(10):
@@ -876,6 +879,7 @@ def printAiBoard(shipMatrix):
             tempShipMatrix[row][column] = 0
 
       print(tempShipMatrix[row])
+   print("\n")
 
    #print(tempShipMatrix)
 
@@ -1152,7 +1156,7 @@ while gameOver == False:
    printHumanBoard(humanShipMatrix)
 
    #check if original target ship has sunk
-   if humanShipMatrix[ogX][ogY] != 0:
+   if humanShipMatrix[ogX][ogY] != 0 and humanShipMatrix[ogX][ogY] != "X" and humanShipMatrix[ogX][ogY] != "O":
       ship = humanShipMatrix[ogX][ogY]
       shipSunk = ship.sunk
       if shipSunk == True: #reset variables
