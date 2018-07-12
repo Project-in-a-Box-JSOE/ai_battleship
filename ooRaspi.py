@@ -22,32 +22,38 @@ class Ship:
 
 
 # Name: ship#()
-# Description: This function calculates the best location to place each ship
+# Description: This function calculates the best location to place each ship.
 # Input: ProbMatrix - overall prob matrix for ai side of the board
 #        ShipMatrix - contains the locations of the ships
-# Output: None
+# Output: aiShips - list that contains all the AIs ships
 def placeShips(gameAiMatrix, aiShipMatrix):
 
-   ship2(gameAiMatrix, aiShipMatrix) #ship of length 2
+   aiShips = []
 
-   ship3(gameAiMatrix, aiShipMatrix) #first ship of length 3
+   ship2(gameAiMatrix, aiShipMatrix, aiShips) #ship of length 2
 
-   ship3(gameAiMatrix, aiShipMatrix) #second ship of length 3
+   ship3(gameAiMatrix, aiShipMatrix, aiShips) #first ship of length 3
 
-   ship4(gameAiMatrix, aiShipMatrix) #ship of length 4
+   ship3(gameAiMatrix, aiShipMatrix, aiShips) #second ship of length 3
 
-   ship5(gameAiMatrix, aiShipMatrix) #ship of length 5
+   ship4(gameAiMatrix, aiShipMatrix, aiShips) #ship of length 4
+
+   ship5(gameAiMatrix, aiShipMatrix, aiShips) #ship of length 5
+
+   return aiShips
 
 # Name: ship#()
 # Description: This function calculates the best location to place each ship by
 # looking at every possible ship placement and using probability superposition
 # to select the orientation with the smallest probability of being guessed.
-# Then we create ship objects and place them in the ShipMatrix for later use
+# Then we create ship objects and place them in the ShipMatrix and ship list
+# for later use
 # Input: ProbMatrix - overall prob matrix for ai side of the board
 #        ShipMatrix - contains the locations of the ships
+#        AI Ships - list that contains all of the AIs ships
 # Output: None
 
-def ship2(matrix, shipMatrix):
+def ship2(matrix, shipMatrix, aiShips):
    #loop through the AI boards history matrix (the human user guesses) aka aiMatrix
 
    one = 1.0
@@ -102,8 +108,9 @@ def ship2(matrix, shipMatrix):
    #create ship and place it in the shipMatrix
    location = [(p1x, p1y, False), (p2x, p2y, False)]
    ship = Ship(len(location), False, orientation, location)
+   aiShips.append(ship)
 
-def ship3(matrix, shipMatrix):
+def ship3(matrix, shipMatrix, aiShips):
    #loop through the AI boards history matrix (the human user guesses) aka aiMatrix
 
    one = 1.0
@@ -165,8 +172,9 @@ def ship3(matrix, shipMatrix):
    #create ship and place it in the shipMatrix
    location = [(p1x, p1y, False), (p2x, p2y, False), (p3x, p3y, False)]
    ship = Ship(len(location), False, orientation, location)
+   aiShips.append(ship)
 
-def ship4(matrix, shipMatrix):
+def ship4(matrix, shipMatrix, aiShips):
    #loop through the AI boards history matrix (the human user guesses) aka aiMatrix
 
    one = 1.0
@@ -233,8 +241,9 @@ def ship4(matrix, shipMatrix):
    #create ship and place it in the shipMatrix
    location = [(p1x, p1y, False), (p2x, p2y, False), (p3x, p3y, False), (p4x, p4y, False)]
    ship = Ship(len(location), False, orientation, location)
+   aiShips.append(ship)
 
-def ship5(matrix, shipMatrix):
+def ship5(matrix, shipMatrix, aiShips):
    #loop through the AI boards history matrix (the human user guesses) aka aiMatrix
 
    one = 1.0
@@ -310,6 +319,7 @@ def ship5(matrix, shipMatrix):
    #create ship and place it in the shipMatrix
    location = [(p1x, p1y, False), (p2x, p2y, False), (p3x, p3y, False), (p4x, p4y, False), (p5x, p5y, False)]
    ship = Ship(len(location), False, orientation, location)
+   aiShips.append(ship)
 
 
 # Name: updateBoard()
@@ -618,9 +628,13 @@ def getHumanInput(humanShipMatrix):
       var = var.replace(" ", "").replace(",", "")
       
       locations = [(int(var[0]), int(var[1]), False), (int(var[2]), int(var[3]), False)]
+      print("here1\n")
       orientation = getOrientation(locations) #check valid orientation
+      print("here2\n")
       size = checkShipSize(orientation, locations) #check valid ship size
+      print("here3\n")
       overlap, locations = checkOverlap(orientation, size, locations, humanShipMatrix) #check is ship overlaps another
+      print("here4\n")
       #print (overlap)
 
       #if orientation or size not valid, reprompt user for locations
@@ -645,6 +659,7 @@ def getHumanInput(humanShipMatrix):
       ship = Ship(len(locations), False, orientation, locations)
       humanShips.append(ship)
       placeHumanShip(ship, humanShipMatrix)
+      #print(humanShipMatrix)
       printBoard(humanShipMatrix)
       #print(humanShipMatrix)
 
@@ -775,8 +790,10 @@ def checkOverlap(orientation, shipSize, locations, humanShipMatrix):
 
       for row in range(startRow, endRow+1):
          newLocations.append((row, column, False)) #append points to new list
-         if humanShipMatrix[row][col] != 0: #if there is a ship there
+         if humanShipMatrix[row][column] != 0: #if there is a ship there
+            print("HERE")
             return (True, locations)
+
 
    return (False, newLocations)
 
@@ -794,7 +811,11 @@ def placeHumanShip(ship, humanShipMatrix):
       #printBoards(humanShipMatrix, aiShipMatrix)
 
 
-# TODO - function that prints the game boards after each turn... need this to test game logic
+# TODO - replace this with update LED board?????
+# Name: printBoard()
+# Description: This function takes in the shipMatrix and prints it out
+# Input: Ship Matrix
+# Output: None
 def printBoard(shipMatrix):
 
    tempShipMatrix = [[0 for x in range(10)] for y in range(10)] 
@@ -806,10 +827,41 @@ def printBoard(shipMatrix):
          elif shipMatrix[row][column] != 0: #if there is a ship
             ship = shipMatrix[row][column]
             tempShipMatrix[row][column] = ship.length
-            
+
       print(tempShipMatrix[row])
 
    #print(tempShipMatrix)
+
+
+# TODO - human turn - need this for testing before hardware implementation
+# Name: humanTurn()
+# Description: This function prompts user to input their next target
+# Input: None
+# Output: Target row/column
+def humanTurn():
+
+   #print("Where would you like your next target to be?")
+   print("Type the row followed by a space followed by column. For example: 2 3")
+   var = input("Where would you like your next target to be?\n")
+   var = var.replace(" ", "")
+   return (int(var[0]), int(var[1]))
+
+
+# Name: isGameOver()
+# Description: This function checks to see if the game is over. Called after
+# each human or Ai turn
+# Input: ship list - list containin the human/ai ships
+# Output: True - game is over if all ships have been sunk
+#         False - game is not over because not all ships have been sunk
+def isGameOver(shipsList):
+
+   for ship in shipsList:
+      if ship.sunk == False: #if there is a ship that has not been sunk
+         return False
+
+   return True
+
+
 
 # -----------------------------------------------------------------------------
 
@@ -877,7 +929,7 @@ gamesPlayed = 1;
 # pregame setup
 gameOver = False #will be set to true when all ships have sunk and someone wins
 
-placeShips(gameAiMatrix, aiShipMatrix) #place ships onto the gameAI Matrix
+aiShips = placeShips(gameAiMatrix, aiShipMatrix) #place ships onto the gameAI Matrix
 
 #get locations from human player and turn them into a list of pairs
 
@@ -939,15 +991,19 @@ shipSunk = False
 while gameOver == False:
    # Human turn
    # TODO - get human input for target positions
-   #x1, y1 = ... 
-   x1, y1 = 1, 1 #SAMPLE FOR NOW
+   x1, y1 = humanTurn() #just using this for testing
+   #x1, y1 = 1, 1 #SAMPLE FOR NOW
    
    #updates boards and returns true if hit, false if miss
    hit1 = updateBoards(x1, y1, aiMatrix, gameAiMatrix, aiShipMatrix) 
+   printBoard(aiShipMatrix)
    
    # TODO - send hit/miss output to human player and let them know if ship has sunk
    # TODO - update LED boards based off of hit/miss
 
+   gameOver = isGameOver(aiShips)
+   if gameOver == True:
+      break
 
    #TODO - AI Turn
       # get most likely location to hit
@@ -1045,6 +1101,7 @@ while gameOver == False:
 
             #x2, y2, direction = getShipDirection(x2, y2, direction)
 
+   printBoard(humanShipMatrix)
 
    #check if original target ship has sunk
    if humanShipMatrix[ogX][ogY] != 0:
@@ -1076,7 +1133,9 @@ while gameOver == False:
 
    
    # just for now until we have this fully functional
-   gameOver = True
+   #gameOver = True
+   gameOver = isGameOver(humanShips)
+
    # TODO - when game is over, have all lights on the board blinking
    # When game is over, make lights blink in cool shape (start going in and out? bordere going in and out?)
 
