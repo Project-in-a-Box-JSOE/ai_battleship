@@ -321,9 +321,9 @@ def ship5(matrix, shipMatrix, aiShips):
    matrix[p2x][p2y] = 5
    matrix[p3x][p3y] = 5
    matrix[p4x][p4y] = 5
-   matrix[p4x][p5y] = 5
+   matrix[p5x][p5y] = 5
 
-   print(matrix)
+   #print(matrix)
 
    #create ship and place it in the shipMatrix
    locations = [[p1x, p1y, False], [p2x, p2y, False], [p3x, p3y, False], [p4x, p4y, False], [p5x, p5y, False]]
