@@ -8,7 +8,7 @@ class Ship:
 
    def __init__(self, length, sunk, orientation, locations):
       self.length = length
-      self.sunk = sunk
+      #self.sunk = sunk
       self.orientation = orientation #might not even be necessary
       self.locations = locations #positions on board, list of list (X, y, hit)
       self.hits = 0
@@ -946,7 +946,8 @@ def humanTurn(aiShipMatrix):
 def isGameOver(shipsList):
 
    for ship in shipsList:
-      if ship.sunk == False: #if there is a ship that has not been sunk
+      if ship.didShipSink() == False: #if there is a ship that has not been sunk
+         print(ship.length)
          return False
 
    return True
@@ -1116,7 +1117,8 @@ while gameOver == False:
    # TODO - update LED boards based off of hit/miss
 
    gameOver = isGameOver(aiShips)
-   if gameOver == True:
+   if gameOver == True: #if human wins game
+      print("Congratulations! You won!")
       break
 
    #TODO - AI Turn
@@ -1253,8 +1255,13 @@ while gameOver == False:
    
    # just for now until we have this fully functional
    #gameOver = True
+   #print("we are here")
+   #print(humanShips)
    gameOver = isGameOver(humanShips)
-   print(gameOver)
+   if gameOver == True: #if AI wins game
+      print("Congratulations! You won!")
+
+   #print(gameOver)
 
    # TODO - when game is over, have all lights on the board blinking
    # When game is over, make lights blink in cool shape (start going in and out? bordere going in and out?)
@@ -1268,7 +1275,7 @@ while gameOver == False:
 
 
 gamesPlayed = gamesPlayed + 1; #increment number of games played
-gamesPlayedFile.write(gamesPlayed) #save to file to be used in next game
+gamesPlayedFile.write(str(gamesPlayed)) #save to file to be used in next game
 gamesPlayedFile.close()
 
 
