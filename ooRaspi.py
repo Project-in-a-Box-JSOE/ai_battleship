@@ -112,6 +112,7 @@ def ship2(matrix, shipMatrix, aiShips):
    for location in locations: #put ships in AI Ship Matrix
       shipMatrix[location[0]][location[1]] = [ship, 0]
    aiShips.append(ship)
+   placeShipOnBoard(ship, aiShipMatrix)
 
 def ship3(matrix, shipMatrix, aiShips):
    #loop through the AI boards history matrix (the human user guesses) aka aiMatrix
@@ -178,6 +179,7 @@ def ship3(matrix, shipMatrix, aiShips):
    for location in locations: #put ships in AI Ship Matrix
       shipMatrix[location[0]][location[1]] = [ship, 0]
    aiShips.append(ship)
+   placeShipOnBoard(ship, aiShipMatrix)
 
 def ship4(matrix, shipMatrix, aiShips):
    #loop through the AI boards history matrix (the human user guesses) aka aiMatrix
@@ -249,6 +251,7 @@ def ship4(matrix, shipMatrix, aiShips):
    for location in locations: #put ships in AI Ship Matrix
       shipMatrix[location[0]][location[1]] = [ship, 0]
    aiShips.append(ship)
+   placeShipOnBoard(ship, aiShipMatrix)
 
 def ship5(matrix, shipMatrix, aiShips):
    #loop through the AI boards history matrix (the human user guesses) aka aiMatrix
@@ -331,6 +334,7 @@ def ship5(matrix, shipMatrix, aiShips):
    for location in locations: #put ships in AI Ship Matrix
       shipMatrix[location[0]][location[1]] = [ship, 0]
    aiShips.append(ship)
+   placeShipOnBoard(ship, aiShipMatrix)
 
 
 # Name: updateBoard()
@@ -369,6 +373,7 @@ def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix):
 
       #update ship object
       #print(shipMatrix)
+      print(shipMatrix[row][col][0])
       ship = shipMatrix[row][col][0]
       #print(ship)
       shipMatrix[row][col][1] = "X"
@@ -678,7 +683,7 @@ def getHumanInput(humanShipMatrix):
 
       ship = Ship(len(locations), False, orientation, locations)
       humanShips.append(ship)
-      placeHumanShip(ship, humanShipMatrix)
+      placeShipOnBoard(ship, humanShipMatrix)
       #print(humanShipMatrix)
       printHumanBoard(humanShipMatrix)
       #print(humanShipMatrix)
@@ -715,7 +720,7 @@ def getHumanInput(humanShipMatrix):
 
          ship = Ship(len(locations), False, orientation, locations)
          humanShips.append(ship)
-         placeHumanShip(ship, humanShipMatrix)
+         placeShipOnBoard(ship, humanShipMatrix)
          printHumanBoard(humanShipMatrix)
          #print(humanShipMatrix)
 
@@ -824,17 +829,17 @@ def checkOverlap(orientation, shipSize, locations, humanShipMatrix):
    return (False, newLocations)
 
 
-# Name: placeHumanShip()
+# Name: placeShipOnBoard()
 # Description: This function takes in the ship and places it on the human matrix
 # Input: Ship to place on Matrix
 # Output: None
-def placeHumanShip(ship, humanShipMatrix):
+def placeShipOnBoard(ship, shipMatrix):
 
    for location in ship.locations:
       #print(location)
       row = location[0]
       column = location[1]
-      humanShipMatrix[row][column] = [ship, 0] #placing ship in matrix
+      shipMatrix[row][column] = [ship, 0] #placing ship in matrix
       #printBoards(humanShipMatrix, aiShipMatrix)
 
 
@@ -1159,6 +1164,7 @@ while gameOver == False:
 
 
       x2, y2 = aiMove()
+      print(x2, y2)
       ogX, ogY = x2, y2
       hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix)
       shipHit = hit2
