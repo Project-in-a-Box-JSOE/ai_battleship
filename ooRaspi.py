@@ -959,8 +959,9 @@ def isGameOver(shipsList):
 # Get number of games played (read from file)
 # Gets incremented and saved at the end of each game
 
-gamesPlayedFile = open("gamesPlayed.txt", "r+")
+gamesPlayedFile = open("gamesPlayed.txt", "r")
 gamesPlayed = int(gamesPlayedFile.read())
+gamesPlayedFile.close()
 print(gamesPlayed)
 
 # -----------------------------------------------------------------------------
@@ -1275,6 +1276,7 @@ while gameOver == False:
 
 
 gamesPlayed = gamesPlayed + 1; #increment number of games played
+gamesPlayedFile = open("gamesPlayed.txt", "w")
 gamesPlayedFile.write(str(gamesPlayed)) #save to file to be used in next game
 gamesPlayedFile.close()
 
