@@ -960,6 +960,7 @@ def isGameOver(shipsList):
 
 gamesPlayedFile = open("gamesPlayed.txt", "r+")
 gamesPlayed = int(gamesPlayedFile.read())
+print(gamesPlayed)
 
 # -----------------------------------------------------------------------------
 
@@ -1253,6 +1254,7 @@ while gameOver == False:
    # just for now until we have this fully functional
    #gameOver = True
    gameOver = isGameOver(humanShips)
+   print(gameOver)
 
    # TODO - when game is over, have all lights on the board blinking
    # When game is over, make lights blink in cool shape (start going in and out? bordere going in and out?)
@@ -1265,8 +1267,12 @@ while gameOver == False:
 
 
 
-gamesPlayed = gamesPlayed + 1;
-#write matrices and games played to files 
+gamesPlayed = gamesPlayed + 1; #increment number of games played
+gamesPlayedFile.write(gamesPlayed) #save to file to be used in next game
+gamesPlayedFile.close()
+
+
+#write matricesto files 
 
 # TODO - code to setup matrices for next game... update aiMatrix and humanMatrix for the start of the next game
    #save current probably matrices to file that will be read at the start of the next game
