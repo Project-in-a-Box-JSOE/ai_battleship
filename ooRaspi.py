@@ -955,9 +955,17 @@ def isGameOver(shipsList):
 
 # -----------------------------------------------------------------------------
 
-# TODO - get matrix values from files at the start of the game (read from file)
+# Get number of games played (read from file)
+# Gets incremented and saved at the end of each game
+
+gamesPlayedFile = open("gamesPlayed.txt", "r+")
+gamesPlayed = int(gamesPlayedFile.read())
+
+# -----------------------------------------------------------------------------
+
 
 #Matrix Initilizations
+
 #this only counts for the first game ever
 startMatrix = [ [0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709676, 0.0088709676, 0.0084677418, 0.0076612902, 0.006048387, 0.004032258],
             [0.006048387, 0.008064516, 0.0096774192, 0.0104838708, 0.0108870966, 0.0108870966, 0.0104838708, 0.0096774192, 0.008064516, 0.006048387],
@@ -969,6 +977,16 @@ startMatrix = [ [0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709
             [0.0076612902, 0.0096774192, 0.0112903224, 0.012096774, 0.0124999998, 0.0124999998, 0.012096774, 0.0112903224, 0.0096774192, 0.0076612902],
             [0.006048387, 0.008064516, 0.0096774192, 0.0104838708, 0.0108870966, 0.0108870966, 0.0104838708, 0.0096774192, 0.008064516, 0.006048387],
             [0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709676, 0.0088709676, 0.0084677418, 0.0076612902, 0.006048387, 0.004032258] ]
+
+
+# TODO - get matrix values from files at the start of the game (read from file)
+# Matrix files are as follows: each line in file contains value
+# Order of values is the same as iterating through rows of matrix (left->right)
+# and then to the next row
+
+#humanMatrixFile = open("humanMatrix", "r+")
+
+
 
 #this is the board probability of the current game... starts the same as the startMatrix
 #this is the humans side of the probability board... this gets saved at the end of the game to be used at the start of the next game
@@ -1006,15 +1024,6 @@ humanShipMatrix = [[0 for x in range(10)] for y in range(10)]
 gameAiMatrix = aiMatrix[:]
 #ai side of the board that shows where its ships are and keeps track of hits/misses
 aiShipMatrix = [[0 for x in range(10)] for y in range(10)]
-
-
-
-
-
-# TODO - get number of games played (read from file)
-#gets saved at the end of the game and overwritten with the start of a game
-# gets incremented and saved at the end of each game
-gamesPlayed = 1;
 
 # -----------------------------------------------------------------------------
 
@@ -1256,7 +1265,8 @@ while gameOver == False:
 
 
 
-gamesPlayed = gamesPlayed + 1; 
+gamesPlayed = gamesPlayed + 1;
+#write matrices and games played to files 
 
 # TODO - code to setup matrices for next game... update aiMatrix and humanMatrix for the start of the next game
    #save current probably matrices to file that will be read at the start of the next game
