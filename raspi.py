@@ -338,6 +338,7 @@ def updateBoard(x, y, probMatrix, gameMatrix):
 
 # Name: aiMove()
 # Description: In this function, the AI determines where to target its next hit
+# by finding position with highest probability
 # Input: None
 # Output: Target locations (x/row, y/col)
 def aiMove():

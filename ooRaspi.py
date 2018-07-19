@@ -947,7 +947,7 @@ def isGameOver(shipsList):
 
    for ship in shipsList:
       if ship.didShipSink() == False: #if there is a ship that has not been sunk
-         print(ship.length)
+         #print(ship.length)
          return False
 
    return True
@@ -962,7 +962,7 @@ def isGameOver(shipsList):
 gamesPlayedFile = open("gamesPlayed.txt", "r")
 gamesPlayed = int(gamesPlayedFile.read())
 gamesPlayedFile.close()
-print(gamesPlayed)
+#print(gamesPlayed)
 
 # -----------------------------------------------------------------------------
 
@@ -981,41 +981,58 @@ startMatrix = [ [0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709
             [0.006048387, 0.008064516, 0.0096774192, 0.0104838708, 0.0108870966, 0.0108870966, 0.0104838708, 0.0096774192, 0.008064516, 0.006048387],
             [0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709676, 0.0088709676, 0.0084677418, 0.0076612902, 0.006048387, 0.004032258] ]
 
-
-# TODO - get matrix values from files at the start of the game (read from file)
 # Matrix files are as follows: each line in file contains value
 # Order of values is the same as iterating through rows of matrix (left->right)
 # and then to the next row
 
-#humanMatrixFile = open("humanMatrix", "r+")
+#if first game ever, start with starting matrix
+humanMatrix = startMatrix[:] #human side of probability board... used for duration of game
+aiMatrix = startMatrix[:] #ai side of probability board... used for duration of game
 
+if gamesPlayed > 1: #if not first game, read from files
+
+   #do both at same time to be more efficient
+   humanMatrixFile = open("humanMatrix.txt", "r")
+   aiMatrixFile = open("aiMatrix.txt", "r")
+
+   for i in range(100):
+      for row in range(10):
+         for column in range(10):
+            #print(humanMatrixFile.readline())
+            value1 = humanMatrixFile.readline()
+            value2 = aiMatrixFile.readline()
+            humanMatrix[row][column] = int(value1)
+            aiMatrix[row][column] = int(value2)
+
+   humanMatrixFile.close()
+   aiMatrixFile.close()
 
 
 #this is the board probability of the current game... starts the same as the startMatrix
 #this is the humans side of the probability board... this gets saved at the end of the game to be used at the start of the next game
-humanMatrix = [ [0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709676, 0.0088709676, 0.0084677418, 0.0076612902, 0.006048387, 0.004032258],
-            [0.006048387, 0.008064516, 0.0096774192, 0.0104838708, 0.0108870966, 0.0108870966, 0.0104838708, 0.0096774192, 0.008064516, 0.006048387],
-            [0.0076612902, 0.0096774192, 0.0112903224, 0.012096774, 0.0124999998, 0.0124999998, 0.012096774, 0.0112903224, 0.0096774192, 0.0076612902],
-            [0.0084677418, 0.0104838708, 0.012096774, 0.0129032256, 0.0133064514, 0.0133064514, 0.0129032256, 0.012096774, 0.0104838708, 0.0084677418],
-            [0.0088709676, 0.0108870966, 0.0124999998, 0.0133064514, 0.0137096772, 0.0137096772, 0.0133064514, 0.0124999998, 0.0108870966, 0.0088709676],
-            [0.0088709676, 0.0108870966, 0.0124999998, 0.0133064514, 0.0137096772, 0.0137096772, 0.0133064514, 0.0124999998, 0.0108870966, 0.0088709676],
-            [0.0084677418, 0.0104838708, 0.012096774, 0.0129032256, 0.0133064514, 0.0133064514, 0.0129032256, 0.012096774, 0.0104838708, 0.0084677418],
-            [0.0076612902, 0.0096774192, 0.0112903224, 0.012096774, 0.0124999998, 0.0124999998, 0.012096774, 0.0112903224, 0.0096774192, 0.0076612902],
-            [0.006048387, 0.008064516, 0.0096774192, 0.0104838708, 0.0108870966, 0.0108870966, 0.0104838708, 0.0096774192, 0.008064516, 0.006048387],
-            [0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709676, 0.0088709676, 0.0084677418, 0.0076612902, 0.006048387, 0.004032258] ]
+#humanMatrix = [ [0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709676, 0.0088709676, 0.0084677418, 0.0076612902, 0.006048387, 0.004032258],
+            # [0.006048387, 0.008064516, 0.0096774192, 0.0104838708, 0.0108870966, 0.0108870966, 0.0104838708, 0.0096774192, 0.008064516, 0.006048387],
+            # [0.0076612902, 0.0096774192, 0.0112903224, 0.012096774, 0.0124999998, 0.0124999998, 0.012096774, 0.0112903224, 0.0096774192, 0.0076612902],
+            # [0.0084677418, 0.0104838708, 0.012096774, 0.0129032256, 0.0133064514, 0.0133064514, 0.0129032256, 0.012096774, 0.0104838708, 0.0084677418],
+            # [0.0088709676, 0.0108870966, 0.0124999998, 0.0133064514, 0.0137096772, 0.0137096772, 0.0133064514, 0.0124999998, 0.0108870966, 0.0088709676],
+            # [0.0088709676, 0.0108870966, 0.0124999998, 0.0133064514, 0.0137096772, 0.0137096772, 0.0133064514, 0.0124999998, 0.0108870966, 0.0088709676],
+            # [0.0084677418, 0.0104838708, 0.012096774, 0.0129032256, 0.0133064514, 0.0133064514, 0.0129032256, 0.012096774, 0.0104838708, 0.0084677418],
+            # [0.0076612902, 0.0096774192, 0.0112903224, 0.012096774, 0.0124999998, 0.0124999998, 0.012096774, 0.0112903224, 0.0096774192, 0.0076612902],
+            # [0.006048387, 0.008064516, 0.0096774192, 0.0104838708, 0.0108870966, 0.0108870966, 0.0104838708, 0.0096774192, 0.008064516, 0.006048387],
+            # [0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709676, 0.0088709676, 0.0084677418, 0.0076612902, 0.006048387, 0.004032258] ]
 #humanMatrix = matrix read from file
 
 #this is the ai side of the probability board... this gets saved at the end of the game to be used at the start of the next game
-aiMatrix = [ [0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709676, 0.0088709676, 0.0084677418, 0.0076612902, 0.006048387, 0.004032258],
-            [0.006048387, 0.008064516, 0.0096774192, 0.0104838708, 0.0108870966, 0.0108870966, 0.0104838708, 0.0096774192, 0.008064516, 0.006048387],
-            [0.0076612902, 0.0096774192, 0.0112903224, 0.012096774, 0.0124999998, 0.0124999998, 0.012096774, 0.0112903224, 0.0096774192, 0.0076612902],
-            [0.0084677418, 0.0104838708, 0.012096774, 0.0129032256, 0.0133064514, 0.0133064514, 0.0129032256, 0.012096774, 0.0104838708, 0.0084677418],
-            [0.0088709676, 0.0108870966, 0.0124999998, 0.0133064514, 0.0137096772, 0.0137096772, 0.0133064514, 0.0124999998, 0.0108870966, 0.0088709676],
-            [0.0088709676, 0.0108870966, 0.0124999998, 0.0133064514, 0.0137096772, 0.0137096772, 0.0133064514, 0.0124999998, 0.0108870966, 0.0088709676],
-            [0.0084677418, 0.0104838708, 0.012096774, 0.0129032256, 0.0133064514, 0.0133064514, 0.0129032256, 0.012096774, 0.0104838708, 0.0084677418],
-            [0.0076612902, 0.0096774192, 0.0112903224, 0.012096774, 0.0124999998, 0.0124999998, 0.012096774, 0.0112903224, 0.0096774192, 0.0076612902],
-            [0.006048387, 0.008064516, 0.0096774192, 0.0104838708, 0.0108870966, 0.0108870966, 0.0104838708, 0.0096774192, 0.008064516, 0.006048387],
-            [0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709676, 0.0088709676, 0.0084677418, 0.0076612902, 0.006048387, 0.004032258] ]
+#aiMatrix = [ [0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709676, 0.0088709676, 0.0084677418, 0.0076612902, 0.006048387, 0.004032258],
+            # [0.006048387, 0.008064516, 0.0096774192, 0.0104838708, 0.0108870966, 0.0108870966, 0.0104838708, 0.0096774192, 0.008064516, 0.006048387],
+            # [0.0076612902, 0.0096774192, 0.0112903224, 0.012096774, 0.0124999998, 0.0124999998, 0.012096774, 0.0112903224, 0.0096774192, 0.0076612902],
+            # [0.0084677418, 0.0104838708, 0.012096774, 0.0129032256, 0.0133064514, 0.0133064514, 0.0129032256, 0.012096774, 0.0104838708, 0.0084677418],
+            # [0.0088709676, 0.0108870966, 0.0124999998, 0.0133064514, 0.0137096772, 0.0137096772, 0.0133064514, 0.0124999998, 0.0108870966, 0.0088709676],
+            # [0.0088709676, 0.0108870966, 0.0124999998, 0.0133064514, 0.0137096772, 0.0137096772, 0.0133064514, 0.0124999998, 0.0108870966, 0.0088709676],
+            # [0.0084677418, 0.0104838708, 0.012096774, 0.0129032256, 0.0133064514, 0.0133064514, 0.0129032256, 0.012096774, 0.0104838708, 0.0084677418],
+            # [0.0076612902, 0.0096774192, 0.0112903224, 0.012096774, 0.0124999998, 0.0124999998, 0.012096774, 0.0112903224, 0.0096774192, 0.0076612902],
+            # [0.006048387, 0.008064516, 0.0096774192, 0.0104838708, 0.0108870966, 0.0108870966, 0.0104838708, 0.0096774192, 0.008064516, 0.006048387],
+            # [0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709676, 0.0088709676, 0.0084677418, 0.0076612902, 0.006048387, 0.004032258] ]
 #aiMatrix = matrix read from file
 
 #this is the human side of the board... used during the duration of the game
@@ -1038,34 +1055,6 @@ gameOver = False #will be set to true when all ships have sunk and someone wins
 aiShips = placeShips(gameAiMatrix, aiShipMatrix) #place ships onto the gameAI Matrix
 
 #get locations from human player and turn them into a list of pairs
-
-#SAMPLE FOR NOW
-# locations1 = [(2, 6), (2, 7)] #sample for first ship
-# orientation1 = None
-# if locations1[0][0] == locations1[1][0]: #if they have the same row
-#    orientation1 = "horizontal"
-# elif locations1[0][1] == locations1[1][1]: #if they have the same column
-#    orientation1 = "vertical"
-# ship1 = Ship(len(locations1), False, orientation1, locations1)
-
-# locations2 = [(3, 0), (4, 0), (5,0)] #sample for first ship
-# orientation2 = None
-# if locations2[0][0] == locations2[1][0]: #if they have the same row
-#    orientation2 = "horizontal"
-# elif locations2[0][1] == locations1[1][1]: #if they have the same column
-#    orientation2 = "vertical"
-# ship2 = Ship(len(locations2), False, orientation2, locations2)
-
-# locations3 = [(2, 6), (2, 7)] #sample for first ship
-# orientation3 = None
-# if locations3[0][0] == locations3[1][0]: #if they have the same row
-#    orientation3 = "horizontal"
-# elif locations3[0][1] == locations3[1][1]: #if they have the same column
-#    orientation3 = "vertical"
-# ship3 = Ship(len(locations3), False, orientation3, locations3)
-
-# #list that contains all the ships
-# humanShips = [ship1, ship2, ship3]
 
 
 # FOR TESTING
@@ -1280,11 +1269,26 @@ gamesPlayedFile = open("gamesPlayed.txt", "w")
 gamesPlayedFile.write(str(gamesPlayed)) #save to file to be used in next game
 gamesPlayedFile.close()
 
+# These files contain the probability matrices at the end of this game that
+# should be used at the start of the next game...
+# Here we are writing the values to the files
 
-#write matricesto files 
+#writing humanMatrix to file
+humanMatrixFile = open("humanMatrix.txt", "w")
+for row in humanMatrix:
+   #print(row)
+   for value in row:
+      humanMatrixFile.write(str(value) + "\n")
+humanMatrixFile.close()
 
-# TODO - code to setup matrices for next game... update aiMatrix and humanMatrix for the start of the next game
-   #save current probably matrices to file that will be read at the start of the next game
+#writing aiMatrix to file
+aiMatrixFile = open("aiMatrix.txt", "w")
+for row in aiMatrix:
+   #print(row)
+   for value in row:
+      aiMatrixFile.write(str(value) + "\n")
+aiMatrixFile.close()
+
 
 
 
