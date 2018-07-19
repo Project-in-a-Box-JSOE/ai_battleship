@@ -919,14 +919,22 @@ def printAiBoard(shipMatrix):
 # Description: This function prompts user to input their next target
 # Input: None
 # Output: Target row/column
-def humanTurn():
+def humanTurn(aiShipMatrix):
 
    #print("Where would you like your next target to be?")
    print("YOUR TURN!")
    print("Type the row followed by a space followed by column. For example: 2 3")
    var = input("Where would you like your next target to be?\n")
    var = var.replace(" ", "")
-   return (int(var[0]), int(var[1]))
+   x, y = int(var[0]), int(var[1])
+
+   while aiShipMatrix[x][y] == "O" or aiShipMatrix[x][y] == "X": #then already hit here
+      print("You have already target that location. Please select a different target.")
+      var = input("Where would you like your next target to be?\n")
+      var = var.replace(" ", "")
+      x, y = int(var[0]), int(var[1])
+
+   return (x, y)
 
 
 # Name: isGameOver()
@@ -1077,7 +1085,7 @@ shipSunk = False
 while gameOver == False:
    # Human turn
    # TODO - get human input for target positions
-   x1, y1 = humanTurn() #just using this for testing
+   x1, y1 = humanTurn(aiShipMatrix) #just using this for testing
    #x1, y1 = 1, 1 #SAMPLE FOR NOW
    
    #updates boards and returns true if hit, false if miss
