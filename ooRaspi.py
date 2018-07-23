@@ -351,11 +351,14 @@ def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix):
    row = x
    col = y
 
-  # print(row, col)
+   #print(row, col)
    print(gameMatrix[row][col])
-   #print(gameMatrix)
+   print(gameMatrix)
+
    # HIT
-   if gameMatrix[row][col] > 1 : #if there is a ship in that position
+   #if gameMatrix[row][col] > 1 : #if there is a ship in that position
+   if shipMatrix[row][col] != 0 : #if there is a ship in that position
+
 
       shipSize = gameMatrix[row][col]
       prob = probMatrix[row][col]
@@ -390,7 +393,9 @@ def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix):
       return True #return hit
 
    # MISS
-   elif gameMatrix[row][col] < 1: #if there is no ship in that position
+   #elif gameMatrix[row][col] < 1: #if there is no ship in that position
+   elif shipMatrix[row][col] == 0: #if there is no ship in that position
+
 
       # updates current game board
       prob = gameMatrix[row][col]
@@ -914,8 +919,8 @@ def printAiBoard(shipMatrix):
             if shipMatrix[row][column][1] == "X": #if ship was hit
                tempShipMatrix[row][column] = "X"
 
-         else:
-            tempShipMatrix[row][column] = 0
+         #else:
+            #tempShipMatrix[row][column] = 0
 
       print(tempShipMatrix[row])
    print("\n")
