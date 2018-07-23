@@ -109,8 +109,8 @@ def ship2(matrix, shipMatrix, aiShips):
    #create ship and place it in the shipMatrix
    locations = [[p1x, p1y, False], [p2x, p2y, False]]
    ship = Ship(len(locations), False, orientation, locations)
-   for location in locations: #put ships in AI Ship Matrix
-      shipMatrix[location[0]][location[1]] = [ship, 0]
+   #for location in locations: #put ships in AI Ship Matrix
+   #   shipMatrix[location[0]][location[1]] = [ship, 0]
    aiShips.append(ship)
    placeShipOnBoard(ship, aiShipMatrix)
 
@@ -176,8 +176,8 @@ def ship3(matrix, shipMatrix, aiShips):
    #create ship and place it in the shipMatrix
    locations = [[p1x, p1y, False], [p2x, p2y, False], [p3x, p3y, False]]
    ship = Ship(len(locations), False, orientation, locations)
-   for location in locations: #put ships in AI Ship Matrix
-      shipMatrix[location[0]][location[1]] = [ship, 0]
+   #for location in locations: #put ships in AI Ship Matrix
+   #   shipMatrix[location[0]][location[1]] = [ship, 0]
    aiShips.append(ship)
    placeShipOnBoard(ship, aiShipMatrix)
 
@@ -248,8 +248,8 @@ def ship4(matrix, shipMatrix, aiShips):
    #create ship and place it in the shipMatrix
    locations = [[p1x, p1y, False], [p2x, p2y, False], [p3x, p3y, False], [p4x, p4y, False]]
    ship = Ship(len(locations), False, orientation, locations)
-   for location in locations: #put ships in AI Ship Matrix
-      shipMatrix[location[0]][location[1]] = [ship, 0]
+   #for location in locations: #put ships in AI Ship Matrix
+   #   shipMatrix[location[0]][location[1]] = [ship, 0]
    aiShips.append(ship)
    placeShipOnBoard(ship, aiShipMatrix)
 
@@ -331,8 +331,8 @@ def ship5(matrix, shipMatrix, aiShips):
    #create ship and place it in the shipMatrix
    locations = [[p1x, p1y, False], [p2x, p2y, False], [p3x, p3y, False], [p4x, p4y, False], [p5x, p5y, False]]
    ship = Ship(len(locations), False, orientation, locations)
-   for location in locations: #put ships in AI Ship Matrix
-      shipMatrix[location[0]][location[1]] = [ship, 0]
+   #for location in locations: #put ships in AI Ship Matrix
+   #   shipMatrix[location[0]][location[1]] = [ship, 0]
    aiShips.append(ship)
    placeShipOnBoard(ship, aiShipMatrix)
 
@@ -353,7 +353,7 @@ def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix):
 
    #print(row, col)
    print(gameMatrix[row][col])
-   print(gameMatrix)
+   #print(gameMatrix)
 
    # HIT
    #if gameMatrix[row][col] > 1 : #if there is a ship in that position
@@ -425,7 +425,7 @@ def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix):
 # by finding position with highest probability
 # Input: None
 # Output: Target locations (x/row, y/col)
-def aiMove():
+def aiMove(gameHumanMatrix):
 
    #determine position to hit
    #update human side probability boards
@@ -637,7 +637,7 @@ def hitShip(x,y, orientation, ogX, ogY):
 # places the ships in the human side matrix
 # Input: Human Ship Matrix - contains locations of the ships
 # Output: humanShips - the list of ships
-def getHumanInput(humanShipMatrix):
+def getHumanInput(gameHumanMatrix, humanShipMatrix):
 
    #humanShipMatrix = shipMatrix
 
@@ -689,6 +689,8 @@ def getHumanInput(humanShipMatrix):
          overlap, locations = checkOverlap(orientation, size, locations, humanShipMatrix)
          #print(overlap)
 
+
+      #TODO - placing ship values on current board
 
       ship = Ship(len(locations), False, orientation, locations)
       humanShips.append(ship)
@@ -1063,6 +1065,14 @@ aiShipMatrix = [[0 for x in range(10)] for y in range(10)]
 
 # START OF THE MAIN CODE
 
+print("first print")
+print("ai game matrix:")
+print(gameAiMatrix)
+print("\n")
+print("human game matrix:")
+print(gameHumanMatrix)
+
+
 # pregame setup
 gameOver = False #will be set to true when all ships have sunk and someone wins
 
@@ -1070,10 +1080,16 @@ aiShips = placeShips(gameAiMatrix, aiShipMatrix) #place ships onto the gameAI Ma
 
 #get locations from human player and turn them into a list of pairs
 
+print("second print")
+print("ai game matrix:")
+print(gameAiMatrix)
+print("\n")
+print("human game matrix:")
+print(gameHumanMatrix)
 
 # FOR TESTING
 #get input from user in terminal
-humanShips = getHumanInput(humanShipMatrix)
+humanShips = getHumanInput(gameHumanMatrix, humanShipMatrix)
 # TODO - get user input from buttons for user to place ships
    #get locations from user input
    #create ships
@@ -1083,6 +1099,13 @@ humanShips = getHumanInput(humanShipMatrix)
       #user puts same location that is already taken
       #user puts locations that are not adjacent to each other
     #user puts locations not in a straight line
+
+print("third print")
+print("ai game matrix:")
+print(gameAiMatrix)
+print("\n")
+print("human game matrix:")
+print(gameHumanMatrix)
 
 
 #saving variables so they can be used in the next iteration
@@ -1102,6 +1125,13 @@ while gameOver == False:
    # TODO - get human input for target positions
    x1, y1 = humanTurn(aiShipMatrix) #just using this for testing
    #x1, y1 = 1, 1 #SAMPLE FOR NOW
+
+   print("fourth print")
+   print("ai game matrix:")
+   print(gameAiMatrix)
+   print("\n")
+   print("human game matrix:")
+   print(gameHumanMatrix)
    
    #updates boards and returns true if hit, false if miss
    hit1 = updateBoards(x1, y1, aiMatrix, gameAiMatrix, aiShipMatrix) 
@@ -1172,7 +1202,7 @@ while gameOver == False:
 
 
 
-      x2, y2 = aiMove()
+      x2, y2 = aiMove(gameHumanMatrix)
       print("this is where we are")
       print(x2, y2)
       ogX, ogY = x2, y2
