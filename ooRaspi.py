@@ -357,8 +357,8 @@ def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix):
    #print(gameMatrix)
 
    # HIT
-   #if gameMatrix[row][col] > 1 : #if there is a ship in that position
-   if shipMatrix[row][col] != 0 : #if there is a ship in that position
+   if gameMatrix[row][col] > 1 : #if there is a ship in that position
+   #if shipMatrix[row][col] != 0 : #if there is a ship in that position
 
 
       shipSize = gameMatrix[row][col]
@@ -378,10 +378,10 @@ def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix):
             probMatrix[i][j] = probMatrix[i][j] - posProb
 
       #update ship object
-      print(shipMatrix)
+      #print(shipMatrix)
       #print(gameMatrix)
       #print(probMatrix)
-      print(shipMatrix[row][col][0])
+      #print(shipMatrix[row][col][0])
       ship = shipMatrix[row][col][0]
       #print(ship)
       shipMatrix[row][col][1] = "X"
@@ -394,8 +394,8 @@ def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix):
       return True #return hit
 
    # MISS
-   #elif gameMatrix[row][col] < 1: #if there is no ship in that position
-   elif shipMatrix[row][col] == 0: #if there is no ship in that position
+   elif gameMatrix[row][col] < 1: #if there is no ship in that position
+   #elif shipMatrix[row][col] == 0: #if there is no ship in that position
 
 
       # updates current game board
@@ -959,7 +959,15 @@ def humanTurn(aiShipMatrix):
    var = var.replace(" ", "")
    x, y = int(var[0]), int(var[1])
 
-   while aiShipMatrix[x][y] == "O" or aiShipMatrix[x][y] == "X": #then already hit here
+   print(aiShipMatrix[x][y])
+   
+   while aiShipMatrix[x][y] == "O": #then already hit here
+      print("You have already target that location. Please select a different target.")
+      var = input("Where would you like your next target to be?\n")
+      var = var.replace(" ", "")
+      x, y = int(var[0]), int(var[1])
+
+   while aiShipMatrix[x][y] != "O" and aiShipMatrix[x][y] != 0 and aiShipMatrix[x][y][1] == "X": #then already hit here
       print("You have already target that location. Please select a different target.")
       var = input("Where would you like your next target to be?\n")
       var = var.replace(" ", "")
@@ -1090,6 +1098,8 @@ print(gameAiMatrix)
 print("\n")
 print("human game matrix:")
 print(gameHumanMatrix)
+print("\n")
+
 
 
 # pregame setup
@@ -1105,6 +1115,8 @@ print(gameAiMatrix)
 print("\n")
 print("human game matrix:")
 print(gameHumanMatrix)
+print("\n")
+
 
 # FOR TESTING
 #get input from user in terminal
@@ -1125,6 +1137,8 @@ print(gameAiMatrix)
 print("\n")
 print("human game matrix:")
 print(gameHumanMatrix)
+print("\n")
+
 
 
 #saving variables so they can be used in the next iteration
@@ -1151,6 +1165,8 @@ while gameOver == False:
    print("\n")
    print("human game matrix:")
    print(gameHumanMatrix)
+   print("\n")
+
    
    #updates boards and returns true if hit, false if miss
    hit1 = updateBoards(x1, y1, aiMatrix, gameAiMatrix, aiShipMatrix) 
