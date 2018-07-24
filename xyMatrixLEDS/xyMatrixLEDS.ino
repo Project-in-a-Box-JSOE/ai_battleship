@@ -32,7 +32,27 @@ void loop() {
   // put your main code here, to run repeatedly:
   uint32_t ms = millis();
   byte pixelHue = ((int32_t)cos16( ms * (27/1) ) * (350 / kMatrixWidth))/32763;
-  leds[ XY(0, 0)]  = CHSV( pixelHue, 255, 255);
+  CRGB red = CRGB( 255, 0, 0);
+  CRGB orange = CRGB( 255, 128, 0);
+  CRGB yellow = CRGB( 255, 255, 0);
+  CRGB green = CRGB( 0, 255, 0);
+  CRGB blue = CRGB( 0, 26, 255);
+  CRGB purple = CRGB( 102, 0, 204);
+  CRGB pink = CRGB( 255, 0, 255);;
+  CRGB white = CRGB( 255, 255, 255);
+  CRGB off = CRGB( 0, 0, 0);
+
+  
+  //leds[ XY(0, 0)]  = CHSV( yellow, 255, 255);
+  //leds[ XY(0, 0)]  = CRGB( 255, 0, 0);
+  
+  leds[ XY(0, 0)]  = red;
+
+
+  
+
+  
+
 
   FastLED.show();
 }
