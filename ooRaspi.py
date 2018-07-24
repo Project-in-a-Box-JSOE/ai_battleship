@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import sys
+from copy import copy, deepcopy
 
 class Ship:
    'Common base class for all ships'
@@ -1002,8 +1003,12 @@ startMatrix = [ [0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709
 # and then to the next row
 
 #if first game ever, start with starting matrix
-humanMatrix = startMatrix[:] #human side of probability board... used for duration of game
-aiMatrix = startMatrix[:] #ai side of probability board... used for duration of game
+#humanMatrix = startMatrix[:] #human side of probability board... used for duration of game
+#aiMatrix = startMatrix[:] #ai side of probability board... used for duration of game
+humanMatrix = deepcopy(startMatrix) #human side of probability board... used for duration of game
+aiMatrix = deepcopy(startMatrix) #ai side of probability board... used for duration of game
+
+
 
 if gamesPlayed > 1: #if not first game, read from files
 
@@ -1052,12 +1057,12 @@ if gamesPlayed > 1: #if not first game, read from files
 #aiMatrix = matrix read from file
 
 #this is the human side of the board... used during the duration of the game
-gameHumanMatrix = humanMatrix[:]
+gameHumanMatrix = deepcopy(humanMatrix)
 #human side of the board that shows where its ships are and keeps track of hits/misses
 humanShipMatrix = [[0 for x in range(10)] for y in range(10)] 
 
 #this is the ai side of the board... only used during the duration of the game
-gameAiMatrix = aiMatrix[:]
+gameAiMatrix = deepcopy(aiMatrix)
 #ai side of the board that shows where its ships are and keeps track of hits/misses
 aiShipMatrix = [[0 for x in range(10)] for y in range(10)]
 
