@@ -692,7 +692,7 @@ def getHumanInput(gameHumanMatrix, humanShipMatrix):
 
 
       #TODO - placing ship values on current board
-
+      placeShipOnCurrentGameBoard(locations, gameHumanMatrix)
       ship = Ship(len(locations), False, orientation, locations)
       humanShips.append(ship)
       placeShipOnBoard(ship, humanShipMatrix)
@@ -729,7 +729,7 @@ def getHumanInput(gameHumanMatrix, humanShipMatrix):
             overlap, locations = checkOverlap(orientation, size, locations, humanShipMatrix)
             #print(overlap)
 
-
+         placeShipOnCurrentGameBoard(locations, gameHumanMatrix)
          ship = Ship(len(locations), False, orientation, locations)
          humanShips.append(ship)
          placeShipOnBoard(ship, humanShipMatrix)
@@ -738,6 +738,20 @@ def getHumanInput(gameHumanMatrix, humanShipMatrix):
 
 
    return humanShips
+
+
+# Name: placeShipOnCurrentGameBoard()
+# Description: This function places the ship length values in the current game
+# board so that we can use the matrix throughout the game... used for human size
+# Input: Locations - start and end location of the ship
+#        GameMatrix - matrix containing values of current board
+# Output: None
+def placeShipOnCurrentGameBoard(locations, gameMatrix):
+   lengthOfShip = len(locations)
+   for i in range(lengthOfShip):
+      x = locations[i][0]
+      y = locations[i][1]
+      gameMatrix[x][y] = lengthOfShip
 
 
 # Name: getOrientation()
@@ -1220,7 +1234,7 @@ while gameOver == False:
          #xStart, yStart = x2, y2
          x2, y2, direction = getShipDirection(x2, y2)
          print(gameHumanMatrix)
-         hit2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix)
+         hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix)
          directionKnown = hit2 #direction only known if there is a hit nearby
 
          #need to check that we hit the same ship
@@ -1237,7 +1251,7 @@ while gameOver == False:
       elif directionKnown == True:
          if hit2 == True:
             x2, y2, direction = hitShip(x2, y2, direction, ogX, ogY)
-            hit2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix)
+            hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix)
 
 
          elif hit2 == False: #if not sunk and miss
@@ -1249,7 +1263,7 @@ while gameOver == False:
 
             else:
                x2, y2, direction = getShipDirection(x2, y2)
-               hit2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix)
+               hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix)
 
 
             #if switch orientation has been called and still no hit, we need to try another direction
@@ -1268,7 +1282,7 @@ while gameOver == False:
    #check if original target ship has sunk
    if humanShipMatrix[ogX][ogY] != 0 and humanShipMatrix[ogX][ogY] != "O":
       ship = humanShipMatrix[ogX][ogY][0]
-      shipSunk = ship.sunk
+      shipSunk = ship.didShipSink()
       if shipSunk == True: #reset variables
          print("Sunk ship of size ", ship.length)
          hit2 = False
