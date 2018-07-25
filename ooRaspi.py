@@ -2,6 +2,7 @@
 
 import sys
 from copy import copy, deepcopy
+import serial
 
 class Ship:
    'Common base class for all ships'
@@ -960,7 +961,7 @@ def humanTurn(aiShipMatrix):
    x, y = int(var[0]), int(var[1])
 
    print(aiShipMatrix[x][y])
-   
+
    while aiShipMatrix[x][y] == "O": #then already hit here
       print("You have already target that location. Please select a different target.")
       var = input("Where would you like your next target to be?\n")
@@ -1003,6 +1004,22 @@ gamesPlayed = int(gamesPlayedFile.read())
 gamesPlayedFile.close()
 #print(gamesPlayed)
 
+# -----------------------------------------------------------------------------
+
+# Need to connect to the Arduino
+
+#connected = False
+ser = serial.Serial("/dev/tty.usbmodem1421", 52000) #ser is the variable that will be communicating with the arduino
+#first param is port
+#second param is baud rate that needs to match arduino sketch defatul is 9600 but we can speed it up (its bps - bits per second)
+
+#while not connected:
+#   serin = ser.read()
+#   connected = True
+
+x, y = 0, 2
+xy = [0, 2]
+ser.write(x)
 # -----------------------------------------------------------------------------
 
 

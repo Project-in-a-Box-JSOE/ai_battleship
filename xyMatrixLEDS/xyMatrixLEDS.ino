@@ -30,6 +30,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  
   uint32_t ms = millis();
   byte pixelHue = ((int32_t)cos16( ms * (27/1) ) * (350 / kMatrixWidth))/32763;
   CRGB red = CRGB( 255, 0, 0);
@@ -46,13 +47,21 @@ void loop() {
   //leds[ XY(0, 0)]  = CHSV( yellow, 255, 255);
   //leds[ XY(0, 0)]  = CRGB( 255, 0, 0);
   
-  leds[ XY(0, 0)]  = red;
+  //leds[ XY(0, 0)]  = orange;
+  int incoming[2];
+  if (Serial.available()) {
+    for (int i = 0; i < 2; i++){
+      //incoming[i] = Serial.read();
+      //Serial.print(incoming[i]);
+    }
+    int place = Serial.read();
+    place = place - 48;
+    
+    //Serial.println(incoming);
+    leds[ XY(place, place)]  = orange;
+  }
 
-
-  
-
-  
-
+  leds[ XY(0, 0)]  = blue;
 
   FastLED.show();
 }
