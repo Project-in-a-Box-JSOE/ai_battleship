@@ -26,6 +26,7 @@ void setup() {
   // put your setup code here, to run once:
   FastLED.addLeds<CHIPSET, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalSMD5050);
   FastLED.setBrightness( BRIGHTNESS );
+  Serial.begin(9600);
 }
 
 void loop() {
@@ -55,7 +56,7 @@ void loop() {
       //Serial.print(incoming[i]);
     }
     int place = Serial.read();
-    place = place - 48;
+    //place = place - 48;
     
     //Serial.println(incoming);
     leds[ XY(place, place)]  = orange;
