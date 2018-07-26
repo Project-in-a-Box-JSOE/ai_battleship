@@ -37,24 +37,19 @@ def placeShips(gameAiMatrix, aiShipMatrix):
    aiShips = []
 
    ship2(gameAiMatrix, aiShipMatrix, aiShips) #ship of length 2
-   printAiBoard(aiShipMatrix)
+   #printAiBoard(aiShipMatrix)
 
    ship3(gameAiMatrix, aiShipMatrix, aiShips) #first ship of length 3
-
-   printAiBoard(aiShipMatrix)
-
+   #printAiBoard(aiShipMatrix)
 
    ship3(gameAiMatrix, aiShipMatrix, aiShips) #second ship of length 3
-   printAiBoard(aiShipMatrix)
-
+   #printAiBoard(aiShipMatrix)
 
    ship4(gameAiMatrix, aiShipMatrix, aiShips) #ship of length 4
-   printAiBoard(aiShipMatrix)
-
+   #printAiBoard(aiShipMatrix)
 
    ship5(gameAiMatrix, aiShipMatrix, aiShips) #ship of length 5
-   printAiBoard(aiShipMatrix)
-
+   #printAiBoard(aiShipMatrix)
 
    return aiShips
 
@@ -1109,14 +1104,15 @@ if gamesPlayed > 1: #if not first game, read from files
    humanMatrixFile = open("humanMatrix.txt", "r")
    aiMatrixFile = open("aiMatrix.txt", "r")
 
-   for i in range(100):
-      for row in range(10):
-         for column in range(10):
-            #print(humanMatrixFile.readline())
-            value1 = humanMatrixFile.readline()
-            value2 = aiMatrixFile.readline()
-            humanMatrix[row][column] = int(value1)
-            aiMatrix[row][column] = int(value2)
+   #for i in range(100):
+   for row in range(10):
+      for column in range(10):
+         #print(humanMatrixFile.readline())
+         value1 = humanMatrixFile.readline().replace("\n", "")
+         value2 = aiMatrixFile.readline().replace("\n", "")
+         print(value1)
+         humanMatrix[row][column] = float(value1)
+         aiMatrix[row][column] = float(value2)
 
    humanMatrixFile.close()
    aiMatrixFile.close()
