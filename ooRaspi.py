@@ -3,6 +3,9 @@
 import sys
 from copy import copy, deepcopy
 import serial
+import struct
+import time
+
 
 class Ship:
    'Common base class for all ships'
@@ -1009,7 +1012,9 @@ gamesPlayedFile.close()
 # Need to connect to the Arduino
 
 #connected = False
-ser = serial.Serial("/dev/tty.usbmodem1421", 52000) #ser is the variable that will be communicating with the arduino
+arduino = serial.Serial("/dev/tty.usbmodem1421", 9600) #ser is the variable that will be communicating with the arduino
+#arduino.open()
+#time.sleep(1.5)
 #first param is port
 #second param is baud rate that needs to match arduino sketch defatul is 9600 but we can speed it up (its bps - bits per second)
 
@@ -1017,9 +1022,25 @@ ser = serial.Serial("/dev/tty.usbmodem1421", 52000) #ser is the variable that wi
 #   serin = ser.read()
 #   connected = True
 
-x, y = 0, 2
-xy = [0, 2]
-ser.write(x)
+#a-j = 0-9
+#xyz = hit/miss/boat
+
+arduino.write('b'.encode())
+#print('z'.encode())
+#arduino.write('1'.encode())
+#arduino.write('h'.encode())
+
+#xVal = str(2)
+#yVal = str(1)
+#arduino.write(xVal.encode())
+
+
+
+#x, y = 0, 2
+#xy = [0, 2]
+#arduino.write(x)
+#arduino.write(struct.pack('>B', 0))
+arduino.close()
 # -----------------------------------------------------------------------------
 
 

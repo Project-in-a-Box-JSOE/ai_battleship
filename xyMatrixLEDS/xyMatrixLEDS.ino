@@ -27,13 +27,20 @@ void setup() {
   FastLED.addLeds<CHIPSET, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalSMD5050);
   FastLED.setBrightness( BRIGHTNESS );
   Serial.begin(9600);
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite (LED_PIN, HIGH);
+  Serial.print("ready!");
+
+  CRGB blue = CRGB( 0, 26, 255);
+
+
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   
-  uint32_t ms = millis();
-  byte pixelHue = ((int32_t)cos16( ms * (27/1) ) * (350 / kMatrixWidth))/32763;
+  //uint32_t ms = millis();
+  //byte pixelHue = ((int32_t)cos16( ms * (27/1) ) * (350 / kMatrixWidth))/32763;
   CRGB red = CRGB( 255, 0, 0);
   CRGB orange = CRGB( 255, 128, 0);
   CRGB yellow = CRGB( 255, 255, 0);
@@ -43,26 +50,59 @@ void loop() {
   CRGB pink = CRGB( 255, 0, 255);;
   CRGB white = CRGB( 255, 255, 255);
   CRGB off = CRGB( 0, 0, 0);
+  CRGB color;
 
+  for (int i = 0; i < 10; i++) {
+    for (int j = 0; i < 10; j++) {
+        leds[ XY(i, j)]  = blue; //blue for the ocean
+        FastLED.show();
+    }
+  }
   
-  //leds[ XY(0, 0)]  = CHSV( yellow, 255, 255);
-  //leds[ XY(0, 0)]  = CRGB( 255, 0, 0);
+  leds[ XY(0, 0)]  = red;
+  //leds[ XY(0, 1)]  = pink;
+  Serial.println("hello");
+  //leds[ XY(0, 1)]  = blue;
+  //FastLED.show();
+
   
   //leds[ XY(0, 0)]  = orange;
-  int incoming[2];
+  //int incoming[2]; 
+
+  int xInt;
+  int yInt;
+  //color = orange;
+   
   if (Serial.available()) {
-    for (int i = 0; i < 2; i++){
-      //incoming[i] = Serial.read();
-      //Serial.print(incoming[i]);
+//    Serial.print("hi");
+    char x = Serial.read();
+    if (x == 'a') {
+      color = green;
+      yInt = 1;
     }
-    int place = Serial.read();
-    //place = place - 48;
-    
-    //Serial.println(incoming);
-    leds[ XY(place, place)]  = orange;
+    else if (x == 'b') {
+      color = blue;
+      yInt = 2;
+    }
+    //char y = Serial.read();
+    //char hms = Serial.read(); // hit/miss/ship
+    //if (x == 'z') {
+      //color = red;
+    //}
+    //if (y == '1') {
+      //color = orange;
+    //}
+    //if (hms == 'l') {
+      //color = green;
+    //}
+    //x = Serial.parseInt();
+    //Serial.print(x);
+    //color = green;
   }
 
-  leds[ XY(0, 0)]  = blue;
 
+  leds[ XY(0, yInt)]  = yellow;
+  //leds[ XY(0, 0)] = red;
   FastLED.show();
+  //delay(100);
 }
