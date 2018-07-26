@@ -5,6 +5,16 @@
 #define CHIPSET     WS2811
 #define BRIGHTNESS 64
 
+const CRGB red = CRGB( 255, 0, 0);
+const CRGB orange = CRGB( 255, 128, 0);
+const CRGB yellow = CRGB( 255, 255, 0);
+const CRGB green = CRGB( 0, 255, 0);
+const CRGB blue = CRGB( 0, 26, 255);
+const CRGB purple = CRGB( 102, 0, 204);
+const CRGB pink = CRGB( 255, 0, 255);;
+const CRGB white = CRGB( 255, 255, 255);
+const CRGB off = CRGB( 0, 0, 0);
+
 // Params for width and height
 const uint8_t kMatrixWidth = 10;
 const uint8_t kMatrixHeight = 10;
@@ -30,10 +40,6 @@ void setup() {
   pinMode(LED_PIN, OUTPUT);
   digitalWrite (LED_PIN, HIGH);
   Serial.print("ready!");
-
-  CRGB blue = CRGB( 0, 26, 255);
-
-
 }
 
 void loop() {
@@ -41,22 +47,24 @@ void loop() {
   
   //uint32_t ms = millis();
   //byte pixelHue = ((int32_t)cos16( ms * (27/1) ) * (350 / kMatrixWidth))/32763;
-  CRGB red = CRGB( 255, 0, 0);
-  CRGB orange = CRGB( 255, 128, 0);
-  CRGB yellow = CRGB( 255, 255, 0);
-  CRGB green = CRGB( 0, 255, 0);
-  CRGB blue = CRGB( 0, 26, 255);
-  CRGB purple = CRGB( 102, 0, 204);
-  CRGB pink = CRGB( 255, 0, 255);;
-  CRGB white = CRGB( 255, 255, 255);
-  CRGB off = CRGB( 0, 0, 0);
-  CRGB color;
 
+  CRGB color;
   for (int i = 0; i < 10; i++) {
     for (int j = 0; i < 10; j++) {
         leds[ XY(i, j)]  = blue; //blue for the ocean
         FastLED.show();
     }
+  }
+
+  gameOver = false;
+
+  //to bypass this loop, we are doing another loop within a loop
+  while (gameOver == false) {
+
+
+
+    //need to check input for gameover
+    
   }
   
   leds[ XY(0, 0)]  = red;
@@ -71,7 +79,7 @@ void loop() {
 
   int xInt;
   int yInt;
-  //color = orange;
+  color = orange;
    
   if (Serial.available()) {
 //    Serial.print("hi");
@@ -81,9 +89,10 @@ void loop() {
       yInt = 1;
     }
     else if (x == 'b') {
-      color = blue;
+      color = red;
       yInt = 2;
     }
+    color = red;
     //char y = Serial.read();
     //char hms = Serial.read(); // hit/miss/ship
     //if (x == 'z') {
@@ -101,8 +110,8 @@ void loop() {
   }
 
 
-  leds[ XY(0, yInt)]  = yellow;
-  //leds[ XY(0, 0)] = red;
+  //leds[ XY(0, yInt)]  = yellow;
+  leds[ XY(0, 0)] = red;
   FastLED.show();
   //delay(100);
 }
