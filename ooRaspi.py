@@ -377,7 +377,7 @@ def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix, turns):
    spacesLeft = 100-turns
 
    #print(row, col)
-   print(gameMatrix[row][col])
+   #print(gameMatrix[row][col])
    #print(gameMatrix)
 
    # HIT
@@ -932,20 +932,20 @@ def printHumanBoard(shipMatrix):
 # Output: None
 def printAiBoard(shipMatrix):
    
-   print("Real AI Board:")
-   tempShipMatrix = [[0 for x in range(10)] for y in range(10)] 
+   # print("Real AI Board:")
+   # tempShipMatrix = [[0 for x in range(10)] for y in range(10)] 
 
-   for row in range(10):
-      for column in range(10):
+   # for row in range(10):
+   #    for column in range(10):
 
-         if shipMatrix[row][column] == "O":
-            tempShipMatrix[row][column] = "O"
-         elif shipMatrix[row][column] != 0: #if there is a ship
-               ship = shipMatrix[row][column][0]
-               tempShipMatrix[row][column] = ship.length
+   #       if shipMatrix[row][column] == "O":
+   #          tempShipMatrix[row][column] = "O"
+   #       elif shipMatrix[row][column] != 0: #if there is a ship
+   #             ship = shipMatrix[row][column][0]
+   #             tempShipMatrix[row][column] = ship.length
 
-      print(tempShipMatrix[row])
-   print("\n")
+   #    print(tempShipMatrix[row])
+   # print("\n")
 
 
 
@@ -986,7 +986,7 @@ def humanTurn(aiShipMatrix):
    var = var.replace(" ", "")
    x, y = int(var[0]), int(var[1])
 
-   print(aiShipMatrix[x][y])
+   #print(aiShipMatrix[x][y])
 
    while aiShipMatrix[x][y] == "O": #then already hit here
       print("You have already target that location. Please select a different target.")
@@ -1036,7 +1036,7 @@ gamesPlayedFile.close()
 
 #connected = False
 
-   #arduino = serial.Serial("/dev/tty.usbmodem1421", 9600) #ser is the variable that will be communicating with the arduino
+arduino = serial.Serial("/dev/tty.usbmodem1421", 9600) #ser is the variable that will be communicating with the arduino
 
 #arduino.open()
 #time.sleep(1.5)
@@ -1050,7 +1050,7 @@ gamesPlayedFile.close()
 #a-j = 0-9
 #xyz = hit/miss/boat
 
-   #arduino.write('b'.encode())
+arduino.write('b'.encode())
 
 #print('z'.encode())
 #arduino.write('1'.encode())
@@ -1067,7 +1067,7 @@ gamesPlayedFile.close()
 #arduino.write(x)
 #arduino.write(struct.pack('>B', 0))
 
-   #arduino.close()
+arduino.close()
 
 # -----------------------------------------------------------------------------
 
@@ -1110,7 +1110,7 @@ if gamesPlayed > 1: #if not first game, read from files
          #print(humanMatrixFile.readline())
          value1 = humanMatrixFile.readline().replace("\n", "")
          value2 = aiMatrixFile.readline().replace("\n", "")
-         print(value1)
+         #print(value1)
          humanMatrix[row][column] = float(value1)
          aiMatrix[row][column] = float(value2)
 
@@ -1159,13 +1159,13 @@ aiShipMatrix = [[0 for x in range(10)] for y in range(10)]
 
 # START OF THE MAIN CODE
 
-print("first print")
-print("ai game matrix:")
-print(gameAiMatrix)
-print("\n")
-print("human game matrix:")
-print(gameHumanMatrix)
-print("\n")
+# print("first print")
+# print("ai game matrix:")
+# print(gameAiMatrix)
+# print("\n")
+# print("human game matrix:")
+# print(gameHumanMatrix)
+# print("\n")
 
 
 
@@ -1176,13 +1176,13 @@ aiShips = placeShips(gameAiMatrix, aiShipMatrix) #place ships onto the gameAI Ma
 
 #get locations from human player and turn them into a list of pairs
 
-print("second print")
-print("ai game matrix:")
-print(gameAiMatrix)
-print("\n")
-print("human game matrix:")
-print(gameHumanMatrix)
-print("\n")
+# print("second print")
+# print("ai game matrix:")
+# print(gameAiMatrix)
+# print("\n")
+# print("human game matrix:")
+# print(gameHumanMatrix)
+# print("\n")
 
 
 # FOR TESTING
@@ -1198,13 +1198,13 @@ humanShips = getHumanInput(gameHumanMatrix, humanShipMatrix)
       #user puts locations that are not adjacent to each other
     #user puts locations not in a straight line
 
-print("third print")
-print("ai game matrix:")
-print(gameAiMatrix)
-print("\n")
-print("human game matrix:")
-print(gameHumanMatrix)
-print("\n")
+# print("third print")
+# print("ai game matrix:")
+# print(gameAiMatrix)
+# print("\n")
+# print("human game matrix:")
+# print(gameHumanMatrix)
+# print("\n")
 
 
 
@@ -1230,13 +1230,13 @@ while gameOver == False:
    humanTurns += 1
    #x1, y1 = 1, 1 #SAMPLE FOR NOW
 
-   print("fourth print")
-   print("ai game matrix:")
-   print(gameAiMatrix)
-   print("\n")
-   print("human game matrix:")
-   print(gameHumanMatrix)
-   print("\n")
+   # print("fourth print")
+   # print("ai game matrix:")
+   # print(gameAiMatrix)
+   # print("\n")
+   # print("human game matrix:")
+   # print(gameHumanMatrix)
+   # print("\n")
 
    
    #updates boards and returns true if hit, false if miss
@@ -1310,8 +1310,8 @@ while gameOver == False:
 
       x2, y2 = aiMove(gameHumanMatrix)
       aiTurns += 1
-      print("this is where we are")
-      print(x2, y2)
+      #print("this is where we are")
+      #print(x2, y2)
       ogX, ogY = x2, y2
       hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix, aiTurns)
       shipHit = hit2
@@ -1321,7 +1321,7 @@ while gameOver == False:
       if directionKnown == False:
          #xStart, yStart = x2, y2
          x2, y2, direction = getShipDirection(x2, y2)
-         print(gameHumanMatrix)
+         #print(gameHumanMatrix)
          hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix, aiTurns)
          directionKnown = hit2 #direction only known if there is a hit nearby
 

@@ -1,8 +1,10 @@
 #include <FastLED.h>
 
 #define LED_PIN 3
+
 #define COLOR_ORDER GRB
-#define CHIPSET     WS2811
+#define CHIPSET     WS2812B
+
 #define BRIGHTNESS 64
 
 const CRGB red = CRGB( 255, 0, 0);
@@ -15,13 +17,13 @@ const CRGB pink = CRGB( 255, 0, 255);;
 const CRGB white = CRGB( 255, 255, 255);
 const CRGB off = CRGB( 0, 0, 0);
 
-int xInt = 0;
-int yInt = 0;
-CRGB color = off;
-
 // Params for width and height
 const uint8_t kMatrixWidth = 10;
 const uint8_t kMatrixHeight = 10;
+
+int xInt = 0;
+int yInt = 0;
+CRGB color = off;
 
 #define NUM_LEDS (kMatrixWidth * kMatrixHeight)
 CRGB leds_plus_safety_pixel[ NUM_LEDS + 1];
@@ -41,16 +43,27 @@ void setup() {
   FastLED.addLeds<CHIPSET, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalSMD5050);
   FastLED.setBrightness( BRIGHTNESS );
   Serial.begin(9600);
-  pinMode(LED_PIN, OUTPUT);
-  digitalWrite (LED_PIN, HIGH);
+  //pinMode(LED_PIN, OUTPUT);
+  //digitalWrite (LED_PIN, HIGH);
   Serial.print("ready!");
 //  for (int i = 0; i < 10; i++) {
 //    for (int j = 0; i < 10; j++) {
 //        leds[ XY(i, j)]  = blue; //blue for the ocean
+////        Serial.print(i);
+////        Serial.print("a");
+////        Serial.print(j);
+////        Serial.print("b");
 //        //FastLED.show();
 //    }
 //  }
-//  FastLED.show();
+  //FastLED.show();
+
+  int i = 0;
+  while (i < 100) {
+    leds[i]  = blue;
+    i = i+1;
+  }
+  
 }
 
 void loop() {
@@ -59,21 +72,21 @@ void loop() {
   //uint32_t ms = millis();
   //byte pixelHue = ((int32_t)cos16( ms * (27/1) ) * (350 / kMatrixWidth))/32763;
 
-  for (int i = 0; i < 10; i++) {
-    for (int j = 0; i < 10; j++) {
-        leds[ XY(i, j)]  = blue; //blue for the ocean
-        FastLED.show();
-    }
-  }
+//  for (int i = 0; i < 10; i++) {
+//    for (int j = 0; i < 10; j++) {
+//        leds[ XY(i, j)]  = blue; //blue for the ocean
+//        //FastLED.show();
+//    }
+//  }
   //FastLED.show();
 
   
-  //leds[ XY(0, 0)]  = red;
-  //FastLED.show();
+  leds[ XY(0, 0)]  = green;
+  FastLED.show();
   //delay(100000);
-  //leds[ XY(0, 1)]  = pink;
-  Serial.println("hello");
-  //leds[ XY(0, 1)]  = blue;
+  leds[ XY(0, 1)]  = pink;
+  //Serial.println("hello");
+  leds[ XY(0, 2)]  = blue;
   //FastLED.show();
 
   
@@ -86,15 +99,16 @@ void loop() {
   if (Serial.available()) {
 //    Serial.print("hi");
     char x = Serial.read();
-    if (x == 'a') {
-      color = green;
-      yInt = 1;
-    }
-    else if (x == 'b') {
+    if (x == '1') {
+//      color = green;
+//      yInt = 1;
+//    }
+//    else if (x == 'b') {
+//      color = red;
+//      yInt = 2;
+//    }
       color = red;
-      yInt = 2;
     }
-    color = red;
     //char y = Serial.read();
     //char hms = Serial.read(); // hit/miss/ship
     //if (x == 'z') {
@@ -113,8 +127,8 @@ void loop() {
 
 
   //leds[ XY(0, yInt)]  = yellow;
-  //leds[ XY(0, 0)] = red;
-  //FastLED.show();
+  leds[ XY(0, 1)] = color;
+  FastLED.show();
   //delay(10000);
   //delay(100);
 }
