@@ -15,13 +15,17 @@ const CRGB pink = CRGB( 255, 0, 255);;
 const CRGB white = CRGB( 255, 255, 255);
 const CRGB off = CRGB( 0, 0, 0);
 
+int xInt = 0;
+int yInt = 0;
+CRGB color = off;
+
 // Params for width and height
 const uint8_t kMatrixWidth = 10;
 const uint8_t kMatrixHeight = 10;
 
 #define NUM_LEDS (kMatrixWidth * kMatrixHeight)
 CRGB leds_plus_safety_pixel[ NUM_LEDS + 1];
-CRGB* const leds( leds_plus_safety_pixel + 1);
+CRGB* leds( leds_plus_safety_pixel + 1);
 
 int16_t XY( uint8_t x, uint8_t y)
 {
@@ -40,6 +44,13 @@ void setup() {
   pinMode(LED_PIN, OUTPUT);
   digitalWrite (LED_PIN, HIGH);
   Serial.print("ready!");
+//  for (int i = 0; i < 10; i++) {
+//    for (int j = 0; i < 10; j++) {
+//        leds[ XY(i, j)]  = blue; //blue for the ocean
+//        //FastLED.show();
+//    }
+//  }
+//  FastLED.show();
 }
 
 void loop() {
@@ -48,26 +59,18 @@ void loop() {
   //uint32_t ms = millis();
   //byte pixelHue = ((int32_t)cos16( ms * (27/1) ) * (350 / kMatrixWidth))/32763;
 
-  CRGB color;
   for (int i = 0; i < 10; i++) {
     for (int j = 0; i < 10; j++) {
         leds[ XY(i, j)]  = blue; //blue for the ocean
         FastLED.show();
     }
   }
+  //FastLED.show();
 
-  gameOver = false;
-
-  //to bypass this loop, we are doing another loop within a loop
-  while (gameOver == false) {
-
-
-
-    //need to check input for gameover
-    
-  }
   
-  leds[ XY(0, 0)]  = red;
+  //leds[ XY(0, 0)]  = red;
+  //FastLED.show();
+  //delay(100000);
   //leds[ XY(0, 1)]  = pink;
   Serial.println("hello");
   //leds[ XY(0, 1)]  = blue;
@@ -77,8 +80,7 @@ void loop() {
   //leds[ XY(0, 0)]  = orange;
   //int incoming[2]; 
 
-  int xInt;
-  int yInt;
+
   color = orange;
    
   if (Serial.available()) {
@@ -111,7 +113,8 @@ void loop() {
 
 
   //leds[ XY(0, yInt)]  = yellow;
-  leds[ XY(0, 0)] = red;
-  FastLED.show();
+  //leds[ XY(0, 0)] = red;
+  //FastLED.show();
+  //delay(10000);
   //delay(100);
 }

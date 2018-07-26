@@ -37,14 +37,24 @@ def placeShips(gameAiMatrix, aiShipMatrix):
    aiShips = []
 
    ship2(gameAiMatrix, aiShipMatrix, aiShips) #ship of length 2
+   printAiBoard(aiShipMatrix)
 
    ship3(gameAiMatrix, aiShipMatrix, aiShips) #first ship of length 3
 
+   printAiBoard(aiShipMatrix)
+
+
    ship3(gameAiMatrix, aiShipMatrix, aiShips) #second ship of length 3
+   printAiBoard(aiShipMatrix)
+
 
    ship4(gameAiMatrix, aiShipMatrix, aiShips) #ship of length 4
+   printAiBoard(aiShipMatrix)
+
 
    ship5(gameAiMatrix, aiShipMatrix, aiShips) #ship of length 5
+   printAiBoard(aiShipMatrix)
+
 
    return aiShips
 
@@ -77,8 +87,10 @@ def ship2(matrix, shipMatrix, aiShips):
    #horizontal checking for ship of size 2
    for i in range(rows):
       for j in range(9):
-         one = matrix[i][j]
-         two = matrix[i][j+1]
+
+         if shipMatrix[i][j] == 0 and shipMatrix[i][j+1] == 0: #if there is no ship there
+            one = matrix[i][j]
+            two = matrix[i][j+1]
 
          #we now get the joint probability
          prob = one*two
@@ -92,8 +104,9 @@ def ship2(matrix, shipMatrix, aiShips):
    #vertical checking for ship of size 2
    for i in range(columns):
       for j in range(9):
-         one = matrix[j][i]
-         two = matrix[j+1][i]
+         if shipMatrix[j][i] == 0 and shipMatrix[j+1][i] == 0: #if there is no ship there
+            one = matrix[j][i]
+            two = matrix[j+1][i]
 
          #we now get the joint probability
          prob = one*two
@@ -108,8 +121,9 @@ def ship2(matrix, shipMatrix, aiShips):
    # to make sure that no positions are chosen for multiple ships, we set those 
    # probabilities to values greater than 1 so they never get chosen
    # but also the value is 2 so we know which positions are for the ship of size 2
-   matrix[p1x][p1y] = 2
-   matrix[p2x][p2y] = 2
+   
+   #matrix[p1x][p1y] = 2
+   #matrix[p2x][p2y] = 2
 
    #create ship and place it in the shipMatrix
    locations = [[p1x, p1y, False], [p2x, p2y, False]]
@@ -139,9 +153,10 @@ def ship3(matrix, shipMatrix, aiShips):
    #horizontal checking for ship of size 3
    for i in range(rows):
       for j in range(8):
-         one = matrix[i][j]
-         two = matrix[i][j+1]
-         three = matrix[i][j+2]
+         if shipMatrix[i][j] == 0 and shipMatrix[i][j+1] == 0 and shipMatrix[i][j+2] == 0: #if there is no ship there
+            one = matrix[i][j]
+            two = matrix[i][j+1]
+            three = matrix[i][j+2]
 
          #we now get the joint probability
          prob = one*two*three
@@ -157,9 +172,10 @@ def ship3(matrix, shipMatrix, aiShips):
    #vertical checking for ship of size 3
    for i in range(columns):
       for j in range(8):
-         one = matrix[j][i]
-         two = matrix[j+1][i]
-         three = matrix[j+2][i]
+         if shipMatrix[j][i] == 0 and shipMatrix[j+1][i] == 0 and shipMatrix[j+2][i] == 0: #if there is no ship there
+            one = matrix[j][i]
+            two = matrix[j+1][i]
+            three = matrix[j+2][i]
 
          #we now get the joint probability
          prob = one*two*three
@@ -174,9 +190,10 @@ def ship3(matrix, shipMatrix, aiShips):
 
    #now to make sure that no positions are chosen for multiple ships, we set those probabilities to values greater than 1 so they never get chosen
    # but also the value is 3 so we know which positions are for the ship of size 3
-   matrix[p1x][p1y] = 3
-   matrix[p2x][p2y] = 3
-   matrix[p3x][p3y] = 3
+   
+   #matrix[p1x][p1y] = 3
+   #matrix[p2x][p2y] = 3
+   #matrix[p3x][p3y] = 3
 
    #create ship and place it in the shipMatrix
    locations = [[p1x, p1y, False], [p2x, p2y, False], [p3x, p3y, False]]
@@ -208,10 +225,11 @@ def ship4(matrix, shipMatrix, aiShips):
    #horizontal checking for ship of size 4
    for i in range(rows):
       for j in range(7):
-         one = matrix[i][j]
-         two = matrix[i][j+1]
-         three = matrix[i][j+2]
-         four = matrix[i][j+3]
+         if shipMatrix[i][j] == 0 and shipMatrix[i][j+1] == 0 and shipMatrix[i][j+2] == 0 and shipMatrix[i][j+3] == 0: #if there is no ship there
+            one = matrix[i][j]
+            two = matrix[i][j+1]
+            three = matrix[i][j+2]
+            four = matrix[i][j+3]
 
          #we now get the joint probability
          prob = one*two*three*four
@@ -227,10 +245,11 @@ def ship4(matrix, shipMatrix, aiShips):
    #vertical checking for ship of size 4
    for i in range(columns):
       for j in range(7):
-         one = matrix[j][i]
-         two = matrix[j+1][i]
-         three = matrix[j+2][i]
-         four = matrix[j+3][i]
+         if shipMatrix[j][i] == 0 and shipMatrix[j+1][i] == 0 and shipMatrix[j+2][i] == 0 and shipMatrix[j+3][i] == 0:  #if there is no ship there
+            one = matrix[j][i]
+            two = matrix[j+1][i]
+            three = matrix[j+2][i]
+            four = matrix[j+3][i]
 
          #we now get the joint probability
          prob = one*two*three*four
@@ -245,10 +264,11 @@ def ship4(matrix, shipMatrix, aiShips):
 
    #now to make sure that no positions are chosen for multiple ships, we set those probabilities to values greater than 1 so they never get chosen
    # but also the value is 4 so we know which positions are for the ship of size 4
-   matrix[p1x][p1y] = 4
-   matrix[p2x][p2y] = 4
-   matrix[p3x][p3y] = 4
-   matrix[p4x][p4y] = 4
+   
+   #matrix[p1x][p1y] = 4
+   #matrix[p2x][p2y] = 4
+   #matrix[p3x][p3y] = 4
+   #matrix[p4x][p4y] = 4
 
    #create ship and place it in the shipMatrix
    locations = [[p1x, p1y, False], [p2x, p2y, False], [p3x, p3y, False], [p4x, p4y, False]]
@@ -283,11 +303,12 @@ def ship5(matrix, shipMatrix, aiShips):
    #horizontal checking for ship of size 5
    for i in range(rows):
       for j in range(6):
-         one = matrix[i][j]
-         two = matrix[i][j+1]
-         three = matrix[i][j+2]
-         four = matrix[i][j+3]
-         five = matrix[i][j+4]
+         if shipMatrix[i][j] == 0 and shipMatrix[i][j+1] == 0 and shipMatrix[i][j+2] == 0 and shipMatrix[i][j+3] == 0 and shipMatrix[i][j+4] == 0: #if there is no ship there
+            one = matrix[i][j]
+            two = matrix[i][j+1]
+            three = matrix[i][j+2]
+            four = matrix[i][j+3]
+            five = matrix[i][j+4]
 
          #we now get the joint probability
          prob = one*two
@@ -304,11 +325,12 @@ def ship5(matrix, shipMatrix, aiShips):
    #vertical checking for ship of size 5
    for i in range(columns):
       for j in range(6):
-         one = matrix[j][i]
-         two = matrix[j+1][i]
-         three = matrix[j+2][i]
-         four = matrix[j+3][i]
-         five = matrix[j+4][i]
+         if shipMatrix[j][i] == 0 and shipMatrix[j+1][i] == 0 and shipMatrix[j+2][i] == 0 and shipMatrix[j+3][i] == 0 and shipMatrix[j+4][i] == 0: #if there is no ship there
+            one = matrix[j][i]
+            two = matrix[j+1][i]
+            three = matrix[j+2][i]
+            four = matrix[j+3][i]
+            five = matrix[j+4][i]
 
          #we now get the joint probability
          prob = one*two
@@ -325,11 +347,12 @@ def ship5(matrix, shipMatrix, aiShips):
 
    #now to make sure that no positions are chosen for multiple ships, we set those probabilities to values greater than 1 so they never get chosen
    # but also the value is 5 so we know which positions are for the ship of size 5
-   matrix[p1x][p1y] = 5
-   matrix[p2x][p2y] = 5
-   matrix[p3x][p3y] = 5
-   matrix[p4x][p4y] = 5
-   matrix[p5x][p5y] = 5
+   
+   #matrix[p1x][p1y] = 5
+   #matrix[p2x][p2y] = 5
+   #matrix[p3x][p3y] = 5
+   #matrix[p4x][p4y] = 5
+   #matrix[p5x][p5y] = 5
 
    #print(matrix)
 
@@ -351,26 +374,30 @@ def ship5(matrix, shipMatrix, aiShips):
 # human/ai), GameMatrix(current game matrix for human/ai), ShipMatrix(contains
 # human/ai ships)
 # Output: True if ship was hit, False if missed
-def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix):
+def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix, turns):
    
    row = x
    col = y
+
+   spacesLeft = 100-turns
 
    #print(row, col)
    print(gameMatrix[row][col])
    #print(gameMatrix)
 
    # HIT
-   if gameMatrix[row][col] > 1 : #if there is a ship in that position
-   #if shipMatrix[row][col] != 0 : #if there is a ship in that position
+   #if gameMatrix[row][col] > 1 : #if there is a ship in that position
+   if shipMatrix[row][col] != 0 : #if there is a ship in that position
 
-
-      shipSize = gameMatrix[row][col]
-      prob = probMatrix[row][col]
-      distProb = prob/99 #need to evenly distribute that probably to the rest of the board
+      ship = shipMatrix[row][col][0]
+      shipSize = ship.length
+      #shipSize = gameMatrix[row][col]
+      prob = gameMatrix[row][col]
+      distProb = prob/spacesLeft #need to evenly distribute that probably to the rest of the board
       for i in range(10):
          for j in range(10): #because 10x10 board size
-            gameMatrix[i][j] = gameMatrix[i][j] + distProb
+            if gameMatrix[i][j] != 0:
+               gameMatrix[i][j] = gameMatrix[i][j] + distProb
       gameMatrix[row][col] = 0 #set probably of that position in current game to be zero
       
       # updates ai side probability board
@@ -386,7 +413,7 @@ def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix):
       #print(gameMatrix)
       #print(probMatrix)
       #print(shipMatrix[row][col][0])
-      ship = shipMatrix[row][col][0]
+      #ship = shipMatrix[row][col][0]
       #print(ship)
       shipMatrix[row][col][1] = "X"
       #print(ship)
@@ -398,16 +425,17 @@ def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix):
       return True #return hit
 
    # MISS
-   elif gameMatrix[row][col] < 1: #if there is no ship in that position
-   #elif shipMatrix[row][col] == 0: #if there is no ship in that position
+   #elif gameMatrix[row][col] < 1: #if there is no ship in that position
+   elif shipMatrix[row][col] == 0: #if there is no ship in that position
 
 
       # updates current game board
       prob = gameMatrix[row][col]
-      distProb = prob/99 #need to evenly distribute that probably to the rest of the board
+      distProb = prob/spacesLeft #need to evenly distribute that probably to the rest of the board
       for i in range(10):
          for j in range(10): #because 10x10 board size
-            gameMatrix[i][j] = gameMatrix[i][j] + distProb
+            if gameMatrix[i][j] != 0:
+               gameMatrix[i][j] = gameMatrix[i][j] + distProb
       gameMatrix[row][col] = 0 #set probably of that position in current game to be zero
 
       # updates ai side probability board
@@ -696,7 +724,7 @@ def getHumanInput(gameHumanMatrix, humanShipMatrix):
 
 
       #TODO - placing ship values on current board
-      placeShipOnCurrentGameBoard(locations, gameHumanMatrix)
+      #placeShipOnCurrentGameBoard(locations, gameHumanMatrix)
       ship = Ship(len(locations), False, orientation, locations)
       humanShips.append(ship)
       placeShipOnBoard(ship, humanShipMatrix)
@@ -733,7 +761,7 @@ def getHumanInput(gameHumanMatrix, humanShipMatrix):
             overlap, locations = checkOverlap(orientation, size, locations, humanShipMatrix)
             #print(overlap)
 
-         placeShipOnCurrentGameBoard(locations, gameHumanMatrix)
+         #placeShipOnCurrentGameBoard(locations, gameHumanMatrix)
          ship = Ship(len(locations), False, orientation, locations)
          humanShips.append(ship)
          placeShipOnBoard(ship, humanShipMatrix)
@@ -750,12 +778,12 @@ def getHumanInput(gameHumanMatrix, humanShipMatrix):
 # Input: Locations - start and end location of the ship
 #        GameMatrix - matrix containing values of current board
 # Output: None
-def placeShipOnCurrentGameBoard(locations, gameMatrix):
-   lengthOfShip = len(locations)
-   for i in range(lengthOfShip):
-      x = locations[i][0]
-      y = locations[i][1]
-      gameMatrix[x][y] = lengthOfShip
+#def placeShipOnCurrentGameBoard(locations, gameMatrix):
+   # lengthOfShip = len(locations)
+   # for i in range(lengthOfShip):
+   #    x = locations[i][0]
+   #    y = locations[i][1]
+   #    gameMatrix[x][y] = lengthOfShip
 
 
 # Name: getOrientation()
@@ -1012,7 +1040,9 @@ gamesPlayedFile.close()
 # Need to connect to the Arduino
 
 #connected = False
-arduino = serial.Serial("/dev/tty.usbmodem1421", 9600) #ser is the variable that will be communicating with the arduino
+
+   #arduino = serial.Serial("/dev/tty.usbmodem1421", 9600) #ser is the variable that will be communicating with the arduino
+
 #arduino.open()
 #time.sleep(1.5)
 #first param is port
@@ -1025,7 +1055,8 @@ arduino = serial.Serial("/dev/tty.usbmodem1421", 9600) #ser is the variable that
 #a-j = 0-9
 #xyz = hit/miss/boat
 
-arduino.write('b'.encode())
+   #arduino.write('b'.encode())
+
 #print('z'.encode())
 #arduino.write('1'.encode())
 #arduino.write('h'.encode())
@@ -1040,7 +1071,9 @@ arduino.write('b'.encode())
 #xy = [0, 2]
 #arduino.write(x)
 #arduino.write(struct.pack('>B', 0))
-arduino.close()
+
+   #arduino.close()
+
 # -----------------------------------------------------------------------------
 
 
@@ -1189,12 +1222,16 @@ direction = None
 orientationSwitched = False
 shipSunk = False
 
+humanTurns = 0
+aiTurns = 0
+
 #Human gets to go first
 
 while gameOver == False:
    # Human turn
    # TODO - get human input for target positions
    x1, y1 = humanTurn(aiShipMatrix) #just using this for testing
+   humanTurns += 1
    #x1, y1 = 1, 1 #SAMPLE FOR NOW
 
    print("fourth print")
@@ -1207,7 +1244,7 @@ while gameOver == False:
 
    
    #updates boards and returns true if hit, false if miss
-   hit1 = updateBoards(x1, y1, aiMatrix, gameAiMatrix, aiShipMatrix) 
+   hit1 = updateBoards(x1, y1, aiMatrix, gameAiMatrix, aiShipMatrix, humanTurns) 
    if hit1 == True:
       print("HIT!")
       #check if ship has sunk
@@ -1276,10 +1313,11 @@ while gameOver == False:
 
 
       x2, y2 = aiMove(gameHumanMatrix)
+      aiTurns += 1
       print("this is where we are")
       print(x2, y2)
       ogX, ogY = x2, y2
-      hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix)
+      hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix, aiTurns)
       shipHit = hit2
 
    elif shipHit == True:
@@ -1288,7 +1326,7 @@ while gameOver == False:
          #xStart, yStart = x2, y2
          x2, y2, direction = getShipDirection(x2, y2)
          print(gameHumanMatrix)
-         hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix)
+         hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix, aiTurns)
          directionKnown = hit2 #direction only known if there is a hit nearby
 
          #need to check that we hit the same ship
@@ -1305,20 +1343,21 @@ while gameOver == False:
       elif directionKnown == True:
          if hit2 == True:
             x2, y2, direction = hitShip(x2, y2, direction, ogX, ogY)
-            hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix)
+            #hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix, aiTurns)
 
 
          elif hit2 == False: #if not sunk and miss
 
             if orientationSwitched == False:
                x2, y2, direction = switchOrientation(ogX, ogY, direction)
-               hit2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix)
+               #hit2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix, aiTurns)
                orientationSwitched == True
 
             else:
                x2, y2, direction = getShipDirection(x2, y2)
-               hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix)
+               #hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix, aiTurns)
 
+         hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix, aiTurns)
 
             #if switch orientation has been called and still no hit, we need to try another direction
 
