@@ -1,4 +1,5 @@
 #include <FastLED.h>
+//#include <Adafruit_NeoPixel.h>
 
 #define LED_PIN 3
 
@@ -17,6 +18,7 @@ const CRGB pink = CRGB( 255, 0, 255);;
 const CRGB white = CRGB( 255, 255, 255);
 const CRGB off = CRGB( 0, 0, 0);
 
+
 // Params for width and height
 const uint8_t kMatrixWidth = 10;
 const uint8_t kMatrixHeight = 10;
@@ -28,6 +30,14 @@ CRGB color = off;
 #define NUM_LEDS (kMatrixWidth * kMatrixHeight)
 CRGB leds_plus_safety_pixel[ NUM_LEDS + 1];
 CRGB* leds( leds_plus_safety_pixel + 1);
+
+//Adafruit_NeoPixel strip = Adafruit_NeoPixel(60, LED_PIN, NEO_GRB + NEO_KHZ800);
+
+
+union {
+  byte data_len[4];
+  int data_len_int;
+} read_data;
 
 int16_t XY( uint8_t x, uint8_t y)
 {
@@ -46,23 +56,16 @@ void setup() {
   //pinMode(LED_PIN, OUTPUT);
   //digitalWrite (LED_PIN, HIGH);
   Serial.print("ready!");
-//  for (int i = 0; i < 10; i++) {
-//    for (int j = 0; i < 10; j++) {
-//        leds[ XY(i, j)]  = blue; //blue for the ocean
-////        Serial.print(i);
-////        Serial.print("a");
-////        Serial.print(j);
-////        Serial.print("b");
-//        //FastLED.show();
-//    }
-//  }
-  //FastLED.show();
 
   int i = 0;
   while (i < 100) {
-    leds[i]  = blue;
+    leds[i]  = CRGB::Blue;
     i = i+1;
   }
+
+
+//  strip.begin();
+//  strip.show();
   
 }
 
@@ -71,64 +74,100 @@ void loop() {
   
   //uint32_t ms = millis();
   //byte pixelHue = ((int32_t)cos16( ms * (27/1) ) * (350 / kMatrixWidth))/32763;
+  
+  leds[ XY(0, 0)]  = CRGB::Yellow;
+  FastLED.show();
+  //color = orange;
 
-//  for (int i = 0; i < 10; i++) {
-//    for (int j = 0; i < 10; j++) {
-//        leds[ XY(i, j)]  = blue; //blue for the ocean
-//        //FastLED.show();
+//  if (Serial.available() < 4) {
+//    for (i = 0; i < 4; i++) {
+//      read_data.data_len[i] = (byte)Serial.read();
 //    }
 //  }
-  //FastLED.show();
+//  Serial.write(read_data.data_len_int);
 
-  
-  leds[ XY(0, 0)]  = green;
-  FastLED.show();
-  //delay(100000);
-  leds[ XY(0, 1)]  = pink;
-  //Serial.println("hello");
-  leds[ XY(0, 2)]  = blue;
-  //FastLED.show();
+//  int valX = 0;
+//  int valY = 0;
+//  int hms = 0;
 
-  
-  //leds[ XY(0, 0)]  = orange;
-  //int incoming[2]; 
+  Serial.write("x");
 
-
-  color = orange;
-   
   if (Serial.available()) {
-//    Serial.print("hi");
-    char x = Serial.read();
-    if (x == '1') {
-//      color = green;
-//      yInt = 1;
-//    }
-//    else if (x == 'b') {
-//      color = red;
-//      yInt = 2;
-//    }
-      color = red;
-    }
-    //char y = Serial.read();
-    //char hms = Serial.read(); // hit/miss/ship
-    //if (x == 'z') {
-      //color = red;
+    char ch = Serial.read();
+    //if (ch == '0') {
+    leds[ XY(0, 0)] = CRGB::Red;
+    FastLED.show();
+    //delay(1000);
     //}
-    //if (y == '1') {
-      //color = orange;
-    //}
-    //if (hms == 'l') {
-      //color = green;
-    //}
-    //x = Serial.parseInt();
-    //Serial.print(x);
-    //color = green;
   }
+  
+  //FastLED.show();
+
+    
+    //char valX = Serial.read();
+    //char valY = Serial.read();
+    //char hms = Serial.read();
+    //int x = 0;
+    //int y = 0;
+//    if (valX >= '0' && valX <= '9' ) {
+//      x = valX - '0';
+//    }
+//    if (valY >= '0' && valY <= '9' ) {
+//      y = valY - '0';
+//    }
+//    if (hms == 'h') {
+//      color = red;
+//    }
+//    else if (hms == 'm') {
+//      color = white;
+//    }
+//    else if (hms == 's') {
+//      color = yellow;
+//    }
+
+    //Serial.write(hms);
+
+    //leds[ XY(x, y)] = color;
+    //FastLED.show();
+    //delay(100000000);
+    
+
+    //leds[ XY(0, 0)] = purple;
+    //delay(10000000);
+    //FastLED.show();
+    //delay(10000000);
+  //}
 
 
-  //leds[ XY(0, yInt)]  = yellow;
-  leds[ XY(0, 1)] = color;
-  FastLED.show();
-  //delay(10000);
-  //delay(100);
+  //leds[ XY(0, 1)] = color;
+  //FastLED.show();
+   
+//  if (Serial.available()) {
+////    Serial.print("hi");
+//    char x = Serial.read();
+//    if (x == 'b') {
+////      color = green;
+////      yInt = 1;
+////    }
+////    else if (x == 'b') {
+////      color = red;
+////      yInt = 2;
+////    }
+//      color = red;
+//    }
+//    //char y = Serial.read();
+//    //char hms = Serial.read(); // hit/miss/ship
+//    //if (x == 'z') {
+//      //color = red;
+//    //}
+//    //if (y == '1') {
+//      //color = orange;
+//    //}
+//    //if (hms == 'l') {
+//      //color = green;
+//    //}
+//    //x = Serial.parseInt();
+//    //Serial.print(x);
+//    //color = green;
+//  }
 }

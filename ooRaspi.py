@@ -1034,40 +1034,42 @@ gamesPlayedFile.close()
 
 # Need to connect to the Arduino
 
-#connected = False
 
 arduino = serial.Serial("/dev/tty.usbmodem1421", 9600) #ser is the variable that will be communicating with the arduino
-
-#arduino.open()
-#time.sleep(1.5)
 #first param is port
 #second param is baud rate that needs to match arduino sketch defatul is 9600 but we can speed it up (its bps - bits per second)
 
-#while not connected:
-#   serin = ser.read()
-#   connected = True
+
+# d = struct.pack('<I', number)       # pack integer data as little-edian bytes
+# print("struct complete\n")
 
 #a-j = 0-9
 #xyz = hit/miss/boat
 
-arduino.write('b'.encode())
+   #arduino.write('b'.encode())
 
 #print('z'.encode())
 #arduino.write('1'.encode())
 #arduino.write('h'.encode())
 
-#xVal = str(2)
-#yVal = str(1)
+xVal = '0'
+#xByte = str.encode(xVal)
+yVal = '5'
+hms = 'h' #hit/miss/ship
+arduino.write(xVal.encode())
+#arduino.write(xVal)
+print(xVal.encode())
+
 #arduino.write(xVal.encode())
+#arduino.write(yVal.encode())
+#arduino.write(hms.encode())
+
+#someVal = arduino.read(1).decode()
+#print(someVal)
 
 
 
-#x, y = 0, 2
-#xy = [0, 2]
-#arduino.write(x)
-#arduino.write(struct.pack('>B', 0))
-
-arduino.close()
+#arduino.close()
 
 # -----------------------------------------------------------------------------
 
@@ -1277,7 +1279,7 @@ while gameOver == False:
       #for it to have been hit once unless it is in the same direction in which case
       #it would been sunk
       for humanShip in humanShips:
-         if humanShip.hits > 0 and humanShip.sunk == False: #ship was hit and not sunk
+         if humanShip.hits > 0 and humanShip.didShipSink() == False: #ship was hit and not sunk
             shipHit = True
             hitLocations = []
             for location in humanShip.locations:
