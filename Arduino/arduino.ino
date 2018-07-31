@@ -6,11 +6,30 @@
 
 #define PIN 3
 
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(200, PIN, NEO_GRB + NEO_KHZ800);
+// Params for width and height
+const uint8_t kMatrixWidth = 10;
+const uint8_t kMatrixHeight = 10;
+
+#define NUM_LEDS (kMatrixWidth * kMatrixHeight)
+
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_LEDS, PIN, NEO_GRB + NEO_KHZ800);
 
 int counter = 0;
 int hasRead = false;
 String aThing = "";
+int x = 0;
+int y = 0;
+
+
+int16_t XY( uint8_t x, uint8_t y)
+{
+  uint16_t i;
+  
+  i = (x * 10) + y;
+  
+  return i;
+}
+
 
 // the setup function runs once when you press reset or power the board
 void setup() {
@@ -52,15 +71,19 @@ void loop() {
     Serial.println(counter++);
   }
 
-  if (Serial.available() == 5) {
+  if (Serial.available() == 2) {
     aThing = Serial.readString();
     aThing.trim();
-    if (aThing.equals("billy"))
-      Serial.print("BILLLLLLYYYYYY!!!!!!");
+    int x = aThing[0] - 48;
+    int y = aThing[1] - 48;
+//    if (aThing.equals("billy"))
+//      Serial.print("BILLLLLLYYYYYY!!!!!!");
     Serial.print("You wrote: ");
     Serial.println(aThing);
+    Serial.println(x);
+    Serial.println(y);
     hasRead = true;
-    strip.setPixelColor(3, CRGB::Red); //Red
+    strip.setPixelColor( XY(x, y), CRGB::Red); //Red
     strip.show();
   }
     

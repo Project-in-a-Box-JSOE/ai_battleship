@@ -1054,6 +1054,13 @@ gamesPlayedFile.close()
 #          x = arduino.readline()
 #          print(x) 
 
+xVal = 0
+yVal = 3
+xStr = str(xVal)
+yStr = str(yVal)
+print(xStr)
+print(yStr)
+
 arduino = serial.Serial('/dev/tty.usbmodem1421', 9600, timeout=1)
 
 # arduino = serial.Serial("/dev/tty.usbmodem1421", 9600) #ser is the variable that will be communicating with the arduino
@@ -1065,8 +1072,10 @@ for x in range(1,3):
       x = arduino.readline()
       print(x)
 
-print("wrote ", arduino.write('billy'.encode()), " bytes")
-#print("wrote ", arduino.write('1'.encode()), " bytes")
+#print("wrote ", arduino.write('billy'.encode()), " bytes")
+print("wrote ", arduino.write(xStr.encode()), " bytes")
+print("wrote ", arduino.write(yStr.encode()), " bytes")
+
 
 
 for x in range(1,50):
