@@ -727,6 +727,12 @@ def getHumanInput(gameHumanMatrix, humanShipMatrix):
       printHumanBoard(humanShipMatrix)
       #print(humanShipMatrix)
 
+      #light LEDS for each ship
+      for location in locations:
+         row = location[0]
+         column = location[1]
+         getLit(row, column, "human", "s")
+
       if i == 3:
          string = "Please enter the start and end locations for the second ship of size " + str(i) + ".\n"
          var = input(string)
@@ -762,6 +768,12 @@ def getHumanInput(gameHumanMatrix, humanShipMatrix):
          placeShipOnBoard(ship, humanShipMatrix)
          printHumanBoard(humanShipMatrix)
          #print(humanShipMatrix)
+
+         #light LEDs for ship
+         for location in locations:
+            row = location[0]
+            column = location[1]
+            getLit(row, column, "human", "s")
 
 
    return humanShips
@@ -1051,6 +1063,9 @@ def getLit(x, y, board, hms):
    #arduino.write(hms.encode())
    print("wrote ", arduino.write(hms.encode()), " bytes")
 
+   time.sleep(0.01)
+
+
 
 # -----------------------------------------------------------------------------
 
@@ -1066,63 +1081,28 @@ gamesPlayedFile.close()
 
 # Need to connect to the Arduino
 
-# with serial.Serial('/dev/tty.usbmodem1421', 9600, timeout=1) as arduino:
-
-# # arduino = serial.Serial("/dev/tty.usbmodem1421", 9600) #ser is the variable that will be communicating with the arduino
-# # print(b'hi')
-#    print(arduino.name)
-
-#    for x in range(1,3):
-#       if(arduino.is_open):
-#          x = arduino.readline()
-#          print(x)
-
-#    print("wrote ", arduino.write('billy'.encode()), " bytes")
-#    #print("wrote ", arduino.write('1'.encode()), " bytes")
-
-   
-#    for x in range(1,50):
-#       if(arduino.is_open):
-#          x = arduino.readline()
-#          print(x) 
-
-# xVal = 10
-# yVal = 13
-# xStr = str(xVal)
-# yStr = str(yVal)
-# print(xStr)
-# print(yStr)
-
 arduino = serial.Serial('/dev/tty.usbmodem1421', 9600, timeout=1)
 
-# arduino = serial.Serial("/dev/tty.usbmodem1421", 9600) #ser is the variable that will be communicating with the arduino
-# print(b'hi')
 print(arduino.name)
 
-
-for x in range(1,3):
-   if(arduino.is_open):
-      x = arduino.readline()
-      print(x)
-
-# #print("wrote ", arduino.write('billy'.encode()), " bytes")
-# print("wrote ", arduino.write(xStr.encode()), " bytes")
-# print("wrote ", arduino.write(yStr.encode()), " bytes")
+# for x in range(1,3):
+#    if(arduino.is_open):
+#       x = arduino.readline()
+#       print(x)
 
 getLit(0, 0, "ai", "h")
-time.sleep(0.5)
+#time.sleep(0.01)
 getLit(0, 1, "ai", "m")
-time.sleep(0.5)
+#time.sleep(0.01)
 getLit(0, 2, "ai", "s")
 # getLit(0, 1, "ai", "m")
 # getLit(0, 2, "ai", "s")
 
 
-
-for x in range(1,50):
-   if(arduino.is_open):
-      x = arduino.readline()
-      print(x)     
+# for x in range(1,50):
+#    if(arduino.is_open):
+#       x = arduino.readline()
+#       print(x)     
 
 
 # -----------------------------------------------------------------------------
