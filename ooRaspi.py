@@ -1242,6 +1242,11 @@ while gameOver == False:
    
    #updates boards and returns true if hit, false if miss
    hit1 = updateBoards(x1, y1, aiMatrix, gameAiMatrix, aiShipMatrix, humanTurns)
+   if hit1 == True:
+      getLit(x1, y1, "ai", "h")
+   else:
+      getLit(x1, y1, "ai", "m")
+
    print("print #2")
  
    if hit1 == True:
@@ -1271,6 +1276,7 @@ while gameOver == False:
       # if there was a hit, find most likely orientation
       # if guess all in one direction and still not sunk, change direction
 
+   time.sleep(5)
 
    # AI Turn
 
@@ -1326,6 +1332,11 @@ while gameOver == False:
       hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix, aiTurns)
       shipHit = hit2
 
+      if hit2 == True:
+         getLit(x2, y2, "human", "h")
+      else:
+         getLit(x2, y2, "human", "m")
+
       print("print #7")
 
    elif shipHit == True:
@@ -1339,6 +1350,11 @@ while gameOver == False:
          #print(gameHumanMatrix)
          hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix, aiTurns)
          directionKnown = hit2 #direction only known if there is a hit nearby
+
+         if hit2 == True:
+            getLit(x2, y2, "human", "h")
+         else:
+            getLit(x2, y2, "human", "m")
 
          #need to check that we hit the same ship
          #if humanShipMatrix[x][y] == humanShipMatrix[x2][y2]: #then same ship
@@ -1372,6 +1388,12 @@ while gameOver == False:
                #hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix, aiTurns)
 
          hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix, aiTurns)
+         
+         if hit2 == True:
+            getLit(x2, y2, "human", "h")
+         else:
+            getLit(x2, y2, "human", "m")
+
          print("print #11")
             #if switch orientation has been called and still no hit, we need to try another direction
 
