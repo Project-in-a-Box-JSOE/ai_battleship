@@ -4,7 +4,7 @@
   #include <avr/power.h>
 #endif
 
-#define PIN 3
+#define PIN 6
 
 // Params for width and height
 const uint8_t kMatrixWidth = 10;
@@ -68,37 +68,37 @@ void loop() {
 //    Serial.println(counter++);
   //}
 
-  if (Serial.available() == 4) { //4 bytes of info x/y/board/hms
-    theInfo = Serial.readString();
-    theInfo.trim();
-    x = theInfo[0] - 48; //to get correct int number (ascii)
-    y = theInfo[1] - 48;
-    int board = theInfo[2] -48;
-    char hms = theInfo[3];
-    
-    if (board == 1) { //human side
-      x = x + 10;
-    }
-
-    if (hms == 'h') { //if hit
-      strip.setPixelColor( XY(x, y), CRGB::Red); //Red
-    }
-    if (hms == 'm') { //if miss
-      strip.setPixelColor( XY(x, y), CRGB::White); //White
-    }
-    if (hms == 's') { //if ship
-      strip.setPixelColor( XY(x, y), CRGB::Yellow); //Yellow
-    }
-    
-//    if (aThing.equals("billy"))
-//      Serial.print("BILLLLLLYYYYYY!!!!!!");
-    Serial.print("You wrote: ");
-    Serial.println(theInfo);
-    Serial.println(x);
-    Serial.println(y);
-//    hasRead = true;
-    //strip.setPixelColor( XY(x, y), CRGB::Red); //Red
-    strip.show();
-  }
+//  if (Serial.available() == 4) { //4 bytes of info x/y/board/hms
+//    theInfo = Serial.readString();
+//    theInfo.trim();
+//    x = theInfo[0] - 48; //to get correct int number (ascii)
+//    y = theInfo[1] - 48;
+//    int board = theInfo[2] -48;
+//    char hms = theInfo[3];
+//    
+//    if (board == 1) { //human side
+//      x = x + 10;
+//    }
+//
+//    if (hms == 'h') { //if hit
+//      strip.setPixelColor( XY(x, y), CRGB::Red); //Red
+//    }
+//    if (hms == 'm') { //if miss
+//      strip.setPixelColor( XY(x, y), CRGB::White); //White
+//    }
+//    if (hms == 's') { //if ship
+//      strip.setPixelColor( XY(x, y), CRGB::Yellow); //Yellow
+//    }
+//    
+////    if (aThing.equals("billy"))
+////      Serial.print("BILLLLLLYYYYYY!!!!!!");
+//    Serial.print("You wrote: ");
+//    Serial.println(theInfo);
+//    Serial.println(x);
+//    Serial.println(y);
+////    hasRead = true;
+//    //strip.setPixelColor( XY(x, y), CRGB::Red); //Red
+//    //strip.show();
+//  }
     
 }

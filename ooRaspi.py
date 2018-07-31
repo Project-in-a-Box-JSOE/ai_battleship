@@ -1034,7 +1034,7 @@ def getLit(x, y, board, hms):
    print("wrote ", arduino.write(xStr.encode()), " bytes")
 
    yStr = str(y)
-   arduino.write(yStr.encode())
+   #arduino.write(yStr.encode())
    print("wrote ", arduino.write(yStr.encode()), " bytes")
 
 
@@ -1110,8 +1110,12 @@ for x in range(1,3):
 # print("wrote ", arduino.write(yStr.encode()), " bytes")
 
 getLit(0, 0, "ai", "h")
+time.sleep(0.5)
 getLit(0, 1, "ai", "m")
+time.sleep(0.5)
 getLit(0, 2, "ai", "s")
+# getLit(0, 1, "ai", "m")
+# getLit(0, 2, "ai", "s")
 
 
 
@@ -1211,30 +1215,12 @@ aiShipMatrix = [[0 for x in range(10)] for y in range(10)]
 
 # START OF THE MAIN CODE
 
-# print("first print")
-# print("ai game matrix:")
-# print(gameAiMatrix)
-# print("\n")
-# print("human game matrix:")
-# print(gameHumanMatrix)
-# print("\n")
-
-
-
 # pregame setup
 gameOver = False #will be set to true when all ships have sunk and someone wins
 
 aiShips = placeShips(gameAiMatrix, aiShipMatrix) #place ships onto the gameAI Matrix
 
 #get locations from human player and turn them into a list of pairs
-
-# print("second print")
-# print("ai game matrix:")
-# print(gameAiMatrix)
-# print("\n")
-# print("human game matrix:")
-# print(gameHumanMatrix)
-# print("\n")
 
 
 # FOR TESTING
@@ -1249,15 +1235,6 @@ humanShips = getHumanInput(gameHumanMatrix, humanShipMatrix)
       #user puts same location that is already taken
       #user puts locations that are not adjacent to each other
     #user puts locations not in a straight line
-
-# print("third print")
-# print("ai game matrix:")
-# print(gameAiMatrix)
-# print("\n")
-# print("human game matrix:")
-# print(gameHumanMatrix)
-# print("\n")
-
 
 
 #saving variables so they can be used in the next iteration
@@ -1277,23 +1254,18 @@ aiTurns = 0
 
 while gameOver == False:
    # Human turn
-   # TODO - get human input for target positions
+   # TODO - get human input for target positions (with buttons)
    x1, y1 = humanTurn(aiShipMatrix) #just using this for testing
    humanTurns += 1
-   #x1, y1 = 1, 1 #SAMPLE FOR NOW
 
-   # print("fourth print")
-   # print("ai game matrix:")
-   # print(gameAiMatrix)
-   # print("\n")
-   # print("human game matrix:")
-   # print(gameHumanMatrix)
-   # print("\n")
-
+   print("print #1")
    
    #updates boards and returns true if hit, false if miss
-   hit1 = updateBoards(x1, y1, aiMatrix, gameAiMatrix, aiShipMatrix, humanTurns) 
+   hit1 = updateBoards(x1, y1, aiMatrix, gameAiMatrix, aiShipMatrix, humanTurns)
+   print("print #2")
+ 
    if hit1 == True:
+      print("print #3")
       print("HIT!")
       #check if ship has sunk
       ship = aiShipMatrix[x1][y1][0]
@@ -1324,12 +1296,17 @@ while gameOver == False:
 
    if shipHit == False: #if no ship has been hit, look for regular target
       
+      print("print #4")
+      
       #do it in the if statement because we dont want to target another ship if we are already targeting a ship
       #if a ship is hit in the process of sinking another ship than it is only possible
       #for it to have been hit once unless it is in the same direction in which case
       #it would been sunk
       for humanShip in humanShips:
          if humanShip.hits > 0 and humanShip.didShipSink() == False: #ship was hit and not sunk
+            
+            print("print #5")
+
             shipHit = True
             hitLocations = []
             for location in humanShip.locations:
@@ -1359,6 +1336,7 @@ while gameOver == False:
             break; #break once we do this for the first ship we find
 
 
+      print("print #6")
 
       x2, y2 = aiMove(gameHumanMatrix)
       aiTurns += 1
@@ -1368,10 +1346,15 @@ while gameOver == False:
       hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix, aiTurns)
       shipHit = hit2
 
+      print("print #7")
+
    elif shipHit == True:
 
       if directionKnown == False:
          #xStart, yStart = x2, y2
+
+         print("print #8")
+
          x2, y2, direction = getShipDirection(x2, y2)
          #print(gameHumanMatrix)
          hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix, aiTurns)
@@ -1390,6 +1373,7 @@ while gameOver == False:
 
       elif directionKnown == True:
          if hit2 == True:
+            print("print #9")
             x2, y2, direction = hitShip(x2, y2, direction, ogX, ogY)
             #hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix, aiTurns)
 
@@ -1397,16 +1381,18 @@ while gameOver == False:
          elif hit2 == False: #if not sunk and miss
 
             if orientationSwitched == False:
+               print("print #9")
                x2, y2, direction = switchOrientation(ogX, ogY, direction)
                #hit2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix, aiTurns)
                orientationSwitched == True
 
             else:
+               print("print #10")
                x2, y2, direction = getShipDirection(x2, y2)
                #hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix, aiTurns)
 
          hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix, aiTurns)
-
+         print("print #11")
             #if switch orientation has been called and still no hit, we need to try another direction
 
 
@@ -1424,6 +1410,7 @@ while gameOver == False:
    if humanShipMatrix[ogX][ogY] != 0 and humanShipMatrix[ogX][ogY] != "O":
       ship = humanShipMatrix[ogX][ogY][0]
       shipSunk = ship.didShipSink()
+      print("print #12")
       if shipSunk == True: #reset variables
          print("Sunk ship of size ", ship.length)
          hit2 = False
