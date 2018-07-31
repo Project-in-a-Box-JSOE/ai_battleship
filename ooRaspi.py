@@ -1019,6 +1019,38 @@ def isGameOver(shipsList):
    return True
 
 
+# Name: get()
+# Description: This function take in the x/y points and also whether this is a
+# hit/miss or ship placement. It sends this information to the arduino so that
+# the correspinding LED will light up in the correct location and color.
+# Input: X/Y  - coordinate of where LED should light
+#        Board - "ai" if its the AIs board, "human" if its the humans board
+#        HMS - hit/miss/ship - "h" or "m" or "s"
+# Output: True - game is over if all ships have been sunk
+#         False - game is not over because not all ships have been sunk
+def getLit(x, y, board, hms):
+   xStr = str(x)
+   #arduino.write(xStr.encode())
+   print("wrote ", arduino.write(xStr.encode()), " bytes")
+
+   yStr = str(y)
+   arduino.write(yStr.encode())
+   print("wrote ", arduino.write(yStr.encode()), " bytes")
+
+
+   side = ""
+
+   if board == "ai":
+      side = str(0)
+   elif board == "human":
+      side = str(1)
+   
+   #arduino.write(side.encode())
+   print("wrote ", arduino.write(side.encode()), " bytes")
+
+   #arduino.write(hms.encode())
+   print("wrote ", arduino.write(hms.encode()), " bytes")
+
 
 # -----------------------------------------------------------------------------
 
@@ -1054,12 +1086,12 @@ gamesPlayedFile.close()
 #          x = arduino.readline()
 #          print(x) 
 
-xVal = 0
-yVal = 3
-xStr = str(xVal)
-yStr = str(yVal)
-print(xStr)
-print(yStr)
+# xVal = 10
+# yVal = 13
+# xStr = str(xVal)
+# yStr = str(yVal)
+# print(xStr)
+# print(yStr)
 
 arduino = serial.Serial('/dev/tty.usbmodem1421', 9600, timeout=1)
 
@@ -1067,14 +1099,19 @@ arduino = serial.Serial('/dev/tty.usbmodem1421', 9600, timeout=1)
 # print(b'hi')
 print(arduino.name)
 
+
 for x in range(1,3):
    if(arduino.is_open):
       x = arduino.readline()
       print(x)
 
-#print("wrote ", arduino.write('billy'.encode()), " bytes")
-print("wrote ", arduino.write(xStr.encode()), " bytes")
-print("wrote ", arduino.write(yStr.encode()), " bytes")
+# #print("wrote ", arduino.write('billy'.encode()), " bytes")
+# print("wrote ", arduino.write(xStr.encode()), " bytes")
+# print("wrote ", arduino.write(yStr.encode()), " bytes")
+
+getLit(0, 0, "ai", "h")
+getLit(0, 1, "ai", "m")
+getLit(0, 2, "ai", "s")
 
 
 
