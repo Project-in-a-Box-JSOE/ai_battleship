@@ -28,8 +28,9 @@
 */
 
 // constants won't change. They're used here to set pin numbers:
-const int buttonPin = 2;    // the number of the pushbutton pin
-const int ledPin = 13;      // the number of the LED pin
+const int buttonPin = A0;    // the number of the pushbutton pin
+const int ledPin = 13; // the number of the LED pin
+
 
 // Variables will change:
 int ledState = HIGH;         // the current state of the output pin
@@ -46,12 +47,14 @@ void setup() {
   pinMode(ledPin, OUTPUT);
 
   // set initial LED state
-  digitalWrite(ledPin, ledState);
+  //digitalWrite(ledPin, ledState);
+  Serial.begin();
 }
 
 void loop() {
   // read the state of the switch into a local variable:
-  int reading = digitalRead(buttonPin);
+  int reading = analogRead(buttonPin);
+  Serial.println(reading);
 
   // check to see if you just pressed the button
   // (i.e. the input went from LOW to HIGH), and you've waited long enough
