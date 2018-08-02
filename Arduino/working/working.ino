@@ -54,7 +54,7 @@ const int BUTTON4HIGH = 705;
 const int BUTTON5LOW = 598;
 const int BUTTON5HIGH = 620;
 const int BUTTON6LOW = 544;
-const int BUTTON6HIGH = 617;
+const int BUTTON6HIGH = 571;
 const int BUTTON7LOW = 506;
 const int BUTTON7HIGH = 520;
 const int BUTTON8LOW = 290;
@@ -96,43 +96,43 @@ void loop() {
   if(reading>BUTTON1LOW && reading<BUTTON1HIGH){
       strip.setPixelColor( XY(0, 0), strip.Color(127, 127, 0)); //Yellow
       strip.show();
-   }
-   if(reading>BUTTON2LOW && reading<BUTTON2HIGH){
+  }
+  if(reading>BUTTON2LOW && reading<BUTTON2HIGH){
       strip.setPixelColor( XY(0, 1), strip.Color(127, 0, 0)); //Red
       strip.show();
-   }
-   if(reading>BUTTON3LOW && reading<BUTTON3HIGH){
+  }
+  if(reading>BUTTON3LOW && reading<BUTTON3HIGH){
       strip.setPixelColor( XY(0, 2), strip.Color(0, 127, 0)); //Green
       strip.show();
-   }
-   if(reading>BUTTON4LOW && reading<BUTTON4HIGH){
+  }
+  if(reading>BUTTON4LOW && reading<BUTTON4HIGH){
       strip.setPixelColor( XY(0, 3), strip.Color(127, 127, 127)); //White
       strip.show();
-   }
-     if(reading>BUTTON5LOW && reading<BUTTON5HIGH){
+  }
+  if(reading>BUTTON5LOW && reading<BUTTON5HIGH){
       strip.setPixelColor( XY(0, 4), strip.Color(127, 127, 0)); //Yellow
       strip.show();
-   }
-   if(reading>BUTTON6LOW && reading<BUTTON6HIGH){
+  }
+  if(reading>BUTTON6LOW && reading<BUTTON6HIGH){
       strip.setPixelColor( XY(0, 5), strip.Color(127, 0, 0)); //Red
       strip.show();
-   }
-   if(reading>BUTTON7LOW && reading<BUTTON7HIGH){
+  }
+  if(reading>BUTTON7LOW && reading<BUTTON7HIGH){
       strip.setPixelColor( XY(0, 6), strip.Color(0, 127, 0)); //Green
       strip.show();
-   }
-   if(reading>BUTTON8LOW && reading<BUTTON8HIGH){
+  }
+  if(reading>BUTTON8LOW && reading<BUTTON8HIGH){
       strip.setPixelColor( XY(0, 7), strip.Color(127, 127, 127)); //White
       strip.show();
-   }
-   if(reading>BUTTON9LOW && reading<BUTTON9HIGH){
+  }
+  if(reading>BUTTON9LOW && reading<BUTTON9HIGH){
       strip.setPixelColor( XY(0, 8), strip.Color(127, 127, 0)); //Yellow
       strip.show();
-   }
-   if(reading>BUTTON10LOW && reading<BUTTON10HIGH){
+  }
+  if(reading>BUTTON10LOW && reading<BUTTON10HIGH){
       strip.setPixelColor( XY(0, 9), strip.Color(127, 0, 0)); //Red
       strip.show();
-   }
+  }
 
   if (Serial.available() >= 4) { //4 bytes of info x/y/board/hms
       
