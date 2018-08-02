@@ -683,10 +683,14 @@ def getHumanInput(gameHumanMatrix, humanShipMatrix):
       # TODO - figure out how to prompt this with LEDS (maybe blinking ship of size ___ or just write number in LEDS)
 
       #print(string)
-      var = input(string)
-      var = var.replace(" ", "").replace(",", "")
+      #var = input(string)
+      #var = var.replace(" ", "").replace(",", "")
+
+      x1, y1 = getButtonInput()
+      x2, y2 = getButtonInput()
+      locations = [(x1, y1, False), (x2, y2, False)]
       
-      locations = [(int(var[0]), int(var[1]), False), (int(var[2]), int(var[3]), False)]
+      #locations = [(int(var[0]), int(var[1]), False), (int(var[2]), int(var[3]), False)]
       #print("here1\n")
       orientation = getOrientation(locations) #check valid orientation
       #print(orientation)
@@ -1031,7 +1035,7 @@ def isGameOver(shipsList):
    return True
 
 
-# Name: get()
+# Name: getLit()
 # Description: This function take in the x/y points and also whether this is a
 # hit/miss or ship placement. It sends this information to the arduino so that
 # the correspinding LED will light up in the correct location and color.
@@ -1066,6 +1070,24 @@ def getLit(x, y, board, hms):
    time.sleep(0.01)
 
 
+# Name: getButtonInput()
+# Description: This function gets information from the arduino about which
+# two buttons have been pushed so that we can get the x/y values for the hit/
+# miss/ship. It takes in the letter/number strings and converts them into ints.
+# Input: None
+# Output: X/Y Values
+def getButtonInput():
+   if(arduino.is_open):
+      x = arduino.read() #only read one byte
+      #turn char into int by doing -65 looking at ascii chart
+      print(x)
+
+      time.sleep(2)
+      y = arduino.read()
+      #turn number into int by doing -49 because -48 for ascii and -1 because our matrix starts at 0 looking at ascii chart
+      print(y)
+      time.sleep(2)
+      return (x, y)
 
 # -----------------------------------------------------------------------------
 
@@ -1081,7 +1103,7 @@ gamesPlayedFile.close()
 
 # Need to connect to the Arduino
 
-arduino = serial.Serial('/dev/tty.usbmodem1421', 9600, timeout=1)
+arduino = serial.Serial('/dev/tty.usbmodem1411', 9600, timeout=1)
 
 print(arduino.name)
 
@@ -1089,6 +1111,8 @@ print(arduino.name)
 #    if(arduino.is_open):
 #       x = arduino.readline()
 #       print(x)
+#time.sleep(0.01)
+
 
 getLit(0, 0, "ai", "h")
 #time.sleep(0.01)

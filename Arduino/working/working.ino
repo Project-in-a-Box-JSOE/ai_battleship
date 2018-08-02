@@ -5,64 +5,54 @@
 
 #define PIN 6
 
-const int buttonPin = A0;     // the number of the pushbutton pin
+const int lettersPin = A0;     // the number of the pushbutton pin for letters(rows)
+const int numbersPin = A1;     // the number of the pushbutton pin for numbers(columns)
 
 // Params for width and height
 const uint8_t kMatrixWidth = 10;
 const uint8_t kMatrixHeight = 20;
 
-const int BUTTON1 = 1;
-const int BUTTON2 = 2;
-const int BUTTON3 = 3;
-const int BUTTON4 = 4;
-const int BUTTON5 = 5;
-const int BUTTON6 = 6;
-const int BUTTON7 = 7;
-const int BUTTON8 = 8;
-const int BUTTON9 = 9;
-const int BUTTON10 = 10;
+const int BUTTON_A_LOW = 950;
+const int BUTTON_A_HIGH = 1024;
+const int BUTTON_B_LOW = 850;
+const int BUTTON_B_HIGH = 900;
+const int BUTTON_C_LOW = 740;
+const int BUTTON_C_HIGH = 800;
+const int BUTTON_D_LOW = 680;
+const int BUTTON_D_HIGH = 705;
+const int BUTTON_E_LOW = 598;
+const int BUTTON_E_HIGH = 620;
+const int BUTTON_F_LOW = 544;
+const int BUTTON_F_HIGH = 571;
+const int BUTTON_G_LOW = 506;
+const int BUTTON_G_HIGH = 520;
+const int BUTTON_H_LOW = 290;
+const int BUTTON_H_HIGH = 310;
+const int BUTTON_I_LOW = 170;
+const int BUTTON_I_HIGH = 195;
+const int BUTTON_J_LOW = 83;
+const int BUTTON_J_HIGH = 130;
 
-//const int BUTTON1LOW = 960;
-//const int BUTTON1HIGH = 1024;
-//const int BUTTON2LOW = 900;
-//const int BUTTON2HIGH = 950;
-//const int BUTTON3LOW = 760;
-//const int BUTTON3HIGH = 820;
-//const int BUTTON4LOW = 683;
-//const int BUTTON4HIGH = 740;
-//const int BUTTON5LOW = 628;
-//const int BUTTON5HIGH = 680;
-//const int BUTTON6LOW = 574;
-//const int BUTTON6HIGH = 627;
-//const int BUTTON7LOW = 490;
-//const int BUTTON7HIGH = 570;
-//const int BUTTON8LOW = 315;
-//const int BUTTON8HIGH = 400;
-//const int BUTTON9LOW = 150;
-//const int BUTTON9HIGH = 250;
-//const int BUTTON10LOW = 60;
-//const int BUTTON10HIGH = 130;
-
-const int BUTTON1LOW = 950;
-const int BUTTON1HIGH = 1024;
-const int BUTTON2LOW = 850;
-const int BUTTON2HIGH = 900;
-const int BUTTON3LOW = 740;
-const int BUTTON3HIGH = 800;
-const int BUTTON4LOW = 680;
-const int BUTTON4HIGH = 705;
-const int BUTTON5LOW = 598;
-const int BUTTON5HIGH = 620;
-const int BUTTON6LOW = 544;
-const int BUTTON6HIGH = 571;
-const int BUTTON7LOW = 506;
-const int BUTTON7HIGH = 520;
-const int BUTTON8LOW = 290;
-const int BUTTON8HIGH = 310;
-const int BUTTON9LOW = 170;
-const int BUTTON9HIGH = 195;
-const int BUTTON10LOW = 83;
-const int BUTTON10HIGH = 130;
+const int BUTTON_1_LOW = 950;
+const int BUTTON_1_HIGH = 1024;
+const int BUTTON_2_LOW = 850;
+const int BUTTON_2_HIGH = 900;
+const int BUTTON_3_LOW = 740;
+const int BUTTON_3_HIGH = 800;
+const int BUTTON_4_LOW = 680;
+const int BUTTON_4_HIGH = 705;
+const int BUTTON_5_LOW = 598;
+const int BUTTON_5_HIGH = 620;
+const int BUTTON_6_LOW = 560;
+const int BUTTON_6_HIGH = 571;
+const int BUTTON_7_LOW = 475;
+const int BUTTON_7_HIGH = 500;
+const int BUTTON_8_LOW = 290;
+const int BUTTON_8_HIGH = 310;
+const int BUTTON_9_LOW = 170;
+const int BUTTON_9_HIGH = 195;
+const int BUTTON_10_LOW = 100;
+const int BUTTON_10_HIGH = 115;
 
 #define NUM_LEDS (kMatrixWidth * kMatrixHeight)
 
@@ -84,54 +74,58 @@ void setup() {
   }
   strip.show(); // Initialize all pixels to 'off'
 
-  pinMode(buttonPin, INPUT);
+  pinMode(lettersPin, INPUT);
+  pinMode(numbersPin, INPUT);
 
   Serial.begin(9600);
 }
 
 void loop() {
 
-  int reading = analogRead(buttonPin);
+  int reading = analogRead(lettersPin);
   Serial.println(reading);
-  if(reading>BUTTON1LOW && reading<BUTTON1HIGH){
-      strip.setPixelColor( XY(0, 0), strip.Color(127, 127, 0)); //Yellow
-      strip.show();
+  if(reading>BUTTON_1_LOW && reading<BUTTON_1_HIGH){ //if button 1
+    strip.setPixelColor( XY(0, 0), strip.Color(127, 127, 0)); //Yellow
+    strip.show();
+    //Serial.println("A");
+      
   }
-  if(reading>BUTTON2LOW && reading<BUTTON2HIGH){
-      strip.setPixelColor( XY(0, 1), strip.Color(127, 0, 0)); //Red
-      strip.show();
+  else if(reading>BUTTON_2_LOW && reading<BUTTON_2_HIGH){ //if button 2
+    strip.setPixelColor( XY(0, 1), strip.Color(127, 0, 0)); //Red
+    strip.show();
+    //Serial.println("1");
   }
-  if(reading>BUTTON3LOW && reading<BUTTON3HIGH){
-      strip.setPixelColor( XY(0, 2), strip.Color(0, 127, 0)); //Green
-      strip.show();
+  else if(reading>BUTTON_3_LOW && reading<BUTTON_3_HIGH){ //if button 3
+    strip.setPixelColor( XY(0, 2), strip.Color(0, 127, 0)); //Green
+    strip.show();
   }
-  if(reading>BUTTON4LOW && reading<BUTTON4HIGH){
-      strip.setPixelColor( XY(0, 3), strip.Color(127, 127, 127)); //White
-      strip.show();
+  else if(reading>BUTTON_4_LOW && reading<BUTTON_4_HIGH){ //if button 4
+    strip.setPixelColor( XY(0, 3), strip.Color(127, 127, 127)); //White
+    strip.show();
   }
-  if(reading>BUTTON5LOW && reading<BUTTON5HIGH){
-      strip.setPixelColor( XY(0, 4), strip.Color(127, 127, 0)); //Yellow
-      strip.show();
+  else if(reading>BUTTON_5_LOW && reading<BUTTON_5_HIGH){ //if button 5
+    strip.setPixelColor( XY(0, 4), strip.Color(127, 127, 0)); //Yellow
+    strip.show();
   }
-  if(reading>BUTTON6LOW && reading<BUTTON6HIGH){
-      strip.setPixelColor( XY(0, 5), strip.Color(127, 0, 0)); //Red
-      strip.show();
+  else if(reading>BUTTON_6_LOW && reading<BUTTON_6_HIGH){ //if button 6
+    strip.setPixelColor( XY(0, 5), strip.Color(127, 0, 0)); //Red
+    strip.show();
   }
-  if(reading>BUTTON7LOW && reading<BUTTON7HIGH){
-      strip.setPixelColor( XY(0, 6), strip.Color(0, 127, 0)); //Green
-      strip.show();
+  else if(reading>BUTTON_7_LOW && reading<BUTTON_7_HIGH){ //if button 7
+    strip.setPixelColor( XY(0, 6), strip.Color(0, 127, 0)); //Green
+    strip.show();
   }
-  if(reading>BUTTON8LOW && reading<BUTTON8HIGH){
-      strip.setPixelColor( XY(0, 7), strip.Color(127, 127, 127)); //White
-      strip.show();
+  else if(reading>BUTTON_8_LOW && reading<BUTTON_8_HIGH){ //if button 8
+    strip.setPixelColor( XY(0, 7), strip.Color(127, 127, 127)); //White
+    strip.show();
   }
-  if(reading>BUTTON9LOW && reading<BUTTON9HIGH){
-      strip.setPixelColor( XY(0, 8), strip.Color(127, 127, 0)); //Yellow
-      strip.show();
+  else if(reading>BUTTON_9_LOW && reading<BUTTON_9_HIGH){ //if button 9
+    strip.setPixelColor( XY(0, 8), strip.Color(127, 127, 0)); //Yellow
+    strip.show();
   }
-  if(reading>BUTTON10LOW && reading<BUTTON10HIGH){
-      strip.setPixelColor( XY(0, 9), strip.Color(127, 0, 0)); //Red
-      strip.show();
+  else if(reading>BUTTON_10_LOW && reading<BUTTON_10_HIGH){ //if button 10
+    strip.setPixelColor( XY(0, 9), strip.Color(127, 0, 0)); //Red
+    strip.show();
   }
 
   if (Serial.available() >= 4) { //4 bytes of info x/y/board/hms
