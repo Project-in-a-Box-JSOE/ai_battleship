@@ -682,13 +682,14 @@ def getHumanInput(gameHumanMatrix, humanShipMatrix):
       string = "Please enter the start and end locations for ship of size " + str(i) + ".\n"
       # TODO - figure out how to prompt this with LEDS (maybe blinking ship of size ___ or just write number in LEDS)
 
-      #print(string)
+      print(string)
       #var = input(string)
       #var = var.replace(" ", "").replace(",", "")
 
       x1, y1 = getButtonInput()
       x2, y2 = getButtonInput()
       locations = [(x1, y1, False), (x2, y2, False)]
+      time.sleep(2)
       
       #locations = [(int(var[0]), int(var[1]), False), (int(var[2]), int(var[3]), False)]
       #print("here1\n")
@@ -713,9 +714,13 @@ def getHumanInput(gameHumanMatrix, humanShipMatrix):
             print("Sorry, you entered a ship overlaps with another ship.")
             printHumanBoard(humanShipMatrix)
 
-         var = input(string)
-         var = var.replace(" ", "").replace(",", "")
-         locations = [[int(var[0]), int(var[1]), False], [int(var[2]), int(var[3]), False]]
+         #var = input(string)
+         #var = var.replace(" ", "").replace(",", "")
+         #locations = [[int(var[0]), int(var[1]), False], [int(var[2]), int(var[3]), False]]
+         x1, y1 = getButtonInput()
+         x2, y2 = getButtonInput()
+         locations = [(x1, y1, False), (x2, y2, False)]
+
          orientation = getOrientation(locations)
          size = checkShipSize(orientation, locations)
          overlap, locations = checkOverlap(orientation, size, locations, humanShipMatrix)
@@ -739,10 +744,15 @@ def getHumanInput(gameHumanMatrix, humanShipMatrix):
 
       if i == 3:
          string = "Please enter the start and end locations for the second ship of size " + str(i) + ".\n"
-         var = input(string)
-         var = var.replace(" ", "").replace(",", "")
+         #var = input(string)
+         #var = var.replace(" ", "").replace(",", "")
          
-         locations = [[int(var[0]), int(var[1]), False], [int(var[2]), int(var[3]), False]]
+         #locations = [[int(var[0]), int(var[1]), False], [int(var[2]), int(var[3]), False]]
+
+         x1, y1 = getButtonInput()
+         x2, y2 = getButtonInput()
+         locations = [(x1, y1, False), (x2, y2, False)]
+
          orientation = getOrientation(locations) #check valid orientation
          size = checkShipSize(orientation, locations) #check valid ship size
          overlap, locations = checkOverlap(orientation, size, locations, humanShipMatrix) #check is ship overlaps another
@@ -758,9 +768,14 @@ def getHumanInput(gameHumanMatrix, humanShipMatrix):
             elif overlap == True:
                print("Sorry, you entered a ship overlaps with another ship.")
             
-            var = input(string)
-            var = var.replace(" ", "").replace(",", "")
-            locations = [[int(var[0]), int(var[1]), False], [int(var[2]), int(var[3]), False]]
+            #var = input(string)
+            #var = var.replace(" ", "").replace(",", "")
+            #locations = [[int(var[0]), int(var[1]), False], [int(var[2]), int(var[3]), False]]
+
+            x1, y1 = getButtonInput()
+            x2, y2 = getButtonInput()
+            locations = [(x1, y1, False), (x2, y2, False)]
+
             orientation = getOrientation(locations)
             size = checkShipSize(orientation, locations)
             overlap, locations = checkOverlap(orientation, size, locations, humanShipMatrix)
@@ -1078,15 +1093,39 @@ def getLit(x, y, board, hms):
 # Output: X/Y Values
 def getButtonInput():
    if(arduino.is_open):
-      x = arduino.read() #only read one byte
-      #turn char into int by doing -65 looking at ascii chart
-      print(x)
+      x = 0
+      while x < 65 or x > 75 : #ascii values for A-J
+         x = arduino.read() #only read one byte
+         x = str(x) #turn byte into string
+         x = x[2] #get letter from string
+         #print(x)
+         #if x == "'":
+         #   x = 0
+         x = ord(x) #get ascii value of letter
+         #print(x)
+         #print("hi")
 
-      time.sleep(2)
-      y = arduino.read()
-      #turn number into int by doing -49 because -48 for ascii and -1 because our matrix starts at 0 looking at ascii chart
-      print(y)
-      time.sleep(2)
+      #turn letter char into int by doing -65 looking at ascii chart
+      x = x - 65
+      print(x)
+      #time.sleep(2)
+
+      y = 0
+      while y < 48 or y > 57 : #ascii values for A-J
+         y = arduino.read() #only read one byte
+         y = str(y) #turn byte into string
+         y = y[2] #get number char from string
+         #print(y)
+         y = ord(y) #get ascii value of number char
+         #print(y)
+         #print("hi2")
+      #turn number char into int by doing -48 looking at ascii chart
+      y = y - 48
+      print(x)
+      #time.sleep(2)
+
+      print("we got here")
+
       return (x, y)
 
 # -----------------------------------------------------------------------------
@@ -1103,7 +1142,7 @@ gamesPlayedFile.close()
 
 # Need to connect to the Arduino
 
-arduino = serial.Serial('/dev/tty.usbmodem1411', 9600, timeout=1)
+arduino = serial.Serial('/dev/tty.usbmodem1421', 9600, timeout=1)
 
 print(arduino.name)
 
