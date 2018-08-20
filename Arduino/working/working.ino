@@ -83,7 +83,7 @@ void setup() {
 void loop() {
 
   int reading = analogRead(lettersPin);
-  //Serial.println(reading);
+//  Serial.println(reading);
 
   //Input for rows (A-J)
   if(reading>BUTTON_A_LOW && reading<BUTTON_A_HIGH){ //if button A
@@ -148,7 +148,7 @@ void loop() {
   }
 
   int reading2 = analogRead(numbersPin);
-  //Serial.println(reading2);
+//  Serial.println(reading2);
   
   //Input for columns (1-10 or 0-9)
   if(reading2>BUTTON_1_LOW && reading2<BUTTON_1_HIGH){ //if button 1
@@ -231,7 +231,7 @@ void loop() {
       strip.setPixelColor( XY(x, y), strip.Color(127, 0, 0)); //Red
     }
     else if (hms == 'm') { //if miss
-      strip.setPixelColor( XY(x, y), strip.Color(127, 127, 127)); //White
+      strip.setPixelColor( XY(x, y), strip.Color(0, 0, 0)); //off
     }
     else if (hms == 's') { //if ship
       strip.setPixelColor( XY(x, y), strip.Color(127, 127, 0)); //Yellow
