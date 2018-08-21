@@ -24,6 +24,9 @@ class Ship:
 			return True
 		return False
 
+	def shipHit(self):
+		self.hits += 1
+
 
 # Name: ship#()
 # Description: This function calculates the best location to place each ship.
@@ -410,10 +413,11 @@ def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix, turns):
 		#print(ship)
 		shipMatrix[row][col][1] = "X"
 		#print(ship)
-		ship.hits += 1
+		ship.shipHit()
 		for location in ship.locations: #setting that location as hit
 			if location[0] == x and location[1] == y:
 				location[2] = True
+			print(location)
 
 		return True #return hit
 
@@ -780,6 +784,7 @@ def getHumanInput(gameHumanMatrix, humanShipMatrix):
 				#print(overlap)
 
 			#placeShipOnCurrentGameBoard(locations, gameHumanMatrix)
+			print(locations)
 			ship = Ship(len(locations), False, orientation, locations)
 			humanShips.append(ship)
 			placeShipOnBoard(ship, humanShipMatrix)
@@ -1123,7 +1128,7 @@ def getButtonInput():
 		
 		#turn number char into int by doing -48 looking at ascii chart
 		y = y - 48
-		print(x)
+		print(y)
 		#time.sleep(2)
 
 		print("we got here")
@@ -1301,6 +1306,8 @@ while gameOver == False:
 
 	time.sleep(5)
 
+
+
 	# AI Turn
 
 	if shipHit == False: #if no ship has been hit, look for regular target
@@ -1318,11 +1325,15 @@ while gameOver == False:
 
 				shipHit = True
 				hitLocations = []
+				print (humanShip.locations)
 				for location in humanShip.locations:
+					print("second location print:")
+					print(location)
 					if location[2] == True:
 						hitLocations.append((location[0], location[1]))
 						ogX, ogY = location[0], location[1]
 						x2, y2 = ogX, ogY
+						print("print #5 -2")
 				# numHits = len(hitLocations)
 				# if numHits > 1: #then shit hit at least twice
 				#    x2, y2 = humanShip.locations[numHits-1][0], humanShip.locations[numHits-1][1]
@@ -1342,16 +1353,16 @@ while gameOver == False:
 
 					# directionKnown = True
 
-					break; #break once we do this for the first ship we find
-
 
 		print("print #6")
 
+	if shipHit == False:
 		x2, y2 = aiMove(gameHumanMatrix)
 		aiTurns += 1
 		#print("this is where we are")
 		#print(x2, y2)
 		ogX, ogY = x2, y2
+
 		hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix, aiTurns)
 		shipHit = hit2
 
@@ -1368,6 +1379,7 @@ while gameOver == False:
 			#xStart, yStart = x2, y2
 
 			print("print #8")
+			print(ogX, ogY)
 
 			x2, y2, direction = getShipDirection(ogX, ogY)
 			#print(gameHumanMatrix)
@@ -1400,14 +1412,14 @@ while gameOver == False:
 			elif hit2 == False: #if not sunk and miss
 
 				if orientationSwitched == False:
-					print("print #9")
+					print("print #10")
 					x2, y2, direction = switchOrientation(ogX, ogY, direction)
 					#hit2 = updateBoard(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix, aiTurns)
-					orientationSwitched == True
+					orientationSwitched = True
 
 				else:
-					print("print #10")
-					x2, y2, direction = getShipDirection(x2, y2)
+					print("print #11")
+					x2, y2, direction = getShipDirection(ogX, ogY)
 					#hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix, aiTurns)
 
 			hit2 = updateBoards(x2, y2, humanMatrix, gameHumanMatrix, humanShipMatrix, aiTurns)
@@ -1417,7 +1429,8 @@ while gameOver == False:
 			else:
 				getLit(x2, y2, "human", "m")
 
-			print("print #11")
+			print("print #12")
+			print(x2, y2)
 			#if switch orientation has been called and still no hit, we need to try another direction
 
 
@@ -1436,7 +1449,7 @@ while gameOver == False:
 	if humanShipMatrix[ogX][ogY] != 0 and humanShipMatrix[ogX][ogY] != "O":
 		ship = humanShipMatrix[ogX][ogY][0]
 		shipSunk = ship.didShipSink()
-		print("print #12")
+		print("print #13")
 		if shipSunk == True: #reset variables
 			print("Sunk ship of size ", ship.length)
 			hit2 = False
@@ -1448,6 +1461,7 @@ while gameOver == False:
 			orientationSwitched = False
 			shipSunk = False
 			humanShips.remove(ship)
+			print("print #14")
 
 			#TODO - lights of ship blink 10-15 times to show that is has sunk
 
@@ -1479,7 +1493,7 @@ while gameOver == False:
 	#print(humanShips)
 	gameOver = isGameOver(humanShips)
 	if gameOver == True: #if AI wins game
-		print("Congratulations! You won!")
+		print("Sorry, you lost!")
 
 	#print(gameOver)
 
