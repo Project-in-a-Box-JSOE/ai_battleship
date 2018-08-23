@@ -386,6 +386,7 @@ def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix, turns):
 	if shipMatrix[row][col] != 0 : #if there is a ship in that position
 
 		ship = shipMatrix[row][col][0]
+		print(ship)
 		shipSize = ship.length
 		#shipSize = gameMatrix[row][col]
 		prob = gameMatrix[row][col]
@@ -583,7 +584,7 @@ def hitShip(x,y, orientation, ogX, ogY):
 	nextOrientation = orientation
 
 	if orientation == "north":
-		if x > 1: #bounds checking
+		if x > 0: #bounds checking
  			nextX = x-1
  			nextY = y
 		else: #switch orientation
@@ -593,7 +594,7 @@ def hitShip(x,y, orientation, ogX, ogY):
 			#nextY = ogY
 
 	elif orientation == "east":
-		if y < 10: #bounds checking
+		if y < 9: #bounds checking
 			nextX = x
 			nextY = y+1
 		else:
@@ -603,7 +604,7 @@ def hitShip(x,y, orientation, ogX, ogY):
 			# nextY = ogY-1
       
 	elif orientation == "south":
-		if x < 10: #bounds checking
+		if x < 9: #bounds checking
 			nextX = x+1
 			nextY = y
 		else:
@@ -613,7 +614,7 @@ def hitShip(x,y, orientation, ogX, ogY):
 			# nextY = ogY
 
 	elif orientation == "west":
-		if y > 1: #bounds checking
+		if y > 0: #bounds checking
 			nextX = x
 			nextY = y-1
 		else:
@@ -1043,7 +1044,7 @@ def humanTurn(aiShipMatrix):
 # Name: isGameOver()
 # Description: This function checks to see if the game is over. Called after
 # each human or Ai turn
-# Input: ship list - list containin the human/ai ships
+# Input: ship list - list containing the human/ai ships
 # Output: True - game is over if all ships have been sunk
 #         False - game is not over because not all ships have been sunk
 def isGameOver(shipsList):
@@ -1100,7 +1101,7 @@ def getLit(x, y, board, hms):
 def getButtonInput():
 	if(arduino.is_open):
 		x = 0
-		while x < 65 or x > 75 : #ascii values for A-J
+		while x < 65 or x > 74 : #ascii values for A-J
 			x = arduino.read() #only read one byte
 			x = str(x) #turn byte into string
 			x = x[2] #get letter from string
@@ -1117,7 +1118,7 @@ def getButtonInput():
 		#time.sleep(2)
 
 		y = 0
-		while y < 48 or y > 57 : #ascii values for A-J
+		while y < 48 or y > 57 : #ascii values for 0-9
 			y = arduino.read() #only read one byte
 			y = str(y) #turn byte into string
 			y = y[2] #get number char from string
@@ -1137,10 +1138,14 @@ def getButtonInput():
 
 # -----------------------------------------------------------------------------
 
+
+time.sleep(10)
+
 # Get number of games played (read from file)
 # Gets incremented and saved at the end of each game
 
-gamesPlayedFile = open("gamesPlayed.txt", "r")
+gamesPlayedFile = open("/home/pi/pib/gamesPlayed.txt", "r")
+#gamesPlayedFile = open("gamesPlayed.txt", "r")
 gamesPlayed = int(gamesPlayedFile.read())
 gamesPlayed = gamesPlayed + 1; #increment number of games played (do this at start because we start with 0)
 gamesPlayedFile.close()
@@ -1150,7 +1155,8 @@ gamesPlayedFile.close()
 
 # Need to connect to the Arduino
 
-arduino = serial.Serial('/dev/tty.usbmodem1421', 9600, timeout=1)
+arduino = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+#arduino = serial.Serial('/dev/tty.usbmodem1411', 9600, timeout=1)
 
 # print(arduino.name)
 
@@ -1192,8 +1198,10 @@ aiMatrix = deepcopy(startMatrix) #ai side of probability board... used for durat
 if gamesPlayed > 1: #if not first game, read from files
 
 	#do both at same time to be more efficient
-	humanMatrixFile = open("humanMatrix.txt", "r")
-	aiMatrixFile = open("aiMatrix.txt", "r")
+	#humanMatrixFile = open("humanMatrix.txt", "r")
+	#aiMatrixFile = open("aiMatrix.txt", "r")
+	humanMatrixFile = open("/home/pi/pib/humanMatrix.txt", "r")
+	aiMatrixFile = open("/home/pi/pib/aiMatrix.txt", "r")
 
 	#for i in range(100):
 	for row in range(10):
@@ -1509,7 +1517,8 @@ while gameOver == False:
 
 
 #gamesPlayed = gamesPlayed + 1; #increment number of games played
-gamesPlayedFile = open("gamesPlayed.txt", "w")
+#gamesPlayedFile = open("gamesPlayed.txt", "w")
+gamesPlayedFile = open("/home/pi/pib/gamesPlayed.txt", "w")
 gamesPlayedFile.write(str(gamesPlayed)) #save to file to be used in next game
 gamesPlayedFile.close()
 
@@ -1518,7 +1527,8 @@ gamesPlayedFile.close()
 # Here we are writing the values to the files
 
 #writing humanMatrix to file
-humanMatrixFile = open("humanMatrix.txt", "w")
+#humanMatrixFile = open("humanMatrix.txt", "w")
+humanMatrixFile = open("/home/pi/pib/humanMatrix.txt", "w")
 for row in humanMatrix:
 	#print(row)
 	for value in row:
@@ -1526,7 +1536,8 @@ for row in humanMatrix:
 humanMatrixFile.close()
 
 #writing aiMatrix to file
-aiMatrixFile = open("aiMatrix.txt", "w")
+#aiMatrixFile = open("aiMatrix.txt", "w")
+aiMatrixFile = open("/home/pi/pib/aiMatrix.txt", "w")
 for row in aiMatrix:
 	#print(row)
 	for value in row:
