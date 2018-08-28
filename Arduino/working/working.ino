@@ -83,7 +83,7 @@ void setup() {
 void loop() {
 
   int reading = analogRead(lettersPin);
-//  Serial.println(reading);
+  //Serial.println(reading);
 
   //Input for rows (A-J)
   if(reading>BUTTON_A_LOW && reading<BUTTON_A_HIGH){ //if button A
@@ -148,7 +148,7 @@ void loop() {
   }
 
   int reading2 = analogRead(numbersPin);
-//  Serial.println(reading2);
+  //Serial.println(reading2);
   
   //Input for columns (1-10 or 0-9)
   if(reading2>BUTTON_1_LOW && reading2<BUTTON_1_HIGH){ //if button 1
