@@ -17,8 +17,8 @@ class Ship:
 # Name: getHumanShipInput()
 # Description: This function prompts the user to enter ship placements and
 # places the ships in the human side matrix
-# Input: Human Ship Matrix - contains locations of the ships
-# Output: humanShips - the list of ships
+# Input: Human Ship Matrix - contains locations of the humans ships
+# Output: humanShips - the list of the humans ships
 def getHumanShipInput(playerBottomMatrix):
 	# TODO
 	# Prompt user to enter ship locations
@@ -30,10 +30,9 @@ def getHumanShipInput(playerBottomMatrix):
 	# Return list of players ships
 
 # Name: placeAiShips()
-# Description: This function prompts the user to enter ship placements and
-# places the ships in the human side matrix
-# Input: Human Ship Matrix - contains locations of the ships
-# Output: humanShips - the list of ships
+# Description: This function places the AIs ships on the matrix
+# Input: AI Ship Matrix - contains locations of the AIs ships
+# Output: aiShips - the list of AIs ships
 def placeAiShips(aiBottomMatrix):
 	# TODO
 	# Loop through AI probability matrix to find smallest superpositions
@@ -55,11 +54,23 @@ def placeAiShips(aiBottomMatrix):
 # Description: This function prompts user to input their next target and 
 # Input: playerTopMatrix - need to check that for previous moves
 # Output: Target row/column
-def humanTurn(playerTopMatrix):
+def humanTurn(humanTopMatrix):
 	# TODO
 	# Prompt user to enter target location
 		# Check to see that location was not already targeted
 	# Return inputted locations
+
+
+# Name: aiTurn()
+# Description: This function determines the AIs next target
+# Input: humanProbMatrix - need to check that highest probability
+# Output: Target row/column
+def aiTurn(humanProbMatrix):
+	# TODO
+	# Loop through humans probability board
+		# determine location with the highest probability
+	# Return x/row and y/column of that location
+
 
 
 # Name: updateBoard()
@@ -68,13 +79,19 @@ def humanTurn(playerTopMatrix):
 # Input: X/Row location, Y/Column location, playerTopMatrix(matrix of players moves),
 # 		otherPlayerBottomMatrix(other players matrix to check if ship is there)
 # 		otherPlayerShips(contains opponents ships)
-# Output: None
-def updateBoard(x, y, playerTopMatrix, otherPlayerBottomMatrix, otherPlayerShips):
+#		probMatrix - the probability matrix that needs to be updated
+#			(humanProbMatrix if AIs turn, AiProbMatrix is humans turn)
+# Output: True if ship was hit, False if missed
+def updateBoard(x, y, playerTopMatrix, otherPlayerBottomMatrix, otherPlayerShips, probMatrix):
 	# TODO
-	# Check the other players matrix if ship is there
-		#update playerTopMatrix accordingly
+	# Check the other players bottom matrix if ship is there
+		# Update playerTopMatrix accordingly
+		# Update probability matrix accordingly
+			# Update method detailed in documentation.
 	# If ship was hit, update ship object with hit and/or hit location
 		# Only if you choose to implement the game this way
+	# Return hit(True) or miss(False)
+
 
 
 # Name: isGameOver()
@@ -109,9 +126,23 @@ startMatrix = [ [0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709
             [0.006048387, 0.008064516, 0.0096774192, 0.0104838708, 0.0108870966, 0.0108870966, 0.0104838708, 0.0096774192, 0.008064516, 0.006048387],
             [0.004032258, 0.006048387, 0.0076612902, 0.0084677418, 0.0088709676, 0.0088709676, 0.0084677418, 0.0076612902, 0.006048387, 0.004032258] ]
 
-# TODO - for the first game, make two copies of his matrix.
-	# One to keep track of the AI side - where to place ships based on human guesses
-	# One to keep track of the human side - where to target based on hits/misses
+# TODO - for the first game, make four copies of his matrix.
+	# Two keep track of the probability throughout the game to help decision making for the current game
+	# Two keep track of the probability throught the game to help decision making for the next game
+		# Directions to updated these matrices are in the documentation explaining the game setup.
+	# aiProbMatrix - to keep track of the AI side - where to place ships based on human guesses
+	# humanProbMatrix - One to keep track of the human side - where to target based on hits/misses
+	# Both AI matrices and Human matrices are exactly the same at the start of the game.
+	# Hint - use the deepcopy() function, otherwise one change will affect all 
+	# the other matrices as well
+
+
+# TODO - In any other game, you must read the updated matrix from a text file.
+	# aiProbMatrix - to keep track of the AI side - where to place ships based on human guesses
+	# humanProbMatrix - One to keep track of the human side - where to target based on hits/misses
+	# Both AI matrices and Human matrices are exactly the same at the start of the game.
+	# Hint - use the deepcopy() function, otherwise one change will affect all 
+	# the other matrices as well
 
 
 # First player places ships
@@ -121,13 +152,13 @@ humanShips = getHumanShipInput(humanBottomMatrix)
 aiShips = placeAiShips(aiBottomMatrix)
 
 
-While game is not over
-	# First players turn
-	humanTurn(player1TopMatrix)
-	updateBoard()
-	isGameOver(player2Ships)
+while game is not over
+	# Human players turn
+	humanTurn(humanTopMatrix)
+	hit1 = updateBoard()
+	isGameOver(aiShips)
 
-	# Second players turn
-	humanTurn(player2TopMatrix)
-	updateBoard()
-	isGameOver(player1Ships)
+	# AI players turn
+	aiTurn(humanProbMatrix)
+	hit2 = updateBoard()
+	isGameOver(humanShips)
