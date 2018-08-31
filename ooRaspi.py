@@ -383,7 +383,7 @@ def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix, turns):
 
 	# HIT
 	#if gameMatrix[row][col] > 1 : #if there is a ship in that position
-	if shipMatrix[row][col] != 0 : #if there is a ship in that position
+	if shipMatrix[row][col][0] != 0 : #if there is a ship in that position
 
 		print(shipMatrix[row][col])
 		ship = shipMatrix[row][col][0]
