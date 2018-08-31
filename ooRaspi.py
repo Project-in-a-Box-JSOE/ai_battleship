@@ -385,6 +385,7 @@ def updateBoards(x, y, probMatrix, gameMatrix, shipMatrix, turns):
 	#if gameMatrix[row][col] > 1 : #if there is a ship in that position
 	if shipMatrix[row][col] != 0 : #if there is a ship in that position
 
+		print(shipMatrix[row][col])
 		ship = shipMatrix[row][col][0]
 		print(ship)
 		shipSize = ship.length
@@ -469,10 +470,74 @@ def aiMove(gameHumanMatrix):
 	row, col = 0, 0 #the row and column positions
 	for i in range(10):
 		for j in range(10): #because 10x10 matrix
-			if gameHumanMatrix[i][j] > maxValue:
-				maxValue = gameHumanMatrix[i][j]
-				row = i
-				col = j
+
+			print(i,j)
+
+			#right side
+			if j == 0:
+				#top right corner
+				if i == 0 and gameHumanMatrix[i+1][j] == 0 and gameHumanMatrix[i][j+1] == 0:
+					pass
+
+				#bottom right corner
+				elif i == 9 and gameHumanMatrix[i-1][j] == 0 and gameHumanMatrix[i][j+1] == 0:
+					pass
+
+				#right edge
+				elif gameHumanMatrix[i-1][j] == 0 and gameHumanMatrix[i+1][j] == 0 and gameHumanMatrix[i][j+1] == 0:
+					pass
+
+			#left side
+			elif j == 9:
+				#top left corner
+				if i == 0 and gameHumanMatrix[i+1][j] == 0 and gameHumanMatrix[i][j-1] == 0:
+					pass
+
+				#bottom left corner
+				elif i == 9 and gameHumanMatrix[i-1][j] == 0 and gameHumanMatrix[i][j-1] == 0:
+					pass
+
+				#right edge
+				elif gameHumanMatrix[i-1][j] == 0 and gameHumanMatrix[i+1][j] == 0 and gameHumanMatrix[i][j-1] == 0:
+					pass
+
+
+			#top edge
+			elif i == 0:
+				if gameHumanMatrix[i+1][j] == 0 and gameHumanMatrix[i][j+1] == 0 and gameHumanMatrix[i][j-1] == 0:
+					pass
+
+			#bottom edge
+			elif i == 9:
+				if gameHumanMatrix[i-1][j] == 0 and gameHumanMatrix[i][j+1] == 0 and gameHumanMatrix[i][j-1] == 0:
+					pass
+
+			# #top right corner
+			# if i == 0 and gameHumanMatrix[i+1][j] == 0 and j == 0 and gameHumanMatrix[i][j+1] == 0:
+			# 	pass #do nothing
+
+			# #top left corner
+			# elif i == 0 and gameHumanMatrix[i+1][j] == 0 and j == 9 and gameHumanMatrix[i][j-1] == 0:
+			# 	pass #do nothing
+
+			# #bottom right corner
+			# elif i == 9 and gameHumanMatrix[i-1][j] == 0 and j == 0 and gameHumanMatrix[i][j+1] == 0:
+			# 	pass #do nothing
+
+			# #bottom left corner
+			# elif i == 9 and gameHumanMatrix[i-1][j] == 0 and j == 9 and gameHumanMatrix[i][j-1] == 0:
+			# 	pass #do nothing
+
+
+			#middle
+			elif gameHumanMatrix[i-1][j] == 0 and gameHumanMatrix[i+1][j] == 0 and gameHumanMatrix[i][j-1] == 0 and gameHumanMatrix[i][j+1] == 0:
+				pass #do nothing
+
+			else:
+				if gameHumanMatrix[i][j] > maxValue:
+					maxValue = gameHumanMatrix[i][j]
+					row = i
+					col = j
 
 	return (row, col)
 
@@ -1144,8 +1209,8 @@ time.sleep(10)
 # Get number of games played (read from file)
 # Gets incremented and saved at the end of each game
 
-#gamesPlayedFile = open("/home/pi/pib/gamesPlayed.txt", "r")
-gamesPlayedFile = open("gamesPlayed.txt", "r")
+gamesPlayedFile = open("/home/pi/pib/gamesPlayed.txt", "r")
+#gamesPlayedFile = open("gamesPlayed.txt", "r")
 gamesPlayed = int(gamesPlayedFile.read())
 gamesPlayed = gamesPlayed + 1; #increment number of games played (do this at start because we start with 0)
 gamesPlayedFile.close()
@@ -1155,8 +1220,8 @@ gamesPlayedFile.close()
 
 # Need to connect to the Arduino
 
-#arduino = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
-arduino = serial.Serial('/dev/tty.usbmodem1411', 9600, timeout=1)
+arduino = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+#arduino = serial.Serial('/dev/tty.usbmodem1411', 9600, timeout=1)
 
 # print(arduino.name)
 
@@ -1198,10 +1263,10 @@ aiMatrix = deepcopy(startMatrix) #ai side of probability board... used for durat
 if gamesPlayed > 1: #if not first game, read from files
 
 	#do both at same time to be more efficient
-	humanMatrixFile = open("humanMatrix.txt", "r")
-	aiMatrixFile = open("aiMatrix.txt", "r")
-	#humanMatrixFile = open("/home/pi/pib/humanMatrix.txt", "r")
-	#aiMatrixFile = open("/home/pi/pib/aiMatrix.txt", "r")
+	#humanMatrixFile = open("humanMatrix.txt", "r")
+	#aiMatrixFile = open("aiMatrix.txt", "r")
+	humanMatrixFile = open("/home/pi/pib/humanMatrix.txt", "r")
+	aiMatrixFile = open("/home/pi/pib/aiMatrix.txt", "r")
 
 	#for i in range(100):
 	for row in range(10):
@@ -1210,8 +1275,8 @@ if gamesPlayed > 1: #if not first game, read from files
 			value1 = humanMatrixFile.readline().replace("\n", "")
 			value2 = aiMatrixFile.readline().replace("\n", "")
 			#print(value1)
-			humanMatrix[row][column] = float(value1)
-			aiMatrix[row][column] = float(value2)
+			humanMatrix[row][column] = float(value1)*((gamesPlayed-1)/gamesPlayed)
+			aiMatrix[row][column] = float(value2)*((gamesPlayed-1)/gamesPlayed)
 
 	humanMatrixFile.close()
 	aiMatrixFile.close()
@@ -1517,8 +1582,8 @@ while gameOver == False:
 
 
 #gamesPlayed = gamesPlayed + 1; #increment number of games played
-gamesPlayedFile = open("gamesPlayed.txt", "w")
-#gamesPlayedFile = open("/home/pi/pib/gamesPlayed.txt", "w")
+#gamesPlayedFile = open("gamesPlayed.txt", "w")
+gamesPlayedFile = open("/home/pi/pib/gamesPlayed.txt", "w")
 gamesPlayedFile.write(str(gamesPlayed)) #save to file to be used in next game
 gamesPlayedFile.close()
 
@@ -1527,8 +1592,8 @@ gamesPlayedFile.close()
 # Here we are writing the values to the files
 
 #writing humanMatrix to file
-humanMatrixFile = open("humanMatrix.txt", "w")
-#humanMatrixFile = open("/home/pi/pib/humanMatrix.txt", "w")
+#humanMatrixFile = open("humanMatrix.txt", "w")
+humanMatrixFile = open("/home/pi/pib/humanMatrix.txt", "w")
 for row in humanMatrix:
 	#print(row)
 	for value in row:
@@ -1536,8 +1601,8 @@ for row in humanMatrix:
 humanMatrixFile.close()
 
 #writing aiMatrix to file
-aiMatrixFile = open("aiMatrix.txt", "w")
-#aiMatrixFile = open("/home/pi/pib/aiMatrix.txt", "w")
+#aiMatrixFile = open("aiMatrix.txt", "w")
+aiMatrixFile = open("/home/pi/pib/aiMatrix.txt", "w")
 for row in aiMatrix:
 	#print(row)
 	for value in row:
